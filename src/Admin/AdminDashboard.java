@@ -1,0 +1,524 @@
+
+package Admin;
+
+import java.awt.Color;
+import javax.swing.JButton;
+import Admin.AdminUserControl;
+import Users.Loginform;
+import config.DbConnect;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
+
+
+public final class AdminDashboard extends javax.swing.JFrame {
+
+    
+    public AdminDashboard() {
+        initComponents();
+        
+        JButton userButton = new JButton("User Control");
+
+
+userButton.setBackground(new Color(200, 0, 0)); 
+userButton.setForeground(Color.WHITE);
+userButton.setFont(new Font("Arial", Font.BOLD, 14));
+userButton.setFocusPainted(false);
+userButton.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15)); 
+
+
+userButton.addMouseListener(new java.awt.event.MouseAdapter() {
+    public void mouseEntered(java.awt.event.MouseEvent evt) {
+        userButton.setBackground(new Color(220, 0, 0)); 
+    }
+    public void mouseExited(java.awt.event.MouseEvent evt) {
+        userButton.setBackground(new Color(200, 0, 0)); 
+    }
+});
+
+
+        loadBooksTable();
+        loadUsersData();
+    customizeButton(jButton1);
+    customizeButton(jButton2);
+    customizeButton(jButton3);
+    customizeButton(jButton4);
+    customizeButton(jButton5);
+    
+    
+   jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        if (!isSelected) {
+            c.setBackground(row % 2 == 0 ? new Color(240, 240, 240) : Color.WHITE);
+        }
+        return c;
+    }
+});
+
+
+JTableHeader header = jTable1.getTableHeader();
+header.setFont(new Font("Tahoma", Font.BOLD, 14));
+header.setBackground(new Color(200, 0, 0));
+header.setForeground(Color.WHITE);
+
+
+jTable1.setRowHeight(25);
+
+    }
+    void addLog(String message) {
+    logTextArea.append(message + "\n"); // Append new log entry
+    logTextArea.setCaretPosition(logTextArea.getDocument().getLength()); // Auto-scroll to bottom
+}
+ public void loadBooksTable() {
+    DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+    
+    // Define column names (if not already set)
+    String[] columnNames = {"Book Title", "Author", "Status"};
+    model.setColumnIdentifiers(columnNames);
+    model.setRowCount(0); // ✅ Clear table before loading data
+
+    String sql = "SELECT b_title, b_author, b_status FROM books";
+
+    try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "");
+         PreparedStatement pst = con.prepareStatement(sql);
+         ResultSet rs = pst.executeQuery()) {
+
+        while (rs.next()) {
+            Object[] row = {
+                rs.getString("b_title"),
+                rs.getString("b_author"),
+                rs.getString("b_status")
+            };
+            model.addRow(row); // ✅ Dynamically add data rows
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+   private void loadUsersData() {
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    
+    
+    String[] columnNames = {"ID", "First Name", "Last Name", "Contact", "Email", "User Type", "Username", "Status"};
+    model.setColumnIdentifiers(columnNames); 
+    model.setRowCount(0);
+
+    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, usertype, RegUser, status FROM users";
+
+    try (Connection connect = new DbConnect().getConnection();
+         PreparedStatement pst = connect.prepareStatement(sql);
+         ResultSet rs = pst.executeQuery()) {
+
+        while (rs.next()) {
+            Object[] row = {
+                rs.getInt("u_id"),
+                rs.getString("Fname"),
+                rs.getString("Lname"),
+                rs.getString("Contactnum"),
+                rs.getString("email"),
+                rs.getString("usertype"),
+                rs.getString("RegUser"),
+                rs.getString("status")
+            };
+            model.addRow(row); 
+        }
+
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+   
+private void customizeButton(JButton button) {
+   button.setOpaque(true);
+button.setBorderPainted(false);
+button.setFocusPainted(false);
+button.setBackground(new Color(139, 0, 0)); 
+button.setForeground(Color.WHITE);
+button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
+
+   
+    button.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(0, 102, 204)); 
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(139, 0, 0)); 
+        }
+    });
+}
+
+   
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        Interface = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        jButton5 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollBar1 = new javax.swing.JScrollBar();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        logTextArea = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        Interface.setBackground(new java.awt.Color(102, 0, 0));
+        Interface.setForeground(new java.awt.Color(102, 102, 102));
+        Interface.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(153, 0, 0));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel3.setBackground(new java.awt.Color(102, 0, 0));
+
+        jLabel6.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Welcome Admin!");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, -1));
+
+        jLabel4.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("DASHBOARD");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 241, 50));
+
+        jTextField1.setText("Search...");
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField1FocusLost(evt);
+            }
+        });
+        jTextField1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextField1MouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTextField1MousePressed(evt);
+            }
+        });
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+        });
+        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 30, 160, -1));
+
+        Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 70));
+
+        jPanel1.setBackground(new java.awt.Color(153, 51, 0));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jButton5.setBackground(new java.awt.Color(204, 0, 51));
+        jButton5.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jButton5.setText("User Control");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 190, 40));
+
+        jButton3.setBackground(new java.awt.Color(204, 0, 51));
+        jButton3.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jButton3.setText("Books");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 190, 40));
+
+        jButton4.setBackground(new java.awt.Color(204, 0, 51));
+        jButton4.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jButton4.setText("Borrowers");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 310, 190, 50));
+
+        jButton1.setBackground(new java.awt.Color(204, 0, 51));
+        jButton1.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jButton1.setText("Records");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 190, 40));
+
+        jButton2.setBackground(new java.awt.Color(204, 0, 51));
+        jButton2.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jButton2.setText("LOGOUT");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 190, 50));
+
+        Interface.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
+
+        jPanel4.setBackground(new java.awt.Color(255, 153, 153));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTable1.setBackground(new java.awt.Color(204, 204, 204));
+        jTable1.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 710, 210));
+
+        jLabel1.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
+        jLabel1.setText("Report LOG:");
+        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 260, 250, 40));
+
+        jLabel2.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
+        jLabel2.setText("Registered Users:");
+        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 4, 250, 40));
+        jPanel4.add(jScrollBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 300, -1, 260));
+
+        logTextArea.setColumns(20);
+        logTextArea.setRows(5);
+        logTextArea.setText("...\nSystem Started...\nRetrieving Data...\nData Retrieved Successfully..");
+        jScrollPane3.setViewportView(logTextArea);
+
+        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 300, 270, 260));
+
+        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
+        jLabel3.setText("Current Books:");
+        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 250, 40));
+
+        jLabel5.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
+        jLabel5.setText("Current Books:");
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 250, 40));
+
+        jTable2.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 390, 260));
+
+        Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 730, 580));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1050, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(Interface, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 650, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(Interface, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       int confirm = javax.swing.JOptionPane.showConfirmDialog(
+        this, "Are you sure you want to logout?", "Logout Confirmation",
+        javax.swing.JOptionPane.YES_NO_OPTION);
+
+    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+        this.dispose(); 
+        
+        
+        Loginform loginPage = new Loginform(); 
+        loginPage.setVisible(true);
+    }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    AdminUserControl userControl = new AdminUserControl(); 
+    userControl.setVisible(true);  
+    this.dispose(); 
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseClicked
+        if (jTextField1.getText().equals("Search...")) {
+        jTextField1.setText(""); 
+    }
+    }//GEN-LAST:event_jTextField1MouseClicked
+
+    private void jTextField1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MousePressed
+       
+    
+    }//GEN-LAST:event_jTextField1MousePressed
+
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+       if (evt.getKeyCode() == KeyEvent.VK_ENTER) { 
+        String searchText = jTextField1.getText().trim();
+        if (!searchText.isEmpty() && !searchText.equals("Search...")) {
+            performSearch(searchText); 
+        }
+       }
+    }//GEN-LAST:event_jTextField1KeyPressed
+    
+    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+      if (jTextField1.getText().trim().isEmpty()) {
+        jTextField1.setText("Search...");
+    }
+    }//GEN-LAST:event_jTextField1FocusLost
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+    
+private void performSearch(String query) {
+    JOptionPane.showMessageDialog(this, "Searching for: " + query);
+}
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(AdminDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(AdminDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(AdminDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(AdminDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new AdminDashboard().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Interface;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollBar jScrollBar1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextArea logTextArea;
+    // End of variables declaration//GEN-END:variables
+}
