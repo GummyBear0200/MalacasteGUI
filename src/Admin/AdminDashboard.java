@@ -59,6 +59,7 @@ userButton.addMouseListener(new java.awt.event.MouseAdapter() {
     
     
    jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+    @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         if (!isSelected) {
@@ -79,16 +80,16 @@ jTable1.setRowHeight(25);
 
     }
     void addLog(String message) {
-    logTextArea.append(message + "\n"); // Append new log entry
-    logTextArea.setCaretPosition(logTextArea.getDocument().getLength()); // Auto-scroll to bottom
+    logTextArea.append(message + "\n"); 
+    logTextArea.setCaretPosition(logTextArea.getDocument().getLength()); 
 }
  public void loadBooksTable() {
     DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
     
-    // Define column names (if not already set)
+    
     String[] columnNames = {"Book Title", "Author", "Status"};
     model.setColumnIdentifiers(columnNames);
-    model.setRowCount(0); // ✅ Clear table before loading data
+    model.setRowCount(0); 
 
     String sql = "SELECT b_title, b_author, b_status FROM books";
 
@@ -102,7 +103,7 @@ jTable1.setRowHeight(25);
                 rs.getString("b_author"),
                 rs.getString("b_status")
             };
-            model.addRow(row); // ✅ Dynamically add data rows
+            model.addRow(row); 
         }
 
     } catch (SQLException e) {
@@ -184,7 +185,6 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollBar1 = new javax.swing.JScrollBar();
         jScrollPane3 = new javax.swing.JScrollPane();
         logTextArea = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
@@ -341,14 +341,13 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel2.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         jLabel2.setText("Registered Users:");
         jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 4, 250, 40));
-        jPanel4.add(jScrollBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 300, -1, 260));
 
         logTextArea.setColumns(20);
         logTextArea.setRows(5);
         logTextArea.setText("...\nSystem Started...\nRetrieving Data...\nData Retrieved Successfully..");
         jScrollPane3.setViewportView(logTextArea);
 
-        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 300, 270, 260));
+        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 300, 270, 260));
 
         jLabel3.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         jLabel3.setText("Current Books:");
@@ -386,7 +385,7 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 650, Short.MAX_VALUE)
+            .addGap(0, 660, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Interface, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -414,7 +413,9 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+AdminBookControl bookControl = new AdminBookControl(); 
+    bookControl.setVisible(true);  
+    this.dispose();        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -512,7 +513,6 @@ private void performSearch(String query) {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

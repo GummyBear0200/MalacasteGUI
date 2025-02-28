@@ -17,6 +17,8 @@ import java.sql.Statement;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -70,8 +72,30 @@ import javax.swing.table.DefaultTableModel;
     });
 }
 private void loadUsersData() {
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+   DefaultTableModel model = new DefaultTableModel() {
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return column != 0; 
+    }
+};
+jTable1.setModel(model);
     
+jTable1.getModel().addTableModelListener(new TableModelListener() {
+    @Override
+    public void tableChanged(TableModelEvent e) {
+        if (e.getType() == TableModelEvent.UPDATE) {
+            int row = e.getFirstRow();
+            int column = e.getColumn();
+
+            
+            if (row == -1 || column == -1) {
+                return; 
+            }
+
+            updateDatabase(row, column);
+        }
+    }
+});
     
     String[] columnNames = {"ID", "First Name", "Last Name", "Contact", "Email", "User Type", "Username","Password", "Status"};
     model.setColumnIdentifiers(columnNames); 
@@ -103,6 +127,26 @@ private void loadUsersData() {
     }
     
 }
+
+private void updateDatabase(int row, int column) {
+    try (Connection connect = new DbConnect().getConnection()) {
+        String columnName = jTable1.getColumnName(column); 
+        String newValue = jTable1.getValueAt(row, column).toString(); 
+        int userId = Integer.parseInt(jTable1.getValueAt(row, 0).toString());
+
+        String sql = "UPDATE users SET " + columnName + " = ? WHERE u_id = ?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setString(1, newValue);
+            pst.setInt(2, userId);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Database Updated Successfully!");
+        }
+
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "Database Error: " + ex.getMessage());
+    }
+}
+
 
 private void addUser() {
     if (txtFirstName == null || txtLastName == null || txtContact == null || 
@@ -286,6 +330,9 @@ private void addUser() {
         txtUsername = new javax.swing.JTextField();
         txtPassword = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -302,7 +349,6 @@ private void addUser() {
 
         jLabel2.setBackground(new java.awt.Color(153, 0, 51));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/54476.png"))); // NOI18N
-        jLabel2.setText("jLabel2");
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel2MouseClicked(evt);
@@ -313,13 +359,13 @@ private void addUser() {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -332,9 +378,9 @@ private void addUser() {
         jLabel3.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("User CONTROL");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 330, 40));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 40));
 
-        Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 830, 90));
+        Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 880, 90));
 
         jPanel4.setBackground(new java.awt.Color(153, 0, 0));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -393,7 +439,7 @@ private void addUser() {
         jTable1.setSelectionBackground(new java.awt.Color(255, 0, 0));
         jScrollPane1.setViewportView(jTable1);
 
-        Interface.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 710, 300));
+        Interface.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 790, 300));
 
         jPanel5.setBackground(new java.awt.Color(255, 204, 204));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -427,18 +473,31 @@ private void addUser() {
         txtPassword.setText("Password");
         jPanel5.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 70, 160, -1));
 
-        jLabel1.setText("Note: To Add and Update please fill all fields and click the button you want to function.");
+        jLabel1.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
         jPanel5.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 4, 570, 20));
 
-        Interface.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 450, 720, 110));
+        Interface.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 450, 790, 110));
+
+        jLabel4.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("User CONTROL");
+        Interface.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 330, 40));
+
+        jLabel5.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("User CONTROL");
+        Interface.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 330, 40));
+
+        jLabel6.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Registered Users:");
+        Interface.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 90, 330, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(Interface, javax.swing.GroupLayout.PREFERRED_SIZE, 958, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(Interface, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -521,6 +580,9 @@ private void addUser() {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

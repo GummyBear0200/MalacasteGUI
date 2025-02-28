@@ -5,9 +5,6 @@ import Admin.AdminDashboard;
 import config.DbConnect;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,10 +44,10 @@ private Timer timer;
         buttonGroup2 = new javax.swing.ButtonGroup();
         Main = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        reg = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         Interface = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         Header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -58,9 +55,10 @@ private Timer timer;
         pass = new javax.swing.JPasswordField();
         jCheckBox1 = new javax.swing.JCheckBox();
         LogButton = new javax.swing.JButton();
-        reg = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         jFormattedTextField1.setText("jFormattedTextField1");
 
@@ -79,33 +77,42 @@ private Timer timer;
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        reg.setBackground(new java.awt.Color(153, 51, 0));
+        reg.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jButton2.setFont(new java.awt.Font("Arial Black", 1, 10)); // NOI18N
+        jButton2.setText("Register");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        reg.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(214, 16, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Arial Black", 2, 12)); // NOI18N
+        jLabel4.setText("No account? Click here to ->");
+        reg.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 200, 30));
+
+        jPanel2.add(reg, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 310, 310, 60));
+
         Interface.setBackground(new java.awt.Color(0, 0, 0));
         Interface.setForeground(new java.awt.Color(102, 102, 102));
         Interface.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel2.add(Interface, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 50, 420));
 
-        jLabel2.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Password:");
-        Interface.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 130, -1, -1));
-
-        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Username:");
-        Interface.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, -1, -1));
-
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/pngtree-book-clipart-vector-png-image_6653535.png"))); // NOI18N
-        jLabel5.setText("jLabel5");
-        Interface.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(-310, 10, 470, 350));
-
-        jPanel2.add(Interface, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 410, 420));
-
-        Header.setBackground(new java.awt.Color(102, 102, 102));
+        Header.setBackground(new java.awt.Color(153, 51, 0));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel1.setBackground(new java.awt.Color(102, 102, 102));
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 2, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("WELCOME TO MY LIBRARY SYSTEM                                                WELCOME TO MY LIBRARY SYSTEM");
+        jLabel1.setText("WELCOME TO MY LIBRARY SYSTEM                    WELCOME TO MY LIBRARY SYSTEM!             WELCOME TO MY LIBRARY SYSTEM!               WELCOME TO MY LIBRARY SYSTEM");
         jLabel1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jLabel1FocusGained(evt);
@@ -118,13 +125,12 @@ private Timer timer;
             public void ancestorResized(java.awt.event.HierarchyEvent evt) {
             }
         });
-        Header.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-500, 20, 1470, -1));
+        Header.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-470, 20, 1470, -1));
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/scc.png"))); // NOI18N
+        Header.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 110, 70));
 
         jPanel2.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 70));
-
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/pngtree-book-clipart-vector-png-image_6653535.png"))); // NOI18N
-        jLabel7.setText("jLabel5");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 120, 140, 350));
 
         username.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,46 +167,22 @@ private Timer timer;
         });
         jPanel2.add(LogButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 240, -1, -1));
 
-        reg.setBackground(new java.awt.Color(102, 102, 102));
+        jLabel2.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Password:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 200, -1, -1));
 
-        jButton2.setFont(new java.awt.Font("Arial Black", 1, 10)); // NOI18N
-        jButton2.setText("Register");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
-            }
-        });
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Username:");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 150, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Arial Black", 1, 10)); // NOI18N
-        jLabel4.setText("No account? Click here to ->");
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/magic-fairy-tale-scene-old-ancient-book-castle-dark-background-open-night-sky-world-glowing-lights-light-coming-out-279382353.png"))); // NOI18N
+        jLabel6.setText("jLabel6");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 1090, 490));
 
-        javax.swing.GroupLayout regLayout = new javax.swing.GroupLayout(reg);
-        reg.setLayout(regLayout);
-        regLayout.setHorizontalGroup(
-            regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, regLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addGap(27, 27, 27))
-        );
-        regLayout.setVerticalGroup(
-            regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, regLayout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
-                .addGroup(regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jLabel4))
-                .addContainerGap())
-        );
-
-        jPanel2.add(reg, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 400, 310, -1));
+        jLabel5.setText("jLabel5");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, 180, 140));
 
         javax.swing.GroupLayout MainLayout = new javax.swing.GroupLayout(Main);
         Main.setLayout(MainLayout);
@@ -236,19 +218,16 @@ private Timer timer;
 
     private void LogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogButtonActionPerformed
                                               
+                                         
+                                              
     String usernameInput = username.getText().trim();
     String passwordInput = new String(pass.getPassword()).trim();
 
-    
     if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Username and Password cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
-    
-    String hashedPasswordInput = hashPassword(passwordInput);
-
-    
     String sql = "SELECT RegPass, status, usertype FROM users WHERE RegUser = ?";
 
     try (Connection connect = new DbConnect().getConnection(); 
@@ -262,17 +241,15 @@ private Timer timer;
             String status = rs.getString("status");
             String userType = rs.getString("usertype"); 
 
-           
             if (status.equalsIgnoreCase("Pending")) {
                 JOptionPane.showMessageDialog(this, "Your account is pending approval. Please wait for admin approval.", "Access Denied", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             
-            if (hashedPasswordInput.equals(dbPassword)) {
+            if (passwordInput.equals(dbPassword)) {
                 JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                
                 switch (userType.toLowerCase()) {
                     case "admin":
                     case "librarian":
@@ -296,22 +273,8 @@ private Timer timer;
     } catch (SQLException ex) {
         JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-      }
 
 
-private String hashPassword(String password) {
-    try {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] hash = md.digest(password.getBytes(StandardCharsets.UTF_8));
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : hash) {
-            hexString.append(String.format("%02x", b));
-        }
-        return hexString.toString();
-    } catch (NoSuchAlgorithmException e) {
-        e.printStackTrace();
-        return null;
-    }
     }//GEN-LAST:event_LogButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -431,6 +394,7 @@ private String hashPassword(String password) {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField pass;
