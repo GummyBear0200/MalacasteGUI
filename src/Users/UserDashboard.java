@@ -5,6 +5,9 @@
  */
 package Users;
 
+import config.Session;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author II
@@ -31,7 +34,9 @@ public class UserDashboard extends javax.swing.JFrame {
         Interface1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        acc_lname_user = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        acc_fname_user = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
@@ -41,6 +46,11 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         Interface.setBackground(new java.awt.Color(0, 0, 0));
         Interface.setForeground(new java.awt.Color(102, 102, 102));
@@ -54,29 +64,24 @@ public class UserDashboard extends javax.swing.JFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel3.setBackground(new java.awt.Color(102, 0, 0));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Welcome User!");
+        acc_lname_user.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        acc_lname_user.setForeground(new java.awt.Color(255, 255, 255));
+        acc_lname_user.setText("User!");
+        jPanel3.add(acc_lname_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 80, -1));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
-        );
+        jLabel7.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Welcome User!");
+        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 170, -1));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, -1));
+        acc_fname_user.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        acc_fname_user.setForeground(new java.awt.Color(255, 255, 255));
+        acc_fname_user.setText("User!");
+        jPanel3.add(acc_fname_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 80, -1));
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 70));
 
         jLabel4.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -145,6 +150,20 @@ public class UserDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        Session sess = Session.getInstance();
+       
+       if(sess.getuid() == 0){
+           JOptionPane.showMessageDialog(null,"No account found , Log in First!");
+           Loginform lf = new Loginform();
+           lf.setVisible(true);
+           this.dispose();
+       
+       }
+       acc_fname_user.setText(""+sess.getFname());
+       acc_lname_user.setText(""+sess.getLname());
+    }//GEN-LAST:event_formWindowActivated
+
     /**
      * @param args the command line arguments
      */
@@ -183,12 +202,14 @@ public class UserDashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Interface;
     private javax.swing.JPanel Interface1;
+    private javax.swing.JLabel acc_fname_user;
+    private javax.swing.JLabel acc_lname_user;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

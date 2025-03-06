@@ -65,37 +65,32 @@ public class AdminBookControl extends javax.swing.JFrame {
         }
     });
      }
-      private void loadBookData() {
+     void loadBookData() {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    
-    
-    String[] columnNames = {"ID", "Book Title", "Author", "Publication date", "Status"};
-    model.setColumnIdentifiers(columnNames); 
-    model.setRowCount(0);
+    model.setRowCount(0); 
 
-    String sql = "SELECT b_id, b_title, b_author, b_pubdate, b_status FROM books";
-
-    try (Connection connect = new DbConnect().getConnection();
-         PreparedStatement pst = connect.prepareStatement(sql);
-         ResultSet rs = pst.executeQuery()) {
+    try {
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "");
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM books"); 
 
         while (rs.next()) {
-            Object[] row = {
+            model.addRow(new Object[]{
                 rs.getInt("b_id"),
                 rs.getString("b_title"),
                 rs.getString("b_author"),
                 rs.getString("b_pubdate"),
                 rs.getString("b_status")
-                
-            };
-            model.addRow(row); 
+            });
         }
 
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        con.close();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error loading books: " + e.getMessage());
     }
-      }
-    private void addBook() {
+}
+
+    void addBook() {
     if (txtBookTtle == null || txtAthr == null || txtPubdte == null || 
         txtSttus == null ) {
         JOptionPane.showMessageDialog(this, "One or more fields are not initialized.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -377,6 +372,16 @@ private void updateBook() {
             new Object [][] {
                 {},
                 {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
                 {}
             },
             new String [] {
@@ -651,7 +656,8 @@ private void updateBook() {
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
-        addBook();
+         AdminAddBook adminaddbook = new AdminAddBook();
+        adminaddbook.setVisible(true);
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed

@@ -13,7 +13,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -21,6 +20,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -47,7 +47,7 @@ import javax.swing.table.DefaultTableModel;
     }
 });
         
-    customizeButton(ViewButton);
+    
     customizeButton(AddButton);
     customizeButton(UpdateButton);
     customizeButton(DeleteButton);
@@ -148,109 +148,73 @@ private void updateDatabase(int row, int column) {
 }
 
 
-private void addUser() {
-    if (txtFirstName == null || txtLastName == null || txtContact == null || 
-        txtEmail == null || txtUserType == null || txtUsername == null || txtStatus == null) {
-        JOptionPane.showMessageDialog(this, "One or more fields are not initialized.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+void addUser() {
+   
+     AdminAddUser adminadduser = new AdminAddUser();
+     adminadduser.setVisible(true);
+}
+    public boolean addUser(String firstName, String lastName, String contact, String email, String userType, String username, String password, String status) {
+    Connection con = null;
+    PreparedStatement pst = null;
 
-    String firstName = txtFirstName.getText();
-    String lastName = txtLastName.getText();
-    String contact = txtContact.getText();
-    String email = txtEmail.getText();
-    String userType = txtUserType.getText();
-    String username = txtUsername.getText();
-    String password = txtPassword.getText();
-    String status = txtStatus.getText();
-
-    try (Connection con = new DbConnect().getConnection()) {
-        if (con == null) {
-            JOptionPane.showMessageDialog(this, "Database connection failed!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String sql = "INSERT INTO users (Fname, Lname, Contactnum, email, usertype, RegUser, RegPass, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    try {
+       
+        con = new DbConnect().getConnection();
 
         
-        try (PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            pst.setString(1, firstName);
-            pst.setString(2, lastName);
-            pst.setString(3, contact);
-            pst.setString(4, email);
-            pst.setString(5, userType);
-            pst.setString(6, username);
-            pst.setString(7, password);
-            pst.setString(8, status);
+        String query = "INSERT INTO users (Fname, Lname, Contactnum, email, usertype, Reguser, RegPass, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        pst = con.prepareStatement(query);
+        
+        
+        pst.setString(1, firstName);
+        pst.setString(2, lastName);
+        pst.setString(3, contact);
+        pst.setString(4, email);
+        pst.setString(5, userType);
+        pst.setString(6, username);
+        pst.setString(7, password);
+        pst.setString(8, status);
 
-            int rowsAffected = pst.executeUpdate();
-            if (rowsAffected > 0) {
-                
-                int newUserId = -1;
-                try (ResultSet rs = pst.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        newUserId = rs.getInt(1);  
-                    }
-                }
+        
+        int rowsInserted = pst.executeUpdate();
+        return rowsInserted > 0;
 
-                JOptionPane.showMessageDialog(this, "User added successfully! ID: " + newUserId);
-                loadUsersData();  
-
-               
-               AdminDashboard dashboard = new AdminDashboard(); 
-               dashboard.addLog("New User registered: " + firstName + " (ID: " + newUserId + ")");
-
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to add user.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    } finally {
+        
+        try {
+            if (pst != null) pst.close();
+            if (con != null) con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
 
+   public boolean updateUser(String firstName, String lastName, String contact, String email, String userType, String username, String password, String status) {
+    try {
+        
+        Connection con = new DbConnect().getConnection();
+        String query = "UPDATE users SET first_name=?, last_name=?, contact=?, email=?, user_type=?, password=?, status=? WHERE username=?";
+        PreparedStatement pst = con.prepareStatement(query);
+        pst.setString(1, firstName);
+        pst.setString(2, lastName);
+        pst.setString(3, contact);
+        pst.setString(4, email);
+        pst.setString(5, userType);
+        pst.setString(6, password);
+        pst.setString(7, status);
+        pst.setString(8, username);
 
-    
-    private void updateUser() {
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a user to update.");
-            return;
-        }
-
-        int userId = (int) jTable1.getValueAt(selectedRow, 0);
-        String fname = txtFirstName.getText();
-        String lname = txtLastName.getText();
-        String contact = txtContact.getText();
-        String email = txtEmail.getText();
-        String userType = txtUserType.getText();
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        String status = txtStatus.getText();
-
-        String sql = "UPDATE users SET Fname=?, Lname=?, Contactnum=?, email=?, usertype=?, RegUser=?,RegPass=?, status=? WHERE u_id=?";
-
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "");
-             PreparedStatement pst = con.prepareStatement(sql)) {
-
-            pst.setString(1, fname);
-            pst.setString(2, lname);
-            pst.setString(3, contact);
-            pst.setString(4, email);
-            pst.setString(5, userType);
-            pst.setString(6, username);
-            pst.setString(7, password);
-            pst.setString(8, status);
-            pst.setInt(9, userId);
-
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "User Updated Successfully!");
-            loadUsersData(); 
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-        }
+        int rowsUpdated = pst.executeUpdate();
+        return rowsUpdated > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+}
 
     
     private void deleteUser() {
@@ -281,21 +245,7 @@ private void addUser() {
     }
 
    
-    private void viewUser() {
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a user to view.");
-            return;
-        }
-
-        txtFirstName.setText(jTable1.getValueAt(selectedRow, 1).toString());
-        txtLastName.setText(jTable1.getValueAt(selectedRow, 2).toString());
-        txtContact.setText(jTable1.getValueAt(selectedRow, 3).toString());
-        txtEmail.setText(jTable1.getValueAt(selectedRow, 4).toString());
-        txtUserType.setText(jTable1.getValueAt(selectedRow, 5).toString());
-        txtUsername.setText(jTable1.getValueAt(selectedRow, 6).toString());
-        txtStatus.setText(jTable1.getValueAt(selectedRow, 7).toString());
-    }
+   
 
    
     /**
@@ -314,22 +264,11 @@ private void addUser() {
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        ViewButton = new javax.swing.JButton();
         AddButton = new javax.swing.JButton();
         UpdateButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jPanel5 = new javax.swing.JPanel();
-        txtFirstName = new javax.swing.JTextField();
-        txtLastName = new javax.swing.JTextField();
-        txtContact = new javax.swing.JTextField();
-        txtStatus = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
-        txtUserType = new javax.swing.JTextField();
-        txtUsername = new javax.swing.JTextField();
-        txtPassword = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -385,15 +324,6 @@ private void addUser() {
         jPanel4.setBackground(new java.awt.Color(153, 0, 0));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ViewButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        ViewButton.setText("VIEW");
-        ViewButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ViewButtonActionPerformed(evt);
-            }
-        });
-        jPanel4.add(ViewButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 110, 40));
-
         AddButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         AddButton.setText("ADD");
         AddButton.addActionListener(new java.awt.event.ActionListener() {
@@ -405,6 +335,11 @@ private void addUser() {
 
         UpdateButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         UpdateButton.setText("UPDATE");
+        UpdateButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                UpdateButtonMouseClicked(evt);
+            }
+        });
         UpdateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 UpdateButtonActionPerformed(evt);
@@ -430,6 +365,28 @@ private void addUser() {
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
@@ -439,44 +396,7 @@ private void addUser() {
         jTable1.setSelectionBackground(new java.awt.Color(255, 0, 0));
         jScrollPane1.setViewportView(jTable1);
 
-        Interface.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 790, 300));
-
-        jPanel5.setBackground(new java.awt.Color(255, 204, 204));
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtFirstName.setText("First Name");
-        txtFirstName.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtFirstNameMouseClicked(evt);
-            }
-        });
-        jPanel5.add(txtFirstName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 160, -1));
-
-        txtLastName.setText("Last Name");
-        jPanel5.add(txtLastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 160, -1));
-
-        txtContact.setText("Contact Number");
-        jPanel5.add(txtContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 160, -1));
-
-        txtStatus.setText("Status");
-        jPanel5.add(txtStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 70, 160, -1));
-
-        txtEmail.setText("Email");
-        jPanel5.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 160, -1));
-
-        txtUserType.setText("User Type");
-        jPanel5.add(txtUserType, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 160, -1));
-
-        txtUsername.setText("Username");
-        jPanel5.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, 160, -1));
-
-        txtPassword.setText("Password");
-        jPanel5.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 70, 160, -1));
-
-        jLabel1.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
-        jPanel5.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 4, 570, 20));
-
-        Interface.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 450, 790, 110));
+        Interface.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 790, 410));
 
         jLabel4.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -516,25 +436,45 @@ private void addUser() {
         this.dispose();
     }//GEN-LAST:event_jLabel2MouseClicked
 
-    private void ViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewButtonActionPerformed
-        viewUser();
-    }//GEN-LAST:event_ViewButtonActionPerformed
-
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
        addUser();
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
-       updateUser();
+         AdminUpdateUser adminUpdateuser = new AdminUpdateUser();
+        adminUpdateuser.setVisible(true);
     }//GEN-LAST:event_UpdateButtonActionPerformed
 
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
        deleteUser();
     }//GEN-LAST:event_DeleteButtonActionPerformed
 
-    private void txtFirstNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtFirstNameMouseClicked
-       
-    }//GEN-LAST:event_txtFirstNameMouseClicked
+    private void UpdateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UpdateButtonMouseClicked
+      int rowindex = jTable1.getSelectedRow();
+      
+      if(rowindex < 0){
+          JOptionPane.showMessageDialog(null, "Please select an account");
+      }else{
+      AdminUpdateUser auu = new AdminUpdateUser();
+      try{
+       DbConnect dbc = new DbConnect();
+       TableModel tbl = jTable1.getModel();
+      ResultSet rs = dbc.getData("SELECT * FROM users WHERE u_id = '"+tbl.getValueAt(rowindex, 0)+"'");
+      if(){
+      crf.fn.setText("");
+      }
+      }catch(SQLException ex){
+          System.out.println(""+ex);
+      
+      }
+      
+      
+      
+      }      
+      TableModel tbl = jTable1.getModel();
+      
+      
+    }//GEN-LAST:event_UpdateButtonMouseClicked
     
     /**
      * @param args the command line arguments
@@ -576,8 +516,6 @@ private void addUser() {
     private javax.swing.JButton DeleteButton;
     private javax.swing.JPanel Interface;
     private javax.swing.JButton UpdateButton;
-    private javax.swing.JButton ViewButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -587,16 +525,7 @@ private void addUser() {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtContact;
-    private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtFirstName;
-    private javax.swing.JTextField txtLastName;
-    private javax.swing.JTextField txtPassword;
-    private javax.swing.JTextField txtStatus;
-    private javax.swing.JTextField txtUserType;
-    private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

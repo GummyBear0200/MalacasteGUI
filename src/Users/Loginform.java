@@ -3,6 +3,7 @@ package Users;
 
 import Admin.AdminDashboard;
 import config.DbConnect;
+import config.Session;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -228,51 +229,60 @@ private Timer timer;
         return;
     }
 
-    String sql = "SELECT RegPass, status, usertype FROM users WHERE RegUser = ?";
+   String sql = "SELECT u_id, Fname, Lname, email, RegUser, usertype, status, RegPass FROM users WHERE RegUser = ?";
 
-    try (Connection connect = new DbConnect().getConnection(); 
-         PreparedStatement pst = connect.prepareStatement(sql)) {
+try (Connection connect = new DbConnect().getConnection(); 
+     PreparedStatement pst = connect.prepareStatement(sql)) {
+    
+    pst.setString(1, usernameInput);
+    ResultSet rs = pst.executeQuery();
+
+    if (rs.next()) {
+        String dbPassword = rs.getString("RegPass"); 
+        String status = rs.getString("status");
+        String userType = rs.getString("usertype"); 
+
         
-        pst.setString(1, usernameInput);
-        ResultSet rs = pst.executeQuery();
+        Session sess = Session.getInstance();
+        sess.setuid(rs.getInt("u_id"));  
+        sess.setFname(rs.getString("Fname"));
+        sess.setLname(rs.getString("Lname"));
+        sess.setemail(rs.getString("email"));
+        sess.setusername(rs.getString("RegUser"));
+        sess.settype(rs.getString("usertype"));
+        sess.setStatus(rs.getString("status"));
+        System.out.println(""+sess.getuid());
+        if (status.equalsIgnoreCase("Pending")) {
+            JOptionPane.showMessageDialog(this, "Your account is pending approval. Please wait for admin approval.", "Access Denied", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        if (rs.next()) {
-            String dbPassword = rs.getString("RegPass"); 
-            String status = rs.getString("status");
-            String userType = rs.getString("usertype"); 
+        if (passwordInput.equals(dbPassword)) {
+            JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-            if (status.equalsIgnoreCase("Pending")) {
-                JOptionPane.showMessageDialog(this, "Your account is pending approval. Please wait for admin approval.", "Access Denied", JOptionPane.ERROR_MESSAGE);
-                return;
+            switch (userType.toLowerCase()) {
+                case "admin":
+                case "librarian":
+                    new AdminDashboard().setVisible(true);
+                    break;
+                case "borrower":
+                    new UserDashboard().setVisible(true);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Invalid User Type!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
             }
-
-            
-            if (passwordInput.equals(dbPassword)) {
-                JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-                switch (userType.toLowerCase()) {
-                    case "admin":
-                    case "librarian":
-                        new AdminDashboard().setVisible(true);
-                        break;
-                    case "borrower":
-                        new UserDashboard().setVisible(true);
-                        break;
-                    default:
-                        JOptionPane.showMessageDialog(this, "Invalid User Type!", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                }
-                this.dispose(); 
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            this.dispose(); 
         } else {
             JOptionPane.showMessageDialog(this, "Invalid Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(this, "Invalid Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
     }
+
+} catch (SQLException ex) {
+    JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+}
 
 
     }//GEN-LAST:event_LogButtonActionPerformed

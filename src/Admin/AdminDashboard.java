@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import Admin.AdminUserControl;
 import Users.Loginform;
 import config.DbConnect;
+import config.Session;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
@@ -174,7 +175,8 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jTextField1 = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        acc_lname = new javax.swing.JLabel();
+        acc_fname = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -202,6 +204,11 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         Interface.setBackground(new java.awt.Color(102, 0, 0));
         Interface.setForeground(new java.awt.Color(102, 102, 102));
@@ -247,12 +254,17 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jPanel3.setBackground(new java.awt.Color(102, 0, 0));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Welcome Admin!");
-        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 170, 50));
+        acc_lname.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        acc_lname.setForeground(new java.awt.Color(255, 255, 255));
+        acc_lname.setText("Admin");
+        jPanel3.add(acc_lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 100, 30));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 210, -1));
+        acc_fname.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        acc_fname.setForeground(new java.awt.Color(255, 255, 255));
+        acc_fname.setText("Admin");
+        jPanel3.add(acc_fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 100, 30));
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 210, 60));
 
         Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 60));
 
@@ -473,6 +485,20 @@ AdminBookControl bookControl = new AdminBookControl();
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+       Session sess = Session.getInstance();
+       
+       if(sess.getuid() == 0){
+           JOptionPane.showMessageDialog(null,"No account found , Log in First!");
+           Loginform lf = new Loginform();
+           lf.setVisible(true);
+           this.dispose();
+       
+       }
+       acc_fname.setText(""+sess.getFname());
+       acc_lname.setText(""+sess.getLname());
+    }//GEN-LAST:event_formWindowActivated
     
 private void performSearch(String query) {
     JOptionPane.showMessageDialog(this, "Searching for: " + query);
@@ -514,6 +540,8 @@ private void performSearch(String query) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Interface;
+    private javax.swing.JLabel acc_fname;
+    private javax.swing.JLabel acc_lname;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -529,7 +557,6 @@ private void performSearch(String query) {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

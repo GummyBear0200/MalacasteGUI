@@ -3,6 +3,7 @@ package config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DbConnect {
@@ -44,5 +45,15 @@ public class DbConnect {
         return result;
     }
     
+public ResultSet getData(String query) {
+    ResultSet rs = null;
+    try {
+        PreparedStatement pst = connect.prepareStatement(query);
+        rs = pst.executeQuery();
+    } catch (SQLException ex) {
+        System.out.println("SQL Error: " + ex.getMessage());
+    }
+    return rs;
+}
 
 }
