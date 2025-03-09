@@ -450,27 +450,29 @@ void addUser() {
     }//GEN-LAST:event_DeleteButtonActionPerformed
 
     private void UpdateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UpdateButtonMouseClicked
-      int rowindex = jTable1.getSelectedRow();
-      
-      if(rowindex < 0){
-          JOptionPane.showMessageDialog(null, "Please select an account");
-      }else{
-      AdminUpdateUser auu = new AdminUpdateUser();
-      try{
-       DbConnect dbc = new DbConnect();
-       TableModel tbl = jTable1.getModel();
-      ResultSet rs = dbc.getData("SELECT * FROM users WHERE u_id = '"+tbl.getValueAt(rowindex, 0)+"'");
-      if(){
-      crf.fn.setText("");
-      }
-      }catch(SQLException ex){
-          System.out.println(""+ex);
-      
-      }
-      
-      
-      
-      }      
+    int rowindex = jTable1.getSelectedRow();
+    
+    if (rowindex < 0) {
+        JOptionPane.showMessageDialog(null, "Please select an account");
+        return;
+    }
+
+    try {
+        DbConnect dbc = new DbConnect();
+        TableModel tbl = jTable1.getModel();
+        ResultSet rs = dbc.getData("SELECT * FROM users WHERE u_id = '" + tbl.getValueAt(rowindex, 0) + "'");
+
+        if (rs.next()) {
+            AdminUpdateUser aau = new AdminUpdateUser();  
+            aau.setFirstName(rs.getString("Fname")); 
+            aau.setVisible(true);
+        }
+
+    } catch (SQLException ex) {
+        System.out.println("Error: " + ex);
+    }
+    
+          
       TableModel tbl = jTable1.getModel();
       
       

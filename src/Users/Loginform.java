@@ -59,7 +59,6 @@ private Timer timer;
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
 
         jFormattedTextField1.setText("jFormattedTextField1");
 
@@ -181,9 +180,6 @@ private Timer timer;
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/magic-fairy-tale-scene-old-ancient-book-castle-dark-background-open-night-sky-world-glowing-lights-light-coming-out-279382353.png"))); // NOI18N
         jLabel6.setText("jLabel6");
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 1090, 490));
-
-        jLabel5.setText("jLabel5");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, 180, 140));
 
         javax.swing.GroupLayout MainLayout = new javax.swing.GroupLayout(Main);
         Main.setLayout(MainLayout);
@@ -403,7 +399,6 @@ try (Connection connect = new DbConnect().getConnection();
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel2;
