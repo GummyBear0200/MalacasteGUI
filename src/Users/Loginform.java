@@ -225,7 +225,7 @@ private Timer timer;
         return;
     }
 
-   String sql = "SELECT u_id, Fname, Lname, email, RegUser, usertype, status, RegPass FROM users WHERE RegUser = ?";
+   String sql = "SELECT u_id, Fname, Lname,Contactnum, email, RegUser, usertype, status, RegPass FROM users WHERE RegUser = ?";
 
 try (Connection connect = new DbConnect().getConnection(); 
      PreparedStatement pst = connect.prepareStatement(sql)) {
@@ -243,8 +243,10 @@ try (Connection connect = new DbConnect().getConnection();
         sess.setuid(rs.getInt("u_id"));  
         sess.setFname(rs.getString("Fname"));
         sess.setLname(rs.getString("Lname"));
+        sess.setContact(rs.getString("Contactnum"));
         sess.setemail(rs.getString("email"));
         sess.setusername(rs.getString("RegUser"));
+        sess.setPassword(rs.getString("RegPass"));       
         sess.settype(rs.getString("usertype"));
         sess.setStatus(rs.getString("status"));
         System.out.println(""+sess.getuid());

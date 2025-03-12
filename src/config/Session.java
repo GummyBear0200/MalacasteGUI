@@ -8,6 +8,10 @@ public class Session {
     private int uid;
     private String Fname;
     private String Lname;
+    private String Contactnum;
+     private String RegPass;   
+
+   
     private String email;
     private String username;
     private String type;
@@ -44,7 +48,13 @@ public class Session {
      public String getLname(){
     return Lname;
     }
-    
+     public void setContact(String contact) {
+        this.Contactnum = contact;
+    }
+
+    public String getContact() {
+        return Contactnum;
+    }
     public void setLname(String Lname){
     this.Lname = Lname;
             } 
@@ -58,7 +68,13 @@ public class Session {
      public String getusername(){
     return username;
     }
-    
+     public void setPassword(String Contactnum) {
+        this.RegPass = Contactnum;
+    }
+
+    public String getPassword() {
+        return RegPass;
+    }
     public void setusername(String username){
     this.username = username;
             } 

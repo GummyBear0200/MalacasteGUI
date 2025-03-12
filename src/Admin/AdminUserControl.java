@@ -197,7 +197,7 @@ void addUser() {
     try {
         
         Connection con = new DbConnect().getConnection();
-        String query = "UPDATE users SET first_name=?, last_name=?, contact=?, email=?, user_type=?, password=?, status=? WHERE username=?";
+        String query = "UPDATE users SET Fname=?, Lname=?, Contactnum=?, email=?, usertype=?, RegPass=?, status=? WHERE RegUser=?";
         PreparedStatement pst = con.prepareStatement(query);
         pst.setString(1, firstName);
         pst.setString(2, lastName);
@@ -450,7 +450,7 @@ if (rowIndex < 0) {
         TableModel tbl = jTable1.getModel();
 
         String userId = tbl.getValueAt(rowIndex, 0).toString(); 
-        String query = "SELECT * FROM users WHERE id = ?";
+        String query = "SELECT * FROM users WHERE u_id = ?";
 
         PreparedStatement pst = dbc.getConnection().prepareStatement(query);
         pst.setString(1, userId);

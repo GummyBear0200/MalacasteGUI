@@ -72,34 +72,10 @@ public class AdminUpdateUser extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         UpdateButton = new javax.swing.JButton();
         CancelButton = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        fn = new javax.swing.JTextField();
-        ln = new javax.swing.JTextField();
-        cn = new javax.swing.JTextField();
-        em = new javax.swing.JTextField();
-        un = new javax.swing.JTextField();
-        ps = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        cmbStatus = new javax.swing.JComboBox<>();
-        cmbUserType = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         AddButton2 = new javax.swing.JButton();
         AddButton3 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
-        txtFirstName1 = new javax.swing.JTextField();
-        txtLastName1 = new javax.swing.JTextField();
-        txtContact1 = new javax.swing.JTextField();
-        txtEmail1 = new javax.swing.JTextField();
-        txtUsername1 = new javax.swing.JTextField();
-        txtPassword1 = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -109,8 +85,15 @@ public class AdminUpdateUser extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        cmbStatus1 = new javax.swing.JComboBox<>();
-        cmbUserType1 = new javax.swing.JComboBox<>();
+        cmbStatus = new javax.swing.JComboBox<>();
+        cmbUserType = new javax.swing.JComboBox<>();
+        fn = new javax.swing.JTextField();
+        ln = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        cn = new javax.swing.JTextField();
+        em = new javax.swing.JTextField();
+        un = new javax.swing.JTextField();
+        ps = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -136,69 +119,6 @@ public class AdminUpdateUser extends javax.swing.JFrame {
         });
         jPanel1.add(CancelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 400, 110, 40));
 
-        jPanel5.setBackground(new java.awt.Color(255, 204, 204));
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        fn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fnActionPerformed(evt);
-            }
-        });
-        jPanel5.add(fn, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 160, 30));
-        jPanel5.add(ln, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 160, 30));
-        jPanel5.add(cn, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, 160, 30));
-        jPanel5.add(em, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 160, 30));
-        jPanel5.add(un, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 230, 160, 30));
-        jPanel5.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, 160, 30));
-
-        jLabel1.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
-        jPanel5.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 570, 20));
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("Status:");
-        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 70, 20));
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel3.setText("First Name:");
-        jPanel5.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 70, 20));
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel5.setText("Last Name:");
-        jPanel5.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 70, 20));
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel6.setText("Contact:");
-        jPanel5.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 70, 20));
-
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel7.setText("Email:");
-        jPanel5.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 150, 70, 20));
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel8.setText("User Type");
-        jPanel5.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 70, 20));
-
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel9.setText("Username:");
-        jPanel5.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 70, 20));
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel10.setText("Password:");
-        jPanel5.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, 70, 20));
-
-        cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Active" }));
-        jPanel5.add(cmbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 160, 30));
-
-        cmbUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User", "Borrower" }));
-        cmbUserType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbUserTypeActionPerformed(evt);
-            }
-        });
-        jPanel5.add(cmbUserType, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 160, 30));
-
-        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 660, 350));
-
         jPanel2.setBackground(new java.awt.Color(153, 51, 0));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -222,29 +142,6 @@ public class AdminUpdateUser extends javax.swing.JFrame {
 
         jPanel6.setBackground(new java.awt.Color(255, 204, 204));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtFirstName1.setText("First Name");
-        txtFirstName1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtFirstName1MouseClicked(evt);
-            }
-        });
-        jPanel6.add(txtFirstName1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 160, 30));
-
-        txtLastName1.setText("Last Name");
-        jPanel6.add(txtLastName1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 160, 30));
-
-        txtContact1.setText("Contact Number");
-        jPanel6.add(txtContact1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, 160, 30));
-
-        txtEmail1.setText("Email");
-        jPanel6.add(txtEmail1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 160, 30));
-
-        txtUsername1.setText("Username");
-        jPanel6.add(txtUsername1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 230, 160, 30));
-
-        txtPassword1.setText("Password");
-        jPanel6.add(txtPassword1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, 160, 30));
 
         jLabel12.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
         jPanel6.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 570, 20));
@@ -281,11 +178,18 @@ public class AdminUpdateUser extends javax.swing.JFrame {
         jLabel20.setText("Password:");
         jPanel6.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, 70, 20));
 
-        cmbStatus1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Active" }));
-        jPanel6.add(cmbStatus1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 160, 30));
+        cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Active" }));
+        jPanel6.add(cmbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 160, 30));
 
-        cmbUserType1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User", "Borrower" }));
-        jPanel6.add(cmbUserType1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 160, 30));
+        cmbUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User", "Borrower" }));
+        jPanel6.add(cmbUserType, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 160, 30));
+        jPanel6.add(fn, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, 150, 30));
+        jPanel6.add(ln, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, 150, 30));
+        jPanel6.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, 150, 30));
+        jPanel6.add(cn, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, 150, 30));
+        jPanel6.add(em, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 150, 150, 30));
+        jPanel6.add(un, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 230, 150, 30));
+        jPanel6.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(241, 270, 150, 30));
 
         jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 680, 350));
 
@@ -377,8 +281,8 @@ public class AdminUpdateUser extends javax.swing.JFrame {
             }
         }
         
-        // Proceed with update
-        String updateQuery = "UPDATE users SET Fname = ?, Lname = ?, email = ?, RegUser = ?, type = ?, status = ? WHERE id = ?";
+        
+        String updateQuery = "UPDATE users SET Fname = ?, Lname = ?, email = ?, RegUser = ?, usertype = ?, status = ? WHERE u_id = ?";
         try (PreparedStatement updatePst = conn.prepareStatement(updateQuery)) {
             updatePst.setString(1, newFname);
             updatePst.setString(2, newLname);
@@ -417,18 +321,6 @@ public class AdminUpdateUser extends javax.swing.JFrame {
     private void AddButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_AddButton3ActionPerformed
-
-    private void txtFirstName1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtFirstName1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFirstName1MouseClicked
-
-    private void fnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fnActionPerformed
-
-    private void cmbUserTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUserTypeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbUserTypeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -471,14 +363,13 @@ public class AdminUpdateUser extends javax.swing.JFrame {
     private javax.swing.JButton CancelButton;
     private javax.swing.JButton UpdateButton;
     private javax.swing.JComboBox<String> cmbStatus;
-    private javax.swing.JComboBox<String> cmbStatus1;
     private javax.swing.JComboBox<String> cmbUserType;
-    private javax.swing.JComboBox<String> cmbUserType1;
-    private javax.swing.JTextField cn;
-    private javax.swing.JTextField em;
-    private static javax.swing.JTextField fn;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
+    public javax.swing.JTextField cn;
+    public javax.swing.JTextField em;
+    public javax.swing.JTextField fn;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -487,27 +378,14 @@ public class AdminUpdateUser extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JTextField ln;
-    private javax.swing.JTextField ps;
-    private javax.swing.JTextField txtContact1;
-    private javax.swing.JTextField txtEmail1;
-    private javax.swing.JTextField txtFirstName1;
-    private javax.swing.JTextField txtLastName1;
-    private javax.swing.JTextField txtPassword1;
-    private javax.swing.JTextField txtUsername1;
-    private javax.swing.JTextField un;
+    private javax.swing.JTextField jTextField4;
+    public javax.swing.JTextField ln;
+    public javax.swing.JPasswordField ps;
+    public javax.swing.JTextField un;
     // End of variables declaration//GEN-END:variables
 }

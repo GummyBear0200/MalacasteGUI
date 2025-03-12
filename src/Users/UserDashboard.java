@@ -38,6 +38,7 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         acc_fname_user = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -46,6 +47,7 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -69,7 +71,7 @@ public class UserDashboard extends javax.swing.JFrame {
         acc_lname_user.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
         acc_lname_user.setForeground(new java.awt.Color(255, 255, 255));
         acc_lname_user.setText("User!");
-        jPanel3.add(acc_lname_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 80, -1));
+        jPanel3.add(acc_lname_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 40, 80, -1));
 
         jLabel7.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -79,7 +81,7 @@ public class UserDashboard extends javax.swing.JFrame {
         acc_fname_user.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
         acc_fname_user.setForeground(new java.awt.Color(255, 255, 255));
         acc_fname_user.setText("User!");
-        jPanel3.add(acc_fname_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 80, -1));
+        jPanel3.add(acc_fname_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 170, -1));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 70));
 
@@ -87,6 +89,17 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("DASHBOARD");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 241, 50));
+
+        jButton5.setBackground(new java.awt.Color(204, 0, 51));
+        jButton5.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jButton5.setText("Account ");
+        jButton5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 20, 140, 30));
 
         Interface1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 70));
 
@@ -96,6 +109,7 @@ public class UserDashboard extends javax.swing.JFrame {
         jButton2.setBackground(new java.awt.Color(204, 0, 51));
         jButton2.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         jButton2.setText("LOGOUT");
+        jButton2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -135,6 +149,7 @@ public class UserDashboard extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -163,6 +178,12 @@ public class UserDashboard extends javax.swing.JFrame {
        acc_fname_user.setText(""+sess.getFname());
        acc_lname_user.setText(""+sess.getLname());
     }//GEN-LAST:event_formWindowActivated
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        UserAccount ua = new UserAccount();
+        ua.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -205,6 +226,7 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel acc_fname_user;
     private javax.swing.JLabel acc_lname_user;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
