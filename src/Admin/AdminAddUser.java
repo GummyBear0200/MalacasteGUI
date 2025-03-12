@@ -56,7 +56,7 @@ public class AdminAddUser extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         AddButton1 = new javax.swing.JButton();
-        AddButton = new javax.swing.JButton();
+        CancelButton = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         fn = new javax.swing.JTextField();
         cn = new javax.swing.JTextField();
@@ -121,14 +121,14 @@ public class AdminAddUser extends javax.swing.JFrame {
         });
         jPanel1.add(AddButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 400, 110, 40));
 
-        AddButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        AddButton.setText("CANCEL");
-        AddButton.addActionListener(new java.awt.event.ActionListener() {
+        CancelButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        CancelButton.setText("CANCEL");
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddButtonActionPerformed(evt);
+                CancelButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(AddButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 400, 110, 40));
+        jPanel1.add(CancelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 400, 110, 40));
 
         jPanel5.setBackground(new java.awt.Color(255, 204, 204));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -319,11 +319,11 @@ public class AdminAddUser extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         AdminUserControl adminusercontrol = new AdminUserControl();
         adminusercontrol.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_AddButtonActionPerformed
+    }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void AddButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButton1ActionPerformed
       
@@ -341,7 +341,7 @@ public class AdminAddUser extends javax.swing.JFrame {
         DbConnect dbc = new DbConnect();
 
         if(dbc.insertData("INSERT INTO users (Fname, Lname,Contactnum, email, RegUser, RegPass, usertype, status) "
-            + "VALUES ('" + fn.getText() + "', '" + fn.getText() + "', '" + cn.getText() + "','" + em.getText() + "' '" + un.getText() + "', '"
+            + "VALUES ('" + fn.getText() + "', '" + ln.getText() + "', '" + cn.getText() + "','" + em.getText() + "', '" + un.getText() + "', '"
             + ps.getText() + "','" + cmbUserType.getSelectedItem() + "','"+cmbStatus.getSelectedItem()+"')")) {
 
             JOptionPane.showMessageDialog(null, "Registration Success!");
@@ -415,10 +415,10 @@ public class AdminAddUser extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton AddButton;
     private javax.swing.JButton AddButton1;
     private javax.swing.JButton AddButton2;
     private javax.swing.JButton AddButton3;
+    private javax.swing.JButton CancelButton;
     private javax.swing.JLabel acc_id;
     private javax.swing.JLabel cc;
     private javax.swing.JComboBox<String> cmbStatus;

@@ -3,20 +3,31 @@ package Admin;
 
 
 import config.DbConnect;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 
 public class AdminUpdateUser extends javax.swing.JFrame {
-
+ 
+    
+    
     
     public AdminUpdateUser() {
         initComponents();
         
         
     }
-    
+    private String userId; // Declare userId at the class level
+
+    public void setUserId(String id) {
+        this.userId = id; // Store the user ID for later use
+    }
     public void setFirstName(String firstName) {
     this.fn.setText(firstName);
 }
@@ -179,6 +190,11 @@ public class AdminUpdateUser extends javax.swing.JFrame {
         jPanel5.add(cmbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 160, 30));
 
         cmbUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User", "Borrower" }));
+        cmbUserType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbUserTypeActionPerformed(evt);
+            }
+        });
         jPanel5.add(cmbUserType, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 160, 30));
 
         jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 660, 350));
@@ -301,35 +317,89 @@ public class AdminUpdateUser extends javax.swing.JFrame {
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
  
         
-        
-        if(fn.getText().isEmpty() || fn.getText().isEmpty() || cn.getText().isEmpty()
-       ||em.getText().isEmpty()|| un.getText().isEmpty() || ps.getText().isEmpty()) {
-        JOptionPane.showMessageDialog(null, "All fields are required!");
-    } else if(ps.getText().length() < 8) {
-        JOptionPane.showMessageDialog(null, "Password character should be 8 above");
-        ps.setText("");
-    } else if(duplicateCheck()) {
-        System.out.println("Duplicate Exist");
-    } else {
-        DbConnect dbc = new DbConnect();
+    String newFname = fn.getText().trim();
+    String newLname = ln.getText().trim();
+    String newContact = cn.getText().trim();
+    String newEmail = em.getText().trim();
+    String newUsername = un.getText().trim();
+    String newUserType = cmbUserType.getSelectedItem().toString();
+    String newUserStatus = cmbStatus.getSelectedItem().toString();
 
-        if(dbc.insertData("INSERT INTO users (Fname, Lname,Contactnum, email, RegUser, RegPass, usertype, status) "
-            + "VALUES ('" + fn.getText() + "', '" + fn.getText() + "', '" + cn.getText() + "','" + em.getText() + "' '" + un.getText() + "', '"
-            + ps.getText() + "','" + cmbUserType.getSelectedItem() + "','"+cmbStatus.getSelectedItem()+"')")) {
+    // Email regex pattern
+    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
-            JOptionPane.showMessageDialog(null, "Registration Success!");
-            AdminUserControl au = new AdminUserControl();
-            au.setVisible(true);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(null, "Connection Error!");
+    // Validate inputs
+    if (newFname.isEmpty() || newLname.isEmpty() || newEmail.isEmpty() || newUsername.isEmpty() || newUserType.isEmpty() || newUserStatus.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    if (!newFname.matches("[a-zA-Z ]+") || !newLname.matches("[a-zA-Z ]+")) {
+        JOptionPane.showMessageDialog(this, "Only letters are allowed for First and Last Name.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    if (!newContact.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "Invalid contact number! Only numbers are allowed.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    if (!newEmail.matches(emailRegex)) {
+        JOptionPane.showMessageDialog(this, "Invalid Email! Please enter a valid email address.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    if (!newUsername.matches("[a-zA-Z0-9_]{5,}")) {
+        JOptionPane.showMessageDialog(this, "Invalid Username! Must be at least 5 characters and contain only letters, numbers, and underscores.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    DbConnect dbc = new DbConnect();
+    
+    // Ensure userId is valid before running queries
+    if (this.userId == null || this.userId.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Error: User ID is missing.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String checkQuery = "SELECT COUNT(*) FROM users WHERE (RegUser = ? OR email = ?) AND u_id != ?";
+
+    try (Connection conn = dbc.getConnection();
+         PreparedStatement pst = conn.prepareStatement(checkQuery)) {
+
+        pst.setString(1, newUsername);
+        pst.setString(2, newEmail);
+        pst.setString(3, this.userId);
+
+        try (ResultSet rs = pst.executeQuery()) {
+            if (rs.next() && rs.getInt(1) > 0) {
+                JOptionPane.showMessageDialog(this, "Username or Email already exists! Please use different credentials.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         }
-    }     
-    
-        AdminUserControl adminusercontrol = new AdminUserControl();
-        adminusercontrol.setVisible(true);
-        this.dispose();
-    
+        
+        // Proceed with update
+        String updateQuery = "UPDATE users SET Fname = ?, Lname = ?, email = ?, RegUser = ?, type = ?, status = ? WHERE id = ?";
+        try (PreparedStatement updatePst = conn.prepareStatement(updateQuery)) {
+            updatePst.setString(1, newFname);
+            updatePst.setString(2, newLname);
+            updatePst.setString(3, newEmail);
+            updatePst.setString(4, newUsername);
+            updatePst.setString(5, newUserType);
+            updatePst.setString(6, newUserStatus);
+            updatePst.setString(7, this.userId);
+
+            int updated = updatePst.executeUpdate();
+            if (updated > 0) {
+                JOptionPane.showMessageDialog(this, "User updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                new AdminUserControl().setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Update failed!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
    
 
     }//GEN-LAST:event_UpdateButtonActionPerformed
@@ -355,6 +425,10 @@ public class AdminUpdateUser extends javax.swing.JFrame {
     private void fnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fnActionPerformed
+
+    private void cmbUserTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUserTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbUserTypeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -402,7 +476,7 @@ public class AdminUpdateUser extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbUserType1;
     private javax.swing.JTextField cn;
     private javax.swing.JTextField em;
-    private javax.swing.JTextField fn;
+    private static javax.swing.JTextField fn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;

@@ -441,8 +441,38 @@ void addUser() {
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
-         AdminUpdateUser adminUpdateuser = new AdminUpdateUser();
-        adminUpdateuser.setVisible(true);
+int rowIndex = jTable1.getSelectedRow();
+if (rowIndex < 0) {
+    JOptionPane.showMessageDialog(null, "Please select an item!");
+} else {
+    try {
+        DbConnect dbc = new DbConnect();
+        TableModel tbl = jTable1.getModel();
+
+        String userId = tbl.getValueAt(rowIndex, 0).toString(); 
+        String query = "SELECT * FROM users WHERE id = ?";
+
+        PreparedStatement pst = dbc.getConnection().prepareStatement(query);
+        pst.setString(1, userId);
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            AdminUpdateUser crf = new AdminUpdateUser();
+            crf.setUserId(userId); 
+            crf.fn.setText(rs.getString("Fname"));
+            crf.ln.setText(rs.getString("Lname"));
+            crf.cn.setText(rs.getString("Contactnum"));
+            crf.em.setText(rs.getString("email"));
+            crf.un.setText(rs.getString("RegUser"));
+            crf.ps.setEnabled(false); 
+
+            crf.setVisible(true);
+            this.dispose();
+        }
+    } catch (SQLException ex) {
+        System.out.println("Error: " + ex.getMessage());
+    }
+}
     }//GEN-LAST:event_UpdateButtonActionPerformed
 
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
@@ -450,32 +480,19 @@ void addUser() {
     }//GEN-LAST:event_DeleteButtonActionPerformed
 
     private void UpdateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UpdateButtonMouseClicked
-    int rowindex = jTable1.getSelectedRow();
-    
-    if (rowindex < 0) {
-        JOptionPane.showMessageDialog(null, "Please select an account");
+   int selectedRow = jTable1.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a user to edit.", "Selection Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
-    try {
-        DbConnect dbc = new DbConnect();
-        TableModel tbl = jTable1.getModel();
-        ResultSet rs = dbc.getData("SELECT * FROM users WHERE u_id = '" + tbl.getValueAt(rowindex, 0) + "'");
+    String username = jTable1.getValueAt(selectedRow, jTable1.getColumn("Username").getModelIndex()).toString();
 
-        if (rs.next()) {
-            AdminUpdateUser aau = new AdminUpdateUser();  
-            aau.setFirstName(rs.getString("Fname")); 
-            aau.setVisible(true);
-        }
-
-    } catch (SQLException ex) {
-        System.out.println("Error: " + ex);
+    if (username == null || username.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Selected user has no username.", "Selection Error", JOptionPane.ERROR_MESSAGE);
+        return;
+      
     }
-    
-          
-      TableModel tbl = jTable1.getModel();
-      
-      
     }//GEN-LAST:event_UpdateButtonMouseClicked
     
     /**
