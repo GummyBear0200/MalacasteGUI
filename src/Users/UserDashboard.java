@@ -6,6 +6,8 @@
 package Users;
 
 import config.Session;
+import java.awt.Color;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,8 +21,29 @@ public class UserDashboard extends javax.swing.JFrame {
      */
     public UserDashboard() {
         initComponents();
+       
+    customizeButton(Logoutbutton);
+    
+    customizeButton(AccountDetails);
     }
+private void customizeButton(JButton button) {
+   button.setOpaque(true);
+button.setBorderPainted(false);
+button.setFocusPainted(false);
+button.setBackground(new Color(139, 0, 0)); 
+button.setForeground(Color.WHITE);
+button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
 
+   
+    button.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(0, 102, 204)); 
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(139, 0, 0)); 
+        }
+    });
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,12 +61,11 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         acc_fname_user = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
+        AccountDetails = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        Logoutbutton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -90,32 +112,32 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel4.setText("DASHBOARD");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 241, 50));
 
-        jButton5.setBackground(new java.awt.Color(204, 0, 51));
-        jButton5.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        jButton5.setText("Account ");
-        jButton5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        AccountDetails.setBackground(new java.awt.Color(204, 0, 51));
+        AccountDetails.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        AccountDetails.setText("Account ");
+        AccountDetails.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        AccountDetails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                AccountDetailsActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 20, 140, 30));
+        jPanel2.add(AccountDetails, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 20, 140, 30));
 
         Interface1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 70));
 
         jPanel1.setBackground(new java.awt.Color(153, 51, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton2.setBackground(new java.awt.Color(204, 0, 51));
-        jButton2.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        jButton2.setText("LOGOUT");
-        jButton2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        Logoutbutton.setBackground(new java.awt.Color(204, 0, 51));
+        Logoutbutton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        Logoutbutton.setText("LOGOUT");
+        Logoutbutton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Logoutbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                LogoutbuttonActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 190, 50));
+        jPanel1.add(Logoutbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 190, 50));
 
         Interface1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
 
@@ -124,10 +146,6 @@ public class UserDashboard extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/unnamed.png"))); // NOI18N
         jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 650, 510));
-
-        jLabel2.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
-        jLabel2.setText("Under Construction...");
-        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
         jLabel3.setText("STAY TUNED!");
@@ -152,7 +170,7 @@ public class UserDashboard extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void LogoutbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutbuttonActionPerformed
         int confirm = javax.swing.JOptionPane.showConfirmDialog(
             this, "Are you sure you want to logout?", "Logout Confirmation",
             javax.swing.JOptionPane.YES_NO_OPTION);
@@ -163,7 +181,7 @@ public class UserDashboard extends javax.swing.JFrame {
             Loginform loginPage = new Loginform();
             loginPage.setVisible(true);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_LogoutbuttonActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         Session sess = Session.getInstance();
@@ -179,11 +197,11 @@ public class UserDashboard extends javax.swing.JFrame {
        acc_lname_user.setText(""+sess.getLname());
     }//GEN-LAST:event_formWindowActivated
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void AccountDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountDetailsActionPerformed
         UserAccount ua = new UserAccount();
         ua.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_AccountDetailsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -221,14 +239,13 @@ public class UserDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AccountDetails;
     private javax.swing.JPanel Interface;
     private javax.swing.JPanel Interface1;
+    private javax.swing.JButton Logoutbutton;
     private javax.swing.JLabel acc_fname_user;
     private javax.swing.JLabel acc_lname_user;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;

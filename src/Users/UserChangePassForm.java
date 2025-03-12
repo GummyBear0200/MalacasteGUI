@@ -3,9 +3,11 @@ package Users;
 
 import config.DbConnect;
 import config.Session;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 
@@ -14,7 +16,30 @@ public class UserChangePassForm extends javax.swing.JFrame {
     
     public UserChangePassForm() {
         initComponents();
+        customizeButton(BackButton);
+    
+    customizeButton(btnChangePassword);
+    customizeButton(LogoutButton);
     }
+    
+    private void customizeButton(JButton button) {
+   button.setOpaque(true);
+button.setBorderPainted(false);
+button.setFocusPainted(false);
+button.setBackground(new Color(139, 0, 0)); 
+button.setForeground(Color.WHITE);
+button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
+
+   
+    button.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(0, 102, 204)); 
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(139, 0, 0)); 
+        }
+    });
+}
 private boolean verifyCurrentPassword(String currentPass) {
     boolean isValid = false;
 
@@ -87,7 +112,7 @@ private boolean updatePassword(String newPass) {
         jLabel11 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
+        LogoutButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -157,16 +182,16 @@ private boolean updatePassword(String newPass) {
         jPanel1.setBackground(new java.awt.Color(153, 51, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton3.setBackground(new java.awt.Color(204, 0, 51));
-        jButton3.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        jButton3.setText("LOGOUT");
-        jButton3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        LogoutButton.setBackground(new java.awt.Color(204, 0, 51));
+        LogoutButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        LogoutButton.setText("LOGOUT");
+        LogoutButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        LogoutButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                LogoutButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 190, 50));
+        jPanel1.add(LogoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 190, 50));
 
         Interface1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
 
@@ -307,7 +332,7 @@ private boolean updatePassword(String newPass) {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1210, Short.MAX_VALUE)
+            .addGap(0, 1050, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -393,9 +418,18 @@ private boolean updatePassword(String newPass) {
        
     }//GEN-LAST:event_formWindowActivated
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
+       int confirm = javax.swing.JOptionPane.showConfirmDialog(
+            this, "Are you sure you want to logout?", "Logout Confirmation",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            this.dispose();
+
+            Loginform loginPage = new Loginform();
+            loginPage.setVisible(true);
+        }
+    }//GEN-LAST:event_LogoutButtonActionPerformed
 
     private void newPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newPasswordFieldActionPerformed
         // TODO add your handling code here:
@@ -459,6 +493,7 @@ private boolean updatePassword(String newPass) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackButton;
     private javax.swing.JPanel Interface1;
+    private javax.swing.JButton LogoutButton;
     private javax.swing.JLabel acc_cn_user;
     private javax.swing.JLabel acc_cn_user2;
     private javax.swing.JLabel acc_cn_user3;
@@ -469,7 +504,6 @@ private boolean updatePassword(String newPass) {
     private javax.swing.JLabel acc_lname_user;
     private javax.swing.JButton btnChangePassword;
     private javax.swing.JPasswordField currentPasswordField;
-    private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;

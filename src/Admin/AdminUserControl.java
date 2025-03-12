@@ -443,7 +443,7 @@ void addUser() {
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
 int rowIndex = jTable1.getSelectedRow();
 if (rowIndex < 0) {
-    JOptionPane.showMessageDialog(null, "Please select an item!");
+    JOptionPane.showMessageDialog(null, "Please select a User!");
 } else {
     try {
         DbConnect dbc = new DbConnect();
