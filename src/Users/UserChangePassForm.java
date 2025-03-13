@@ -59,7 +59,7 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     }
 }
 private boolean verifyCurrentPassword(String enteredPassword) {
-    String userId = Session.getInstance().getuid() + ""; // Get user ID from session
+    String userId = Session.getInstance().getuid() + "";
     String sql = "SELECT RegPass FROM users WHERE u_id = ?";
 
     try (Connection connect = new DbConnect().getConnection();
@@ -70,9 +70,9 @@ private boolean verifyCurrentPassword(String enteredPassword) {
 
         if (rs.next()) {
             String storedHashedPassword = rs.getString("RegPass");
-            String enteredHashedPassword = hashPassword(enteredPassword); // Hash entered password
+            String enteredHashedPassword = hashPassword(enteredPassword); 
 
-            return storedHashedPassword.equals(enteredHashedPassword); // Compare hashes
+            return storedHashedPassword.equals(enteredHashedPassword); 
         }
     } catch (SQLException ex) {
         ex.printStackTrace();
@@ -81,8 +81,8 @@ private boolean verifyCurrentPassword(String enteredPassword) {
 }
 
 private boolean updatePassword(String newPassword) {
-    String userId = Session.getInstance().getuid() + ""; // Get user ID from session
-    String hashedNewPassword = hashPassword(newPassword); // Hash the new password
+    String userId = Session.getInstance().getuid() + "";
+    String hashedNewPassword = hashPassword(newPassword); 
 
     if (hashedNewPassword == null) return false;
 
@@ -91,10 +91,10 @@ private boolean updatePassword(String newPassword) {
     try (Connection connect = new DbConnect().getConnection();
          PreparedStatement pst = connect.prepareStatement(sql)) {
         
-        pst.setString(1, hashedNewPassword); // Store hashed password
+        pst.setString(1, hashedNewPassword); 
         pst.setString(2, userId);
 
-        return pst.executeUpdate() > 0; // Return true if update successful
+        return pst.executeUpdate() > 0; 
     } catch (SQLException ex) {
         ex.printStackTrace();
     }

@@ -307,7 +307,7 @@ public class RegistrationForm extends javax.swing.JFrame {
 
     System.out.println("Debug: Validation passed, checking for duplicates...");
     
-    // Hash the password using SHA-256
+  
     String hashedPassword = hashPassword(password);
     if (hashedPassword == null) {
         JOptionPane.showMessageDialog(this, "Error hashing password. Try again.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -336,7 +336,7 @@ public class RegistrationForm extends javax.swing.JFrame {
             insertStmt.setString(4, email);
             insertStmt.setString(5, UserType);
             insertStmt.setString(6, username);
-            insertStmt.setString(7, hashedPassword); // Store hashed password
+            insertStmt.setString(7, hashedPassword);
 
             int inserted = insertStmt.executeUpdate();
 
@@ -354,7 +354,7 @@ public class RegistrationForm extends javax.swing.JFrame {
     }
 }
 
-// Password hashing function using SHA-256
+
 private String hashPassword(String password) {
     try {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
