@@ -263,10 +263,10 @@ void addUser() {
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
         AddButton = new javax.swing.JButton();
         UpdateButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
@@ -276,7 +276,7 @@ void addUser() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        Interface.setBackground(new java.awt.Color(102, 0, 0));
+        Interface.setBackground(new java.awt.Color(204, 204, 204));
         Interface.setForeground(new java.awt.Color(102, 102, 102));
         Interface.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -284,9 +284,9 @@ void addUser() {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         Interface.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 100, -1));
 
-        jPanel3.setBackground(new java.awt.Color(102, 0, 0));
+        jPanel3.setBackground(new java.awt.Color(102, 102, 102));
 
-        jLabel2.setBackground(new java.awt.Color(153, 0, 51));
+        jLabel2.setBackground(new java.awt.Color(102, 102, 102));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/54476.png"))); // NOI18N
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -298,31 +298,22 @@ void addUser() {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, Short.MAX_VALUE)
         );
 
         Interface.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 90));
 
-        jPanel2.setBackground(new java.awt.Color(153, 0, 0));
+        jPanel2.setBackground(new java.awt.Color(51, 51, 51));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("User CONTROL");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 40));
-
-        Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 880, 90));
-
-        jPanel4.setBackground(new java.awt.Color(153, 0, 0));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         AddButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         AddButton.setText("ADD");
@@ -331,7 +322,7 @@ void addUser() {
                 AddButtonActionPerformed(evt);
             }
         });
-        jPanel4.add(AddButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 110, 40));
+        jPanel2.add(AddButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 110, 40));
 
         UpdateButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         UpdateButton.setText("UPDATE");
@@ -345,7 +336,7 @@ void addUser() {
                 UpdateButtonActionPerformed(evt);
             }
         });
-        jPanel4.add(UpdateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 110, 40));
+        jPanel2.add(UpdateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, 110, 40));
 
         DeleteButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         DeleteButton.setText("DELETE");
@@ -354,11 +345,15 @@ void addUser() {
                 DeleteButtonActionPerformed(evt);
             }
         });
-        jPanel4.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 110, 40));
+        jPanel2.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 30, 110, 40));
 
+        Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 880, 90));
+
+        jPanel4.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 130, 490));
 
-        jTable1.setBackground(new java.awt.Color(255, 204, 204));
+        jTable1.setBackground(new java.awt.Color(204, 204, 204));
         jTable1.setFont(new java.awt.Font("Bahnschrift", 1, 10)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -417,7 +412,9 @@ void addUser() {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Interface, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Interface, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

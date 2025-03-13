@@ -65,10 +65,10 @@ public class AdminAddBook extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(153, 51, 0));
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel9.setBackground(new java.awt.Color(255, 204, 204));
+        jPanel9.setBackground(new java.awt.Color(204, 204, 204));
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtBookTitle.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -176,11 +176,12 @@ public class AdminAddBook extends javax.swing.JFrame {
 
         jPanel9.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 720, 70));
 
-        jLabel9.setText("Note: To Add please fill all fields then click the button to function.");
+        jLabel9.setText("Note: To Add please fill all fields then click the add button to function.");
         jPanel9.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 570, 20));
 
         AddButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         AddButton.setText("CANCEL");
+        AddButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         AddButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddButtonActionPerformed(evt);
@@ -190,12 +191,13 @@ public class AdminAddBook extends javax.swing.JFrame {
 
         AddButton1.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         AddButton1.setText("ADD");
+        AddButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         AddButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddButton1ActionPerformed(evt);
             }
         });
-        jPanel9.add(AddButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 250, 110, 40));
+        jPanel9.add(AddButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 250, 130, 40));
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 2, 10)); // NOI18N
         jLabel1.setText("STATUS: (AVAILABLE)");
@@ -218,17 +220,17 @@ public class AdminAddBook extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Add Book page");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 241, 50));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 241, 50));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 801, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
         );
 
         pack();

@@ -236,33 +236,7 @@ private void updateBook() {
         DeleteButton = new javax.swing.JButton();
         ViewButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        jPanel9 = new javax.swing.JPanel();
-        txtBookTitle = new javax.swing.JTextField();
-        txtAuthor = new javax.swing.JTextField();
-        txtPubdate = new javax.swing.JTextField();
-        txtStatus = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        jPanel10 = new javax.swing.JPanel();
-        txtBookTitle5 = new javax.swing.JTextField();
-        txtAuthor5 = new javax.swing.JTextField();
-        txtPubdate5 = new javax.swing.JTextField();
-        txtStatus5 = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jPanel11 = new javax.swing.JPanel();
-        txtBookTitle6 = new javax.swing.JTextField();
-        txtAuthor6 = new javax.swing.JTextField();
-        txtPubdate6 = new javax.swing.JTextField();
-        txtStatus6 = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jPanel12 = new javax.swing.JPanel();
-        txtBookTitle7 = new javax.swing.JTextField();
-        txtAuthor7 = new javax.swing.JTextField();
-        txtPubdate7 = new javax.swing.JTextField();
-        txtStatus7 = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         txtBookTtle = new javax.swing.JTextField();
         txtAthr = new javax.swing.JTextField();
@@ -287,17 +261,19 @@ private void updateBook() {
         txtPubdate3 = new javax.swing.JTextField();
         txtStatus3 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        Interface.setBackground(new java.awt.Color(102, 0, 0));
+        Interface.setBackground(new java.awt.Color(102, 102, 102));
         Interface.setForeground(new java.awt.Color(102, 102, 102));
         Interface.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(153, 0, 0));
+        jPanel2.setBackground(new java.awt.Color(51, 51, 51));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel3.setBackground(new java.awt.Color(102, 0, 0));
+        jPanel3.setBackground(new java.awt.Color(102, 102, 102));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel6.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
@@ -322,7 +298,7 @@ private void updateBook() {
 
         Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 70));
 
-        jPanel1.setBackground(new java.awt.Color(153, 51, 0));
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         AddButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -363,160 +339,14 @@ private void updateBook() {
 
         Interface.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
 
-        jPanel4.setBackground(new java.awt.Color(255, 153, 153));
+        jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jTable1.setBackground(new java.awt.Color(204, 204, 204));
-        jTable1.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 710, 320));
 
         jLabel3.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         jLabel3.setText("Current Books:");
         jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 250, 40));
 
-        jPanel9.setBackground(new java.awt.Color(255, 204, 204));
-        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtBookTitle.setText("Title");
-        txtBookTitle.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtBookTitleMouseClicked(evt);
-            }
-        });
-        txtBookTitle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBookTitleActionPerformed(evt);
-            }
-        });
-        jPanel9.add(txtBookTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 160, -1));
-
-        txtAuthor.setText("Author");
-        jPanel9.add(txtAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 160, -1));
-
-        txtPubdate.setText("Publication Date");
-        jPanel9.add(txtPubdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 160, -1));
-
-        txtStatus.setText("Status of the book");
-        jPanel9.add(txtStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 160, -1));
-
-        jLabel9.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
-        jPanel9.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 570, 20));
-
-        jPanel10.setBackground(new java.awt.Color(255, 204, 204));
-        jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtBookTitle5.setText("Title");
-        txtBookTitle5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtBookTitle5MouseClicked(evt);
-            }
-        });
-        txtBookTitle5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBookTitle5ActionPerformed(evt);
-            }
-        });
-        jPanel10.add(txtBookTitle5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 160, -1));
-
-        txtAuthor5.setText("Author");
-        jPanel10.add(txtAuthor5, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 160, -1));
-
-        txtPubdate5.setText("Publication Date");
-        jPanel10.add(txtPubdate5, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 160, -1));
-
-        txtStatus5.setText("Status of the book");
-        jPanel10.add(txtStatus5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 160, -1));
-
-        jLabel10.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
-        jPanel10.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 570, 20));
-
-        jPanel9.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 720, 70));
-
-        jPanel11.setBackground(new java.awt.Color(255, 204, 204));
-        jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtBookTitle6.setText("Title");
-        txtBookTitle6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtBookTitle6MouseClicked(evt);
-            }
-        });
-        txtBookTitle6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBookTitle6ActionPerformed(evt);
-            }
-        });
-        jPanel11.add(txtBookTitle6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 160, -1));
-
-        txtAuthor6.setText("Author");
-        jPanel11.add(txtAuthor6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 160, -1));
-
-        txtPubdate6.setText("Publication Date");
-        jPanel11.add(txtPubdate6, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 160, -1));
-
-        txtStatus6.setText("Status of the book");
-        jPanel11.add(txtStatus6, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 160, -1));
-
-        jLabel11.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
-        jPanel11.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 570, 20));
-
-        jPanel12.setBackground(new java.awt.Color(255, 204, 204));
-        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtBookTitle7.setText("Title");
-        txtBookTitle7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtBookTitle7MouseClicked(evt);
-            }
-        });
-        txtBookTitle7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBookTitle7ActionPerformed(evt);
-            }
-        });
-        jPanel12.add(txtBookTitle7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 160, -1));
-
-        txtAuthor7.setText("Author");
-        jPanel12.add(txtAuthor7, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 160, -1));
-
-        txtPubdate7.setText("Publication Date");
-        jPanel12.add(txtPubdate7, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 160, -1));
-
-        txtStatus7.setText("Status of the book");
-        jPanel12.add(txtStatus7, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 160, -1));
-
-        jLabel12.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
-        jPanel12.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 570, 20));
-
-        jPanel11.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 720, 70));
-
-        jPanel9.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 720, 70));
-
-        jPanel4.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 720, 70));
-
-        jPanel5.setBackground(new java.awt.Color(255, 204, 204));
+        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtBookTtle.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -534,6 +364,7 @@ private void updateBook() {
         jPanel5.add(txtPubdte, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 160, -1));
         jPanel5.add(txtSttus, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 160, -1));
 
+        jLabel1.setBackground(new java.awt.Color(204, 204, 204));
         jLabel1.setText("View Log: Select a row in the table then click View button to display their data.");
         jPanel5.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 570, 20));
 
@@ -627,7 +458,23 @@ private void updateBook() {
 
         jPanel5.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 720, 70));
 
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 720, 70));
+        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 720, 70));
+
+        jTable1.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
+
+        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 40, 700, 330));
 
         Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 780, 580));
 
@@ -704,38 +551,6 @@ private void updateBook() {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBookTitle3ActionPerformed
 
-    private void txtBookTitleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBookTitleMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitleMouseClicked
-
-    private void txtBookTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookTitleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitleActionPerformed
-
-    private void txtBookTitle5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBookTitle5MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle5MouseClicked
-
-    private void txtBookTitle5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookTitle5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle5ActionPerformed
-
-    private void txtBookTitle6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBookTitle6MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle6MouseClicked
-
-    private void txtBookTitle6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookTitle6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle6ActionPerformed
-
-    private void txtBookTitle7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBookTitle7MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle7MouseClicked
-
-    private void txtBookTitle7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookTitle7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle7ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -778,9 +593,6 @@ private void updateBook() {
     private javax.swing.JButton UpdateButton;
     private javax.swing.JButton ViewButton;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -788,11 +600,7 @@ private void updateBook() {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -800,40 +608,23 @@ private void updateBook() {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtAthr;
-    private javax.swing.JTextField txtAuthor;
     private javax.swing.JTextField txtAuthor1;
     private javax.swing.JTextField txtAuthor2;
     private javax.swing.JTextField txtAuthor3;
-    private javax.swing.JTextField txtAuthor5;
-    private javax.swing.JTextField txtAuthor6;
-    private javax.swing.JTextField txtAuthor7;
-    private javax.swing.JTextField txtBookTitle;
     private javax.swing.JTextField txtBookTitle1;
     private javax.swing.JTextField txtBookTitle2;
     private javax.swing.JTextField txtBookTitle3;
-    private javax.swing.JTextField txtBookTitle5;
-    private javax.swing.JTextField txtBookTitle6;
-    private javax.swing.JTextField txtBookTitle7;
     private javax.swing.JTextField txtBookTtle;
-    private javax.swing.JTextField txtPubdate;
     private javax.swing.JTextField txtPubdate1;
     private javax.swing.JTextField txtPubdate2;
     private javax.swing.JTextField txtPubdate3;
-    private javax.swing.JTextField txtPubdate5;
-    private javax.swing.JTextField txtPubdate6;
-    private javax.swing.JTextField txtPubdate7;
     private javax.swing.JTextField txtPubdte;
-    private javax.swing.JTextField txtStatus;
     private javax.swing.JTextField txtStatus1;
     private javax.swing.JTextField txtStatus2;
     private javax.swing.JTextField txtStatus3;
-    private javax.swing.JTextField txtStatus5;
-    private javax.swing.JTextField txtStatus6;
-    private javax.swing.JTextField txtStatus7;
     private javax.swing.JTextField txtSttus;
     // End of variables declaration//GEN-END:variables
 }

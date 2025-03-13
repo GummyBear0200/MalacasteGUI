@@ -7,6 +7,7 @@ package Users;
 
 import config.Session;
 import java.awt.Color;
+import java.awt.Cursor;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -52,12 +53,12 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         BackButton = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
         LogoutButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         acc_fname_user = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -87,7 +88,8 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         acc_ps_user = new javax.swing.JPasswordField();
         jCheckBox1 = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        ChangePass = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -97,14 +99,14 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
             }
         });
 
-        Interface1.setBackground(new java.awt.Color(102, 0, 0));
+        Interface1.setBackground(new java.awt.Color(102, 102, 102));
         Interface1.setForeground(new java.awt.Color(102, 102, 102));
         Interface1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(153, 0, 0));
+        jPanel2.setBackground(new java.awt.Color(51, 51, 51));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel3.setBackground(new java.awt.Color(102, 0, 0));
+        jPanel3.setBackground(new java.awt.Color(102, 102, 102));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         BackButton.setBackground(new java.awt.Color(204, 0, 51));
@@ -120,10 +122,11 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 70));
 
-        Interface1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 70));
-
-        jPanel1.setBackground(new java.awt.Color(153, 51, 0));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jLabel5.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel5.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("SEE YOUR PERSONAL INFO HERE!");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, 490, 50));
 
         LogoutButton.setBackground(new java.awt.Color(204, 0, 51));
         LogoutButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -134,11 +137,15 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
                 LogoutButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(LogoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 190, 50));
+        jPanel2.add(LogoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 20, 130, 30));
 
+        Interface1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 70));
+
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         Interface1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
 
-        jPanel4.setBackground(new java.awt.Color(255, 153, 153));
+        jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         acc_fname_user.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
@@ -149,11 +156,6 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel4.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel4.setText("Password:");
         jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 360, 160, 50));
-
-        jLabel5.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel5.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
-        jLabel5.setText("Account Details:");
-        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 241, 50));
 
         jLabel6.setBackground(new java.awt.Color(0, 0, 0));
         jLabel6.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
@@ -295,15 +297,26 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/ACCOUNTT.png"))); // NOI18N
         jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 60));
 
-        jLabel1.setFont(new java.awt.Font("Book Antiqua", 3, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 51, 204));
-        jLabel1.setText("Change password");
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        ChangePass.setFont(new java.awt.Font("Book Antiqua", 3, 14)); // NOI18N
+        ChangePass.setForeground(new java.awt.Color(0, 51, 204));
+        ChangePass.setText("Change password");
+        ChangePass.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                ChangePassMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ChangePassMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                ChangePassMouseExited(evt);
             }
         });
-        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 408, 230, 30));
+        jPanel4.add(ChangePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 408, 230, 30));
+
+        jLabel12.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel12.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel12.setText("Account Details:");
+        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 241, 50));
 
         Interface1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 730, 580));
 
@@ -382,19 +395,29 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         return;
     }
 
-    // Show or hide password
+    
     if (jCheckBox1.isSelected()) {
-        acc_ps_user.setEchoChar((char) 0); // Show password
+        acc_ps_user.setEchoChar((char) 0); 
     } else {
-        acc_ps_user.setEchoChar('*'); // Mask password
+        acc_ps_user.setEchoChar('*'); 
     }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+    private void ChangePassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChangePassMouseClicked
          UserChangePassForm ucpf = new UserChangePassForm();
             ucpf.setVisible(true);
             this.dispose();
-    }//GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_ChangePassMouseClicked
+
+    private void ChangePassMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChangePassMouseEntered
+      ChangePass.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+      ChangePass.setForeground(Color.BLUE); 
+    }//GEN-LAST:event_ChangePassMouseEntered
+
+    private void ChangePassMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChangePassMouseExited
+    ChangePass.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    ChangePass.setForeground(Color.BLACK); 
+    }//GEN-LAST:event_ChangePassMouseExited
 
     /**
      * @param args the command line arguments
@@ -433,6 +456,7 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackButton;
+    private javax.swing.JLabel ChangePass;
     private javax.swing.JPanel Interface1;
     private javax.swing.JButton LogoutButton;
     private javax.swing.JLabel acc_cn_user;
@@ -450,9 +474,9 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     private javax.swing.JPasswordField acc_ps_user;
     private javax.swing.JLabel acc_un_user;
     private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

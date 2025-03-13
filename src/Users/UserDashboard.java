@@ -7,6 +7,7 @@ package Users;
 
 import config.Session;
 import java.awt.Color;
+import java.awt.Cursor;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -57,13 +58,21 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         Interface1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        acc_lname_user = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        acc_fname_user = new javax.swing.JLabel();
+        Logoutbutton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         AccountDetails = new javax.swing.JButton();
+        acc_fname_user = new javax.swing.JLabel();
+        acc_lname_user = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        Logoutbutton = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -80,37 +89,33 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         Interface.setForeground(new java.awt.Color(102, 102, 102));
         Interface.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Interface1.setBackground(new java.awt.Color(102, 0, 0));
+        Interface1.setBackground(new java.awt.Color(102, 102, 102));
         Interface1.setForeground(new java.awt.Color(102, 102, 102));
         Interface1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(153, 0, 0));
+        jPanel2.setBackground(new java.awt.Color(51, 51, 51));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel3.setBackground(new java.awt.Color(102, 0, 0));
+        jPanel3.setBackground(new java.awt.Color(102, 102, 102));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        acc_lname_user.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
-        acc_lname_user.setForeground(new java.awt.Color(255, 255, 255));
-        acc_lname_user.setText("User!");
-        jPanel3.add(acc_lname_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 40, 80, -1));
-
-        jLabel7.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Welcome User!");
-        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 170, -1));
-
-        acc_fname_user.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
-        acc_fname_user.setForeground(new java.awt.Color(255, 255, 255));
-        acc_fname_user.setText("User!");
-        jPanel3.add(acc_fname_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 170, -1));
+        Logoutbutton.setBackground(new java.awt.Color(204, 0, 51));
+        Logoutbutton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        Logoutbutton.setText("LOGOUT");
+        Logoutbutton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Logoutbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogoutbuttonActionPerformed(evt);
+            }
+        });
+        jPanel3.add(Logoutbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 130, 30));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 70));
 
         jLabel4.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("DASHBOARD");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 241, 50));
+        jLabel4.setText("WELCOME TO THE LIBRARY!");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 380, 50));
 
         AccountDetails.setBackground(new java.awt.Color(204, 0, 51));
         AccountDetails.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -123,25 +128,103 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         });
         jPanel2.add(AccountDetails, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 20, 140, 30));
 
+        acc_fname_user.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        acc_fname_user.setForeground(new java.awt.Color(255, 255, 255));
+        acc_fname_user.setText("User!");
+        jPanel2.add(acc_fname_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, 170, 30));
+
+        acc_lname_user.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        acc_lname_user.setForeground(new java.awt.Color(255, 255, 255));
+        acc_lname_user.setText("User!");
+        jPanel2.add(acc_lname_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 21, 140, 30));
+
         Interface1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 70));
 
-        jPanel1.setBackground(new java.awt.Color(153, 51, 0));
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Logoutbutton.setBackground(new java.awt.Color(204, 0, 51));
-        Logoutbutton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        Logoutbutton.setText("LOGOUT");
-        Logoutbutton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        Logoutbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LogoutbuttonActionPerformed(evt);
+        jLabel7.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Lets Get Started!");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 170, -1));
+
+        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel5MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel5MouseExited(evt);
             }
         });
-        jPanel1.add(Logoutbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 190, 50));
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Book_Shelf_50px.png"))); // NOI18N
+        jLabel2.setText("Available Books");
+        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 40));
+
+        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 140, 50));
+
+        jPanel6.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel6MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel6MouseExited(evt);
+            }
+        });
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Books_26px.png"))); // NOI18N
+        jLabel5.setText("Borrow Book");
+        jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 120, 28));
+
+        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 140, 50));
+
+        jPanel7.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel7MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel7MouseExited(evt);
+            }
+        });
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Book_26px.png"))); // NOI18N
+        jLabel6.setText("Return Book");
+        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 11, -1, 28));
+
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 140, 50));
+
+        jPanel8.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel8MouseEntered(evt);
+            }
+        });
+        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/customerService.png"))); // NOI18N
+        jLabel8.setText("Customer Service");
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel8MouseExited(evt);
+            }
+        });
+        jPanel8.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 50));
+
+        jPanel1.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 170, 50));
 
         Interface1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
 
-        jPanel4.setBackground(new java.awt.Color(255, 153, 153));
+        jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/unnamed.png"))); // NOI18N
@@ -203,6 +286,46 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         this.dispose();
     }//GEN-LAST:event_AccountDetailsActionPerformed
 
+    private void jPanel6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseEntered
+        jPanel6.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+    jPanel6.setBackground(Color.RED); 
+    }//GEN-LAST:event_jPanel6MouseEntered
+
+    private void jPanel6MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseExited
+       jPanel6.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+    jPanel6.setBackground(Color.WHITE); 
+    }//GEN-LAST:event_jPanel6MouseExited
+
+    private void jPanel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseEntered
+       jPanel5.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+    jPanel5.setBackground(Color.RED); 
+    }//GEN-LAST:event_jPanel5MouseEntered
+
+    private void jPanel5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseExited
+       jPanel5.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+    jPanel5.setBackground(Color.WHITE); 
+    }//GEN-LAST:event_jPanel5MouseExited
+
+    private void jPanel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseEntered
+         jPanel7.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+    jPanel7.setBackground(Color.RED); 
+    }//GEN-LAST:event_jPanel7MouseEntered
+
+    private void jPanel7MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseExited
+        jPanel7.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+    jPanel7.setBackground(Color.WHITE); 
+    }//GEN-LAST:event_jPanel7MouseExited
+
+    private void jPanel8MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseEntered
+        jPanel8.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+    jPanel8.setBackground(Color.RED); 
+    }//GEN-LAST:event_jPanel8MouseEntered
+
+    private void jLabel8MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseExited
+      jPanel8.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+    jPanel8.setBackground(Color.WHITE); 
+    }//GEN-LAST:event_jLabel8MouseExited
+
     /**
      * @param args the command line arguments
      */
@@ -246,12 +369,20 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     private javax.swing.JLabel acc_fname_user;
     private javax.swing.JLabel acc_lname_user;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     // End of variables declaration//GEN-END:variables
 }

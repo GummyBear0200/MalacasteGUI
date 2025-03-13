@@ -4,9 +4,12 @@ package Users;
 import config.DbConnect;
 import config.Session;
 import java.awt.Color;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -40,58 +43,64 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         }
     });
 }
-private boolean verifyCurrentPassword(String currentPass) {
-    boolean isValid = false;
-
+    public static String hashPassword(String password) {
     try {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hashedBytes = md.digest(password.getBytes());
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hashedBytes) {
+            hexString.append(String.format("%02x", b));
+        }
+        return hexString.toString();
+    } catch (NoSuchAlgorithmException e) {
+        e.printStackTrace();
+        return null;
+    }
+}
+private boolean verifyCurrentPassword(String enteredPassword) {
+    String userId = Session.getInstance().getuid() + ""; // Get user ID from session
+    String sql = "SELECT RegPass FROM users WHERE u_id = ?";
+
+    try (Connection connect = new DbConnect().getConnection();
+         PreparedStatement pst = connect.prepareStatement(sql)) {
         
-        DbConnect db = new DbConnect();
-        Connection conn = db.getConnection(); 
-
-        String query = "SELECT RegPass FROM users WHERE u_id = ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-
-        stmt.setInt(1, Session.getInstance().getuid()); 
-
-        ResultSet rs = stmt.executeQuery();
+        pst.setString(1, userId);
+        ResultSet rs = pst.executeQuery();
 
         if (rs.next()) {
-            String dbPass = rs.getString("RegPass");
-            isValid = dbPass.equals(currentPass); 
+            String storedHashedPassword = rs.getString("RegPass");
+            String enteredHashedPassword = hashPassword(enteredPassword); // Hash entered password
+
+            return storedHashedPassword.equals(enteredHashedPassword); // Compare hashes
         }
-
-        conn.close();
-    } catch (Exception e) {
-        e.printStackTrace();
+    } catch (SQLException ex) {
+        ex.printStackTrace();
     }
-
-    return isValid;
+    return false;
 }
-private boolean updatePassword(String newPass) {
-    boolean isUpdated = false;
-    
-    try {
+
+private boolean updatePassword(String newPassword) {
+    String userId = Session.getInstance().getuid() + ""; // Get user ID from session
+    String hashedNewPassword = hashPassword(newPassword); // Hash the new password
+
+    if (hashedNewPassword == null) return false;
+
+    String sql = "UPDATE users SET RegPass = ? WHERE u_id = ?";
+
+    try (Connection connect = new DbConnect().getConnection();
+         PreparedStatement pst = connect.prepareStatement(sql)) {
         
-        DbConnect db = new DbConnect();
-        Connection conn = db.getConnection(); 
+        pst.setString(1, hashedNewPassword); // Store hashed password
+        pst.setString(2, userId);
 
-        String query = "UPDATE users SET RegPass = ? WHERE u_id = ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, newPass); 
-        stmt.setInt(2, Session.getInstance().getuid());
-
-        int rows = stmt.executeUpdate();
-        if (rows > 0) {
-            isUpdated = true;
-        }
-
-        conn.close();
-    } catch (Exception e) {
-        e.printStackTrace();
+        return pst.executeUpdate() > 0; // Return true if update successful
+    } catch (SQLException ex) {
+        ex.printStackTrace();
     }
-    
-    return isUpdated;
+    return false;
 }
+
 
 
 
@@ -140,20 +149,21 @@ private boolean updatePassword(String newPass) {
         jCheckBox3 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
             }
         });
 
-        Interface1.setBackground(new java.awt.Color(102, 0, 0));
+        Interface1.setBackground(new java.awt.Color(102, 102, 102));
         Interface1.setForeground(new java.awt.Color(102, 102, 102));
         Interface1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(153, 0, 0));
+        jPanel2.setBackground(new java.awt.Color(51, 51, 51));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel3.setBackground(new java.awt.Color(102, 0, 0));
+        jPanel3.setBackground(new java.awt.Color(102, 102, 102));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         BackButton.setBackground(new java.awt.Color(204, 0, 51));
@@ -170,16 +180,17 @@ private boolean updatePassword(String newPass) {
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 70));
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/ACCOUNTT.png"))); // NOI18N
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 0, -1, 60));
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, -1, 60));
 
         jLabel5.setBackground(new java.awt.Color(0, 0, 0));
         jLabel5.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Change Password:");
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 241, 50));
 
         Interface1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 70));
 
-        jPanel1.setBackground(new java.awt.Color(153, 51, 0));
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         LogoutButton.setBackground(new java.awt.Color(204, 0, 51));
@@ -191,11 +202,11 @@ private boolean updatePassword(String newPass) {
                 LogoutButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(LogoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 190, 50));
+        jPanel1.add(LogoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 580, 140, 30));
 
         Interface1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
 
-        jPanel4.setBackground(new java.awt.Color(255, 153, 153));
+        jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel6.setBackground(new java.awt.Color(0, 0, 0));
@@ -350,6 +361,7 @@ private boolean updatePassword(String newPass) {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed
@@ -359,7 +371,7 @@ private boolean updatePassword(String newPass) {
     }//GEN-LAST:event_BackButtonActionPerformed
 
     private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
- String currentPass = String.valueOf(currentPasswordField.getPassword());
+    String currentPass = String.valueOf(currentPasswordField.getPassword());
     String newPass = String.valueOf(newPasswordField.getPassword());
     String reenterPass = String.valueOf(reenterPasswordField.getPassword());
 
@@ -373,9 +385,7 @@ private boolean updatePassword(String newPass) {
         return;
     }
 
-    
     if (verifyCurrentPassword(currentPass)) {
-        
         if (updatePassword(newPass)) {
             JOptionPane.showMessageDialog(this, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             this.dispose(); 

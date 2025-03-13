@@ -6,6 +6,9 @@ import config.DbConnect;
 import config.Session;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,6 +33,20 @@ private Timer timer;
 
         initComponents();
     }
+private String hashPassword(String password) {
+    try {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hash = md.digest(password.getBytes(StandardCharsets.UTF_8));
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) {
+            hexString.append(String.format("%02x", b)); 
+        }
+        return hexString.toString();
+    } catch (NoSuchAlgorithmException e) {
+        e.printStackTrace();
+        return null;
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,7 +65,7 @@ private Timer timer;
         reg = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        Interface = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
         Header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -57,8 +74,11 @@ private Timer timer;
         jCheckBox1 = new javax.swing.JCheckBox();
         LogButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         jFormattedTextField1.setText("jFormattedTextField1");
 
@@ -77,11 +97,12 @@ private Timer timer;
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        reg.setBackground(new java.awt.Color(153, 51, 0));
+        reg.setBackground(new java.awt.Color(51, 51, 51));
         reg.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton2.setFont(new java.awt.Font("Arial Black", 1, 10)); // NOI18N
         jButton2.setText("Register");
+        jButton2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton2MouseClicked(evt);
@@ -92,27 +113,29 @@ private Timer timer;
                 jButton2ActionPerformed(evt);
             }
         });
-        reg.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(214, 16, -1, -1));
+        reg.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, 90, 40));
 
-        jLabel4.setFont(new java.awt.Font("Arial Black", 2, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial Black", 2, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("No account? Click here to ->");
-        reg.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 200, 30));
+        reg.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 240, 30));
 
-        jPanel2.add(reg, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 310, 310, 60));
+        jPanel2.add(reg, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 360, 440, 60));
 
-        Interface.setBackground(new java.awt.Color(0, 0, 0));
-        Interface.setForeground(new java.awt.Color(102, 102, 102));
-        Interface.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel2.add(Interface, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 50, 420));
+        jLabel9.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/customerService.png"))); // NOI18N
+        jLabel9.setText("+63923654987");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 430, 160, 50));
 
-        Header.setBackground(new java.awt.Color(153, 51, 0));
+        Header.setBackground(new java.awt.Color(51, 51, 51));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(102, 102, 102));
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 2, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("WELCOME TO MY LIBRARY SYSTEM                    WELCOME TO MY LIBRARY SYSTEM!             WELCOME TO MY LIBRARY SYSTEM!               WELCOME TO MY LIBRARY SYSTEM");
+        jLabel1.setText("WELCOME TO MY LIBRARY SYSTEM                    WELCOME TO MY LIBRARY SYSTEM!             WELCOME TO MY LIBRARY SYSTEM!               WELCOME TO MY LIBRARY SYSTEM                          WELCOME TO MY LIBRARY SYSTEM                    WELCOME TO MY LIBRARY SYSTEM!             WELCOME TO MY LIBRARY SYSTEM!               WELCOME TO MY LIBRARY SYSTEM");
         jLabel1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jLabel1FocusGained(evt);
@@ -125,7 +148,7 @@ private Timer timer;
             public void ancestorResized(java.awt.event.HierarchyEvent evt) {
             }
         });
-        Header.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-470, 20, 1470, -1));
+        Header.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-3880, 20, 4840, -1));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/scc.png"))); // NOI18N
         Header.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 110, 70));
@@ -137,7 +160,7 @@ private Timer timer;
                 usernameActionPerformed(evt);
             }
         });
-        jPanel2.add(username, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, 220, 30));
+        jPanel2.add(username, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 120, 260, 40));
 
         pass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,37 +172,55 @@ private Timer timer;
                 passKeyPressed(evt);
             }
         });
-        jPanel2.add(pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 190, 220, 30));
+        jPanel2.add(pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 200, 260, 40));
 
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 190, -1, 30));
+        jPanel2.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 200, 30, 40));
 
         LogButton.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
         LogButton.setText("LOGIN");
+        LogButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         LogButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LogButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(LogButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 240, -1, -1));
+        jPanel2.add(LogButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 270, 100, 30));
 
-        jLabel2.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Password:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 200, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 210, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/colourful-google-logo-in-dark-background-free-vector.jpg"))); // NOI18N
+        jLabel10.setText("MalacasteGUI");
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 439, 140, 40));
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Username:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 150, -1, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, -1, -1));
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/magic-fairy-tale-scene-old-ancient-book-castle-dark-background-open-night-sky-world-glowing-lights-light-coming-out-279382353.png"))); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/7ab261c112429812160c05ad9f487c2f.jpg"))); // NOI18N
+        jLabel5.setText("MalacasteGUI");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 440, 130, -1));
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/istockphoto-1790848330-612x612.jpg"))); // NOI18N
         jLabel6.setText("jLabel6");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 1090, 490));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 790, 530));
+
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/customerService.png"))); // NOI18N
+        jLabel8.setText("Customer Service");
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 50));
 
         javax.swing.GroupLayout MainLayout = new javax.swing.GroupLayout(Main);
         Main.setLayout(MainLayout);
@@ -216,8 +257,7 @@ private Timer timer;
     private void LogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogButtonActionPerformed
                                               
                                          
-                                              
-    String usernameInput = username.getText().trim();
+ String usernameInput = username.getText().trim();
     String passwordInput = new String(pass.getPassword()).trim();
 
     if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
@@ -225,62 +265,71 @@ private Timer timer;
         return;
     }
 
-   String sql = "SELECT u_id, Fname, Lname,Contactnum, email, RegUser, usertype, status, RegPass FROM users WHERE RegUser = ?";
+    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, RegUser, usertype, status, RegPass FROM users WHERE RegUser = ?";
 
-try (Connection connect = new DbConnect().getConnection(); 
-     PreparedStatement pst = connect.prepareStatement(sql)) {
-    
-    pst.setString(1, usernameInput);
-    ResultSet rs = pst.executeQuery();
-
-    if (rs.next()) {
-        String dbPassword = rs.getString("RegPass"); 
-        String status = rs.getString("status");
-        String userType = rs.getString("usertype"); 
-
+    try (Connection connect = new DbConnect().getConnection(); 
+         PreparedStatement pst = connect.prepareStatement(sql)) {
         
-        Session sess = Session.getInstance();
-        sess.setuid(rs.getInt("u_id"));  
-        sess.setFname(rs.getString("Fname"));
-        sess.setLname(rs.getString("Lname"));
-        sess.setContact(rs.getString("Contactnum"));
-        sess.setemail(rs.getString("email"));
-        sess.setusername(rs.getString("RegUser"));
-        sess.setPassword(rs.getString("RegPass"));       
-        sess.settype(rs.getString("usertype"));
-        sess.setStatus(rs.getString("status"));
-        System.out.println(""+sess.getuid());
-        if (status.equalsIgnoreCase("Pending")) {
-            JOptionPane.showMessageDialog(this, "Your account is pending approval. Please wait for admin approval.", "Access Denied", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        pst.setString(1, usernameInput);
+        ResultSet rs = pst.executeQuery();
 
-        if (passwordInput.equals(dbPassword)) {
-            JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        if (rs.next()) {
+            String dbPasswordHash = rs.getString("RegPass"); 
+            String status = rs.getString("status");
+            String userType = rs.getString("usertype");
 
-            switch (userType.toLowerCase()) {
-                case "admin":
-                case "librarian":
-                    new AdminDashboard().setVisible(true);
-                    break;
-                case "borrower":
-                    new UserDashboard().setVisible(true);
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(this, "Invalid User Type!", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+            
+            String hashedInputPassword = hashPassword(passwordInput);
+
+            if (hashedInputPassword == null) {
+                JOptionPane.showMessageDialog(this, "Error hashing password. Try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-            this.dispose(); 
+
+            if (status.equalsIgnoreCase("Pending")) {
+                JOptionPane.showMessageDialog(this, "Your account is pending approval. Please wait for admin approval.", "Access Denied", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (hashedInputPassword.equals(dbPasswordHash)) { 
+                JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                
+                Session sess = Session.getInstance();
+                sess.setuid(rs.getInt("u_id"));  
+                sess.setFname(rs.getString("Fname"));
+                sess.setLname(rs.getString("Lname"));
+                sess.setContact(rs.getString("Contactnum"));
+                sess.setemail(rs.getString("email"));
+                sess.setusername(rs.getString("RegUser"));
+                sess.setPassword(rs.getString("RegPass"));
+                sess.settype(rs.getString("usertype"));
+                sess.setStatus(rs.getString("status"));
+                sess.setPassword(passwordInput);
+                
+                switch (userType.toLowerCase()) {
+                    case "admin":
+                    case "librarian":
+                        new AdminDashboard().setVisible(true);
+                        break;
+                    case "borrower":
+                        new UserDashboard().setVisible(true);
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(this, "Invalid User Type!", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                }
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Invalid Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Invalid Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
-    }
 
-} catch (SQLException ex) {
-    JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-}
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
 
     }//GEN-LAST:event_LogButtonActionPerformed
@@ -389,7 +438,6 @@ try (Connection connect = new DbConnect().getConnection();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Header;
-    private javax.swing.JPanel Interface;
     private javax.swing.JButton LogButton;
     private javax.swing.JPanel Main;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -398,11 +446,15 @@ try (Connection connect = new DbConnect().getConnection();
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField pass;
     private javax.swing.JPanel reg;
