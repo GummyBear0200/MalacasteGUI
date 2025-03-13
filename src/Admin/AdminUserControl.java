@@ -6,6 +6,7 @@
 package Admin;
 
 import config.DbConnect;
+import config.Session;
 import java.awt.Color;
 import java.awt.Component;
 import java.sql.Connection;
@@ -96,12 +97,13 @@ jTable1.getModel().addTableModelListener(new TableModelListener() {
         }
     }
 });
+    Session sess = Session.getInstance();
     
     String[] columnNames = {"ID", "First Name", "Last Name", "Contact", "Email", "User Type", "Username","Password", "Status"};
     model.setColumnIdentifiers(columnNames); 
     model.setRowCount(0);
 
-    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, usertype, RegUser,RegPass, status FROM users";
+    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, usertype, RegUser, RegPass, status FROM users WHERE u_id != '"+sess.getuid()+"';";
 
     try (Connection connect = new DbConnect().getConnection();
          PreparedStatement pst = connect.prepareStatement(sql);

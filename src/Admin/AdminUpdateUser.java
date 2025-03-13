@@ -3,6 +3,7 @@ package Admin;
 
 
 import config.DbConnect;
+import config.Session;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -92,9 +93,16 @@ public class AdminUpdateUser extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         CancelButton = new javax.swing.JButton();
         UpdateButton = new javax.swing.JButton();
+        cc = new javax.swing.JLabel();
+        acc_id = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -178,6 +186,16 @@ public class AdminUpdateUser extends javax.swing.JFrame {
             }
         });
         jPanel2.add(UpdateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 410, 140, 40));
+
+        cc.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        cc.setForeground(new java.awt.Color(255, 255, 255));
+        cc.setText("Current User:");
+        jPanel2.add(cc, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 0, 180, 50));
+
+        acc_id.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        acc_id.setForeground(new java.awt.Color(255, 255, 255));
+        acc_id.setText("ID");
+        jPanel2.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 0, 110, 50));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -296,6 +314,11 @@ public class AdminUpdateUser extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_CancelButtonActionPerformed
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+      Session sess = Session.getInstance();
+       acc_id.setText(""+sess.getuid());
+    }//GEN-LAST:event_formWindowActivated
+
     /**
      * @param args the command line arguments
      */
@@ -334,6 +357,8 @@ public class AdminUpdateUser extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
     private javax.swing.JButton UpdateButton;
+    private javax.swing.JLabel acc_id;
+    private javax.swing.JLabel cc;
     private javax.swing.JComboBox<String> cmbStatus;
     private javax.swing.JComboBox<String> cmbUserType;
     public javax.swing.JTextField cn;
