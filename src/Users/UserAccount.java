@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Users;
 
 import config.Session;
@@ -11,21 +7,20 @@ import java.awt.Cursor;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author II
- */
+
 public class UserAccount extends javax.swing.JFrame {
 
-    /**
-     * Creates new form UserAccount
-     */
+    
     public UserAccount() {
         initComponents();
        customizeButton(BackButton);
     customizeButton(LogoutButton);
     
     }
+    
+    private boolean hasShownPinReminder = false;
+    private boolean isPinCreationOpen = false;
+    
 private void customizeButton(JButton button) {
    button.setOpaque(true);
 button.setBorderPainted(false);
@@ -86,16 +81,19 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         acc_un_user = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         acc_ps_user = new javax.swing.JPasswordField();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
         ChangePass = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        PIN = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -287,18 +285,11 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
 
         jPanel4.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 370, 350, 40));
 
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 370, 30, 40));
-
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/ACCOUNTT.png"))); // NOI18N
         jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 60));
 
         ChangePass.setFont(new java.awt.Font("Book Antiqua", 3, 14)); // NOI18N
-        ChangePass.setForeground(new java.awt.Color(0, 51, 204));
+        ChangePass.setForeground(new java.awt.Color(0, 0, 255));
         ChangePass.setText("Change password");
         ChangePass.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -313,10 +304,27 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         });
         jPanel4.add(ChangePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 408, 230, 30));
 
-        jLabel12.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel12.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
-        jLabel12.setText("Account Details:");
-        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 241, 50));
+        PIN.setBackground(new java.awt.Color(0, 0, 0));
+        PIN.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
+        PIN.setForeground(new java.awt.Color(51, 51, 255));
+        PIN.setText("ΔPIN");
+        PIN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                PINMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                PINMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                PINMouseExited(evt);
+            }
+        });
+        jPanel4.add(PIN, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 0, 120, 50));
+
+        jLabel13.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel13.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel13.setText("Account Details:");
+        jPanel4.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 241, 50));
 
         Interface1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 730, 580));
 
@@ -365,43 +373,29 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     }//GEN-LAST:event_LogoutButtonActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-       Session sess = Session.getInstance();
-       
-       if(sess.getuid() == 0){
-           JOptionPane.showMessageDialog(null,"No account found , Log in First!");
-           Loginform lf = new Loginform();
-           lf.setVisible(true);
-           this.dispose();
-       
-       }
-       acc_fname_user.setText(""+sess.getFname());
-       acc_lname_user1.setText(""+sess.getLname());
-       acc_cn_user8.setText(""+sess.getContact());
-       acc_em_user.setText(""+sess.getemail());
-       acc_un_user.setText(""+sess.getusername());
-       acc_ps_user.setText(""+sess.getPassword());
-       acc_ps_user.setEchoChar('*');
-      
-       
-       
-       
-       
-       
-    }//GEN-LAST:event_formWindowActivated
-
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        if (acc_ps_user == null) {
-        System.out.println("acc_ps_user is null");
-        return;
+         Session sess = Session.getInstance();
+    
+    
+    if (sess.getuid() == 0) {
+        JOptionPane.showMessageDialog(this, "No account found, Log in First!", "Login Required", JOptionPane.WARNING_MESSAGE);
+        Loginform lf = new Loginform();
+        lf.setVisible(true);
+        this.dispose();
+        return; 
     }
 
     
-    if (jCheckBox1.isSelected()) {
-        acc_ps_user.setEchoChar((char) 0); 
-    } else {
-        acc_ps_user.setEchoChar('*'); 
-    }
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    acc_fname_user.setText(sess.getFname());
+    acc_lname_user1.setText(sess.getLname());
+    acc_cn_user8.setText(sess.getContact());
+    acc_em_user.setText(sess.getemail());
+    acc_un_user.setText(sess.getusername());
+    acc_ps_user.setText(sess.getPassword());
+    acc_ps_user.setEchoChar('*');
+
+   
+       
+    }//GEN-LAST:event_formWindowActivated
 
     private void ChangePassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChangePassMouseClicked
          UserChangePassForm ucpf = new UserChangePassForm();
@@ -411,13 +405,53 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
 
     private void ChangePassMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChangePassMouseEntered
       ChangePass.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-      ChangePass.setForeground(Color.BLUE); 
+      ChangePass.setForeground(Color.BLACK); 
     }//GEN-LAST:event_ChangePassMouseEntered
 
     private void ChangePassMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChangePassMouseExited
     ChangePass.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-    ChangePass.setForeground(Color.BLACK); 
+    ChangePass.setForeground(Color.BLUE); 
     }//GEN-LAST:event_ChangePassMouseExited
+
+    private void PINMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PINMouseClicked
+       if (!isPinCreationOpen) { 
+        isPinCreationOpen = true; 
+        UserPINcreation upc = new UserPINcreation();
+        
+        
+        upc.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                isPinCreationOpen = false; 
+            }
+        });
+
+        upc.setVisible(true); 
+    }
+    }//GEN-LAST:event_PINMouseClicked
+
+    private void PINMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PINMouseEntered
+        PIN.setCursor(new Cursor  (Cursor.HAND_CURSOR));
+        PIN.setForeground(Color.BLACK);
+    }//GEN-LAST:event_PINMouseEntered
+
+    private void PINMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PINMouseExited
+       PIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+       PIN.setForeground(Color.BLUE);
+    }//GEN-LAST:event_PINMouseExited
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+       Session sess = Session.getInstance(); 
+    String pin = sess.getPIN(); 
+    System.out.println("Retrieved PIN: " + pin); 
+
+    
+    if (pin == null || pin.isEmpty()) {
+        if (!hasShownPinReminder) { 
+            JOptionPane.showMessageDialog(this, "It is advisable that you create your PIN for your account security.", "PIN Reminder", JOptionPane.WARNING_MESSAGE);
+            hasShownPinReminder = true; 
+        }
+    }
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -459,6 +493,7 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     private javax.swing.JLabel ChangePass;
     private javax.swing.JPanel Interface1;
     private javax.swing.JButton LogoutButton;
+    private javax.swing.JLabel PIN;
     private javax.swing.JLabel acc_cn_user;
     private javax.swing.JLabel acc_cn_user2;
     private javax.swing.JLabel acc_cn_user3;
@@ -473,10 +508,9 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     private javax.swing.JLabel acc_lname_user1;
     private javax.swing.JPasswordField acc_ps_user;
     private javax.swing.JLabel acc_un_user;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

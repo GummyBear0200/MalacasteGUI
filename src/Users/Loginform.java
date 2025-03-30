@@ -4,6 +4,8 @@ package Users;
 import Admin.AdminDashboard;
 import config.DbConnect;
 import config.Session;
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -28,6 +31,17 @@ private Timer timer;
     
     public Loginform() {
         
+        setUndecorated(true);
+         addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                
+            }
+        });
+        addMouseMotionListener(new java.awt.event.MouseAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                
+            }
+        });
         txtUsername = new JTextField();
         txtPassword = new JPasswordField();
 
@@ -46,6 +60,9 @@ private String hashPassword(String password) {
         e.printStackTrace();
         return null;
     }
+}
+private void minimize() {
+    this.setState(JFrame.ICONIFIED); // Minimize the frame
 }
 
     /**
@@ -69,11 +86,14 @@ private String hashPassword(String password) {
         Header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         username = new javax.swing.JTextField();
         pass = new javax.swing.JPasswordField();
         jCheckBox1 = new javax.swing.JCheckBox();
         LogButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        Forgotpass = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -106,6 +126,12 @@ private String hashPassword(String password) {
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton2MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton2MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton2MouseExited(evt);
             }
         });
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -148,12 +174,44 @@ private String hashPassword(String password) {
             public void ancestorResized(java.awt.event.HierarchyEvent evt) {
             }
         });
-        Header.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-3880, 20, 4840, -1));
+        Header.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-3870, 30, 4840, -1));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/scc.png"))); // NOI18N
         Header.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 110, 70));
 
-        jPanel2.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 70));
+        jLabel11.setFont(new java.awt.Font("Arial Black", 1, 22)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("X");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel11MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel11MouseExited(evt);
+            }
+        });
+        Header.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(938, 0, 20, 30));
+
+        jLabel12.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("←");
+        jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel12MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel12MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel12MouseExited(evt);
+            }
+        });
+        Header.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 0, 30, 30));
+
+        jPanel2.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 990, 70));
 
         username.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -184,6 +242,14 @@ private String hashPassword(String password) {
         LogButton.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
         LogButton.setText("LOGIN");
         LogButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        LogButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                LogButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                LogButtonMouseExited(evt);
+            }
+        });
         LogButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LogButtonActionPerformed(evt);
@@ -195,6 +261,22 @@ private String hashPassword(String password) {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Password:");
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 210, -1, -1));
+
+        Forgotpass.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        Forgotpass.setForeground(new java.awt.Color(51, 51, 255));
+        Forgotpass.setText("Forgot Password?");
+        Forgotpass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ForgotpassMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ForgotpassMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                ForgotpassMouseExited(evt);
+            }
+        });
+        jPanel2.add(Forgotpass, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 240, 130, 30));
 
         jLabel10.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
@@ -226,7 +308,9 @@ private String hashPassword(String password) {
         Main.setLayout(MainLayout);
         MainLayout.setHorizontalGroup(
             MainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(MainLayout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 990, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         MainLayout.setVerticalGroup(
             MainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,7 +349,7 @@ private String hashPassword(String password) {
         return;
     }
 
-    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, RegUser, usertype, status, RegPass FROM users WHERE RegUser = ?";
+    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, RegUser, usertype, status ,PIN , RegPass FROM users WHERE RegUser = ?";
 
     try (Connection connect = new DbConnect().getConnection(); 
          PreparedStatement pst = connect.prepareStatement(sql)) {
@@ -305,6 +389,7 @@ private String hashPassword(String password) {
                 sess.setPassword(rs.getString("RegPass"));
                 sess.settype(rs.getString("usertype"));
                 sess.setStatus(rs.getString("status"));
+                sess.setPIN(rs.getString("PIN"));
                 sess.setPassword(passwordInput);
                 
                 switch (userType.toLowerCase()) {
@@ -401,9 +486,76 @@ private String hashPassword(String password) {
         // TODO add your handling code here:
     }//GEN-LAST:event_passActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void ForgotpassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ForgotpassMouseClicked
+       UserForgotPass ufp = new UserForgotPass();
+       ufp.setVisible(true);
+       this.dispose();
+      
+     }//GEN-LAST:event_ForgotpassMouseClicked
+
+    private void ForgotpassMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ForgotpassMouseEntered
+       Forgotpass.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+      
+    }//GEN-LAST:event_ForgotpassMouseEntered
+
+    private void ForgotpassMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ForgotpassMouseExited
+       Forgotpass.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+    }//GEN-LAST:event_ForgotpassMouseExited
+
+    private void LogButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogButtonMouseEntered
+     LogButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_LogButtonMouseEntered
+
+    private void LogButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogButtonMouseExited
+      LogButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_LogButtonMouseExited
+
+    private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseEntered
+       jButton2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jButton2MouseEntered
+
+    private void jButton2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseExited
+        jButton2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_jButton2MouseExited
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+         int confirm = javax.swing.JOptionPane.showConfirmDialog(
+            this, "You sure you wanna exit?", "Exit Confirmation",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+
+         if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+        int secondConfirm = javax.swing.JOptionPane.showConfirmDialog(
+            this, "Sure? You don't want the system?", "Exit Confirmation",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+        
+        if (secondConfirm == javax.swing.JOptionPane.YES_OPTION) {
+            this.dispose(); 
+    }
+    
+         }
+    }//GEN-LAST:event_jLabel11MouseClicked
+
+    private void jLabel11MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseEntered
+        jLabel1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jLabel11MouseEntered
+
+    private void jLabel11MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseExited
+        jLabel1.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_jLabel11MouseExited
+
+    private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
+        this.minimize();
+        
+    }//GEN-LAST:event_jLabel12MouseClicked
+
+    private void jLabel12MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseEntered
+        jLabel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jLabel12MouseEntered
+
+    private void jLabel12MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseExited
+        jLabel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_jLabel12MouseExited
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -437,6 +589,7 @@ private String hashPassword(String password) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Forgotpass;
     private javax.swing.JPanel Header;
     private javax.swing.JButton LogButton;
     private javax.swing.JPanel Main;
@@ -447,6 +600,8 @@ private String hashPassword(String password) {
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

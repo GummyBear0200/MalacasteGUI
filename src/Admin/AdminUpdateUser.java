@@ -259,7 +259,7 @@ public class AdminUpdateUser extends javax.swing.JFrame {
 
     DbConnect dbc = new DbConnect();
     
-    // Ensure userId is valid before running queries
+    
     if (this.userId == null || this.userId.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Error: User ID is missing.", "Error", JOptionPane.ERROR_MESSAGE);
         return;

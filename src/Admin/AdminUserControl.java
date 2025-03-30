@@ -154,6 +154,7 @@ void addUser() {
    
      AdminAddUser adminadduser = new AdminAddUser();
      adminadduser.setVisible(true);
+     this.dispose();
 }
     public boolean addUser(String firstName, String lastName, String contact, String email, String userType, String username, String password, String status) {
     Connection con = null;
@@ -315,7 +316,7 @@ void addUser() {
         jLabel3.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("User CONTROL");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 40));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 200, 40));
 
         AddButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         AddButton.setText("ADD");

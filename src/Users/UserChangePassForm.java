@@ -143,7 +143,6 @@ private boolean updatePassword(String newPassword) {
         jLabel7 = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         currentPasswordField = new javax.swing.JPasswordField();
-        jCheckBox1 = new javax.swing.JCheckBox();
         btnChangePassword = new javax.swing.JButton();
         jCheckBox2 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
@@ -305,13 +304,6 @@ private boolean updatePassword(String newPassword) {
 
         jPanel4.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, 350, 40));
 
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 60, 30, 40));
-
         btnChangePassword.setBackground(new java.awt.Color(204, 0, 51));
         btnChangePassword.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         btnChangePassword.setText("Change");
@@ -396,20 +388,6 @@ private boolean updatePassword(String newPassword) {
         JOptionPane.showMessageDialog(this, "Incorrect current password!", "Error", JOptionPane.ERROR_MESSAGE);
     }       
     }//GEN-LAST:event_btnChangePasswordActionPerformed
-
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        if (currentPasswordField == null) {
-            System.out.println("acc_ps_user is null");
-            return;
-        }
-
-        
-        if (jCheckBox1.isSelected()) {
-            currentPasswordField.setEchoChar((char) 0); 
-        } else {
-            currentPasswordField.setEchoChar('*'); 
-        }
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
          Session sess = Session.getInstance();
@@ -514,7 +492,6 @@ private boolean updatePassword(String newPassword) {
     private javax.swing.JLabel acc_lname_user;
     private javax.swing.JButton btnChangePassword;
     private javax.swing.JPasswordField currentPasswordField;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JLabel jLabel11;

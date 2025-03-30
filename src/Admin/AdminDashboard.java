@@ -190,7 +190,6 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel12 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
-        acc_lname = new javax.swing.JLabel();
         acc_fname = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -279,15 +278,10 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel18.setText("Online");
         jPanel3.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(1430, 50, -1, -1));
 
-        acc_lname.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
-        acc_lname.setForeground(new java.awt.Color(255, 255, 255));
-        acc_lname.setText("Admin");
-        jPanel3.add(acc_lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 100, 30));
-
         acc_fname.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
         acc_fname.setForeground(new java.awt.Color(255, 255, 255));
         acc_fname.setText("Admin");
-        jPanel3.add(acc_fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 100, 30));
+        jPanel3.add(acc_fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 200, 30));
 
         jLabel2.setFont(new java.awt.Font("Georgia", 3, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -556,8 +550,8 @@ AdminBookControl bookControl = new AdminBookControl();
            this.dispose();
        
        }
-       acc_fname.setText(""+sess.getFname());
-       acc_lname.setText(""+sess.getLname());
+       acc_fname.setText(sess.getFname() +" "+  sess.getLname());
+       
     }//GEN-LAST:event_formWindowActivated
     
 private void performSearch(String query) {
@@ -601,7 +595,6 @@ private void performSearch(String query) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Interface;
     private javax.swing.JLabel acc_fname;
-    private javax.swing.JLabel acc_lname;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

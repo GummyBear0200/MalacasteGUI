@@ -9,9 +9,10 @@ public class Session {
     private String Fname;
     private String Lname;
     private String Contactnum;
-     private String RegPass;   
-
-   
+    private String RegPass;   
+    private String SecurityQuestion;
+    private String answer;
+    private String PIN;
     private String email;
     private String username;
     private String type;
@@ -92,4 +93,27 @@ public class Session {
     public void setStatus(String status){
     this.status = status;
             }
+    
+    public String getSecurityQuestion() {
+        return SecurityQuestion;
+    }
+
+    public void setSecurityQuestion(String SecurityQuestion) {
+        this.SecurityQuestion = SecurityQuestion;
+    }
+    
+     public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+     public String getPIN() {
+        return PIN;
+    }
+
+    public void setPIN(String PIN) {
+        this.PIN = PIN;
+    }
 }
