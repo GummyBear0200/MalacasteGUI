@@ -4,6 +4,9 @@ package Users;
 import config.Session;
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 import javax.swing.JOptionPane;
 
@@ -250,11 +253,21 @@ private void resetPassword() {
     }//GEN-LAST:event_reqMouseExited
 
     private void reqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reqActionPerformed
-        String pin = PIN.getText().trim();
-       
+      Session  sess = Session.getInstance();
+        
+        int userId = sess.getuid();
 
-        // Logic to request a new PIN (e.g., send a request to the server)
+    try {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "");
+        String sql = "INSERT INTO pin_requests (user_id) VALUES (?)";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, userId);
+        stmt.executeUpdate();
+
         JOptionPane.showMessageDialog(this, "A request for a new PIN has been sent!", "Request Sent", JOptionPane.INFORMATION_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Request Failed", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_reqActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated

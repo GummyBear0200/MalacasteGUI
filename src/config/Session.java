@@ -1,6 +1,9 @@
 
 package config;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 
 public class Session {
    
@@ -17,6 +20,12 @@ public class Session {
     private String username;
     private String type;
     private String status;
+    private String pinreq;
+    private String imagePath;
+
+   
+
+    
     
         
     private Session(){
@@ -116,4 +125,19 @@ public class Session {
     public void setPIN(String PIN) {
         this.PIN = PIN;
     }
+    public String getPinreq() {
+        return pinreq;
+    }
+
+    public void setPinreq(String pinreq) {
+        this.pinreq = pinreq;
+    }
+     public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getImagePath() {
+        return this.imagePath;
+    }
+
 }

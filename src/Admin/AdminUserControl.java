@@ -9,11 +9,13 @@ import config.DbConnect;
 import config.Session;
 import java.awt.Color;
 import java.awt.Component;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -154,6 +156,8 @@ void addUser() {
    
      AdminAddUser adminadduser = new AdminAddUser();
      adminadduser.setVisible(true);
+     adminadduser.remove.setEnabled(false);
+     adminadduser.select.setEnabled(true);
      this.dispose();
 }
     public boolean addUser(String firstName, String lastName, String contact, String email, String userType, String username, String password, String status) {
@@ -247,7 +251,6 @@ void addUser() {
         }
     }
 
-   
    
 
    
@@ -442,37 +445,61 @@ void addUser() {
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
 int rowIndex = jTable1.getSelectedRow();
-if (rowIndex < 0) {
-    JOptionPane.showMessageDialog(null, "Please select a User!");
-} else {
-    try {
-        DbConnect dbc = new DbConnect();
-        TableModel tbl = jTable1.getModel();
+    if (rowIndex < 0) {
+        JOptionPane.showMessageDialog(null, "Please select a User!");
+    } else {
+        try {
+            DbConnect dbc = new DbConnect();
+            TableModel tbl = jTable1.getModel();
 
-        String userId = tbl.getValueAt(rowIndex, 0).toString(); 
-        String query = "SELECT * FROM users WHERE u_id = ?";
+            String userId = tbl.getValueAt(rowIndex, 0).toString(); 
+            String query = "SELECT * FROM users WHERE u_id = ?";
 
-        PreparedStatement pst = dbc.getConnection().prepareStatement(query);
-        pst.setString(1, userId);
-        ResultSet rs = pst.executeQuery();
+            PreparedStatement pst = dbc.getConnection().prepareStatement(query);
+            pst.setString(1, userId);
+            ResultSet rs = pst.executeQuery();
 
-        if (rs.next()) {
-            AdminUpdateUser crf = new AdminUpdateUser();
-            crf.setUserId(userId); 
-            crf.fn.setText(rs.getString("Fname"));
-            crf.ln.setText(rs.getString("Lname"));
-            crf.cn.setText(rs.getString("Contactnum"));
-            crf.em.setText(rs.getString("email"));
-            crf.un.setText(rs.getString("RegUser"));
-            crf.ps.setEnabled(false); 
+            if (rs.next()) {
+                
+                AdminUpdateUser crf = new AdminUpdateUser();
+                crf.setUserId(userId); 
+                crf.fn.setText(rs.getString("Fname"));
+                crf.ln.setText(rs.getString("Lname"));
+                crf.cn.setText(rs.getString("Contactnum"));
+                crf.em.setText(rs.getString("email"));
+                crf.un.setText(rs.getString("RegUser"));
+                crf.cmbStatus.setSelectedItem(rs.getString("status"));
+                crf.cmbUserType.setSelectedItem(rs.getString("usertype"));
+                
+                String imagePath = rs.getString("image");
+                File imgFile = new File(imagePath);
+                if (imgFile.exists()) {
+                    crf.image.setIcon(crf.ResizeImage(imagePath, null, crf.image));
+                } else {
+                    System.out.println("Image file does not exist: " + imagePath);
+                    crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
+                }
+                    if(rs.getString("image").isEmpty()){ 
+                    crf.select.setEnabled(true); 
+                    crf.remove.setEnabled(false); 
+                }else{ 
+                    crf.select.setEnabled(false); 
+                    crf.remove.setEnabled(true); 
+                }
+                crf.oldpath = imagePath;
+                crf.path = imagePath;
+                crf.destination = imagePath;
+                crf.ps.setEnabled(false);
+                crf.CancelButton1.setVisible(false);
+                crf.CancelButton.setVisible(true);
 
-            crf.setVisible(true);
-            this.dispose();
+                crf.setVisible(true);
+                this.dispose();
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
         }
-    } catch (SQLException ex) {
-        System.out.println("Error: " + ex.getMessage());
     }
-}
     }//GEN-LAST:event_UpdateButtonActionPerformed
 
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed

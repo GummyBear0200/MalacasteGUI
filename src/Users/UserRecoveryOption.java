@@ -4,13 +4,17 @@ package Users;
 import config.Session;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author II
- */
+
 public class UserRecoveryOption extends javax.swing.JFrame {
 
     
@@ -35,7 +39,42 @@ public class UserRecoveryOption extends javax.swing.JFrame {
          
      
     }
-    
+     public  ImageIcon ResizeImage(String ImagePath, byte[] pic, JLabel label) {
+    ImageIcon MyImage = null;
+        if(ImagePath !=null){
+            MyImage = new ImageIcon(ImagePath);
+        }else{
+            MyImage = new ImageIcon(pic);
+        }
+        
+    int newHeight = getHeightFromWidth(ImagePath, label.getWidth());
+
+    Image img = MyImage.getImage();
+    Image newImg = img.getScaledInstance(label.getWidth(), newHeight, Image.SCALE_SMOOTH);
+    ImageIcon image = new ImageIcon(newImg);
+    return image;
+}
+
+public static int getHeightFromWidth(String imagePath, int desiredWidth) {
+        try {
+            // Read the image file
+            File imageFile = new File(imagePath);
+            BufferedImage image = ImageIO.read(imageFile);
+            
+            // Get the original width and height of the image
+            int originalWidth = image.getWidth();
+            int originalHeight = image.getHeight();
+            
+            // Calculate the new height based on the desired width and the aspect ratio
+            int newHeight = (int) ((double) desiredWidth / originalWidth * originalHeight);
+            
+            return newHeight;
+        } catch (IOException ex) {
+            System.out.println("No image found!"+ex);
+        }
+        
+        return -1;
+    }
     
 private void customizeButton(JButton button) {
    button.setOpaque(true);
@@ -82,7 +121,7 @@ private void customizeButton(JButton button) {
         jLabel1 = new javax.swing.JLabel();
         mnumber = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        image = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -194,7 +233,7 @@ private void customizeButton(JButton button) {
         USER.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         USER.setForeground(new java.awt.Color(51, 51, 255));
         USER.setText("USER");
-        jPanel4.add(USER, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 400, 50));
+        jPanel4.add(USER, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 360, 50));
 
         titlelabel6.setBackground(new java.awt.Color(0, 0, 0));
         titlelabel6.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
@@ -223,12 +262,9 @@ private void customizeButton(JButton button) {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel3.add(image, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 260, 240));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/adadsdadwd.jpg"))); // NOI18N
-        jLabel2.setText("jLabel2");
-        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, -10, 330, 260));
-
-        jPanel4.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 280, 240));
+        jPanel4.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 280, 260));
 
         Interface1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1050, -1));
 
@@ -304,18 +340,36 @@ private void customizeButton(JButton button) {
     }//GEN-LAST:event_PINMouseClicked
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-       Session sess = Session.getInstance();
+        Session sess = Session.getInstance();
 
-    
     if (sess.getusername() == null) {
         JOptionPane.showMessageDialog(null, "No account found, find your account first!");
         UserForgotPass ufp = new UserForgotPass();
         ufp.setVisible(true);
         this.dispose();
-    } else {
-        
-        USER.setText(sess.getFname() + " " + sess.getLname());
+        return; 
+    } 
     
+    USER.setText(sess.getFname() + " " + sess.getLname());
+    String imagePath = sess.getImagePath();
+    
+    if (imagePath != null && !imagePath.isEmpty()) {
+        File imgFile = new File(imagePath);
+        if (imgFile.exists()) {
+            try {
+                
+                image.setIcon(ResizeImage(imagePath, null, image));
+            } catch (Exception e) {
+                System.out.println("Error loading image: " + e.getMessage());
+                image.setIcon(new ImageIcon("path/to/default/icon.png"));
+            }
+        } else {
+            System.out.println("Image file does not exist: " + imagePath);
+            image.setIcon(new ImageIcon("path/to/default/icon.png")); 
+        }
+    } else {
+        System.out.println("Image path is null or empty");
+        image.setIcon(new ImageIcon("path/to/default/icon.png"));
     }
     }//GEN-LAST:event_formWindowActivated
 
@@ -387,10 +441,10 @@ private void customizeButton(JButton button) {
     private javax.swing.JLabel SecurityQ;
     private javax.swing.JLabel USER;
     private javax.swing.JLabel exit;
+    private javax.swing.JLabel image;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

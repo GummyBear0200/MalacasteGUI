@@ -15,6 +15,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -49,7 +50,7 @@ userButton.addMouseListener(new java.awt.event.MouseAdapter() {
     }
 });
 
-
+        loadPinRequestData();
         loadBooksTable();
         loadUsersData();
     customizeButton(jButton1);
@@ -93,11 +94,35 @@ jTable1.setRowHeight(25);
             System.out.println("" + ex);
         }
     }
-     
-    void addLog(String message) {
-    logTextArea.append(message + "\n"); 
-    logTextArea.setCaretPosition(logTextArea.getDocument().getLength()); 
-}
+  public void loadPinRequestData() {
+    DefaultTableModel model = (DefaultTableModel) PinRequestTable.getModel();
+    
+    
+    String[] columnNames = {"ID", "Temp PIN", "Status"};
+    model.setColumnIdentifiers(columnNames);
+    model.setRowCount(0); 
+
+    String sql = "SELECT user_id , temp_pin, status FROM pin_requests";
+
+    try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "");
+         PreparedStatement pst = con.prepareStatement(sql);
+         ResultSet rs = pst.executeQuery()) {
+
+        while (rs.next()) {
+            Object[] row = {
+                rs.getString("user_id"),
+                rs.getString("temp_pin"),
+                rs.getString("status")
+            };
+            model.addRow(row); 
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+
  public void loadBooksTable() {
     DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
     
@@ -177,6 +202,14 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         }
     });
 }
+private String generateTempPin() {
+    StringBuilder pin = new StringBuilder();
+    for (int i = 0; i < 6; i++) {
+        int digit = (int)(Math.random() * 10); // generates 0-9
+        pin.append(digit);
+    }
+    return pin.toString();
+}
 
    
     @SuppressWarnings("unchecked")
@@ -210,8 +243,6 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         totalacc = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        logTextArea = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -220,6 +251,9 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel9 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        ApproveReq = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        PinRequestTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -397,18 +431,11 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 710, 210));
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
-        jLabel1.setText("Report LOG:");
+        jLabel1.setText("PIN requests:");
         jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 260, 250, 40));
 
         totalacc.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         jPanel4.add(totalacc, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, 40, 40));
-
-        logTextArea.setColumns(20);
-        logTextArea.setRows(5);
-        logTextArea.setText("...\nSystem Started...\nRetrieving Data...\nData Retrieved Successfully..");
-        jScrollPane3.setViewportView(logTextArea);
-
-        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 300, 270, 260));
 
         jLabel5.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         jLabel5.setText("Current Books:");
@@ -447,6 +474,27 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Online");
         jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1430, 50, -1, -1));
+
+        ApproveReq.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        ApproveReq.setText("Approve");
+        ApproveReq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApproveReqActionPerformed(evt);
+            }
+        });
+        jPanel4.add(ApproveReq, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 510, 110, 30));
+
+        PinRequestTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3"
+            }
+        ));
+        jScrollPane4.setViewportView(PinRequestTable);
+
+        jPanel4.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 300, 300, 200));
 
         Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 730, 580));
 
@@ -553,6 +601,42 @@ AdminBookControl bookControl = new AdminBookControl();
        acc_fname.setText(sess.getFname() +" "+  sess.getLname());
        
     }//GEN-LAST:event_formWindowActivated
+
+    private void ApproveReqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApproveReqActionPerformed
+      try {
+        int selectedRow = PinRequestTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a request first.");
+            return;
+        }
+
+        // Retrieve the requestId as a String and parse it to an Integer
+        String requestIdString = PinRequestTable.getValueAt(selectedRow, 0).toString();
+        int requestId = Integer.parseInt(requestIdString); // Convert to Integer
+
+        String tempPin = generateTempPin(); // You must implement this if not yet
+
+        // Use your DbConnect class
+        config.DbConnect db = new config.DbConnect();
+        Connection conn = db.getConnection();
+
+        String sql = "UPDATE pin_requests SET status = 'approved', temp_pin = ? WHERE id = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, tempPin);
+        stmt.setInt(2, requestId);
+        stmt.executeUpdate();
+
+        JOptionPane.showMessageDialog(this, "Request approved!\nTemporary PIN: " + tempPin);
+
+        // Optional: refresh table after approving
+        loadPinRequestData();
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Error: Invalid ID format. " + e.getMessage());
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
+    }//GEN-LAST:event_ApproveReqActionPerformed
     
 private void performSearch(String query) {
     JOptionPane.showMessageDialog(this, "Searching for: " + query);
@@ -593,7 +677,9 @@ private void performSearch(String query) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ApproveReq;
     private javax.swing.JPanel Interface;
+    private javax.swing.JTable PinRequestTable;
     private javax.swing.JLabel acc_fname;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -624,11 +710,10 @@ private void performSearch(String query) {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextArea logTextArea;
     private javax.swing.JLabel totalacc;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,11 +1,24 @@
 
 package Users;
 
+import Admin.AdminUpdateUser;
+import config.DbConnect;
 import config.Session;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
 
 
 public class UserAccount extends javax.swing.JFrame {
@@ -39,7 +52,42 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         }
     });
 }
-    
+    public  ImageIcon ResizeImage(String ImagePath, byte[] pic, JLabel label) {
+    ImageIcon MyImage = null;
+        if(ImagePath !=null){
+            MyImage = new ImageIcon(ImagePath);
+        }else{
+            MyImage = new ImageIcon(pic);
+        }
+        
+    int newHeight = getHeightFromWidth(ImagePath, label.getWidth());
+
+    Image img = MyImage.getImage();
+    Image newImg = img.getScaledInstance(label.getWidth(), newHeight, Image.SCALE_SMOOTH);
+    ImageIcon image = new ImageIcon(newImg);
+    return image;
+}
+
+public static int getHeightFromWidth(String imagePath, int desiredWidth) {
+        try {
+            // Read the image file
+            File imageFile = new File(imagePath);
+            BufferedImage image = ImageIO.read(imageFile);
+            
+            // Get the original width and height of the image
+            int originalWidth = image.getWidth();
+            int originalHeight = image.getHeight();
+            
+            // Calculate the new height based on the desired width and the aspect ratio
+            int newHeight = (int) ((double) desiredWidth / originalWidth * originalHeight);
+            
+            return newHeight;
+        } catch (IOException ex) {
+            System.out.println("No image found!"+ex);
+        }
+        
+        return -1;
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -51,10 +99,13 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel5 = new javax.swing.JLabel();
         LogoutButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        acc_image_label = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        EditProfile = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         acc_fname_user = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -83,8 +134,9 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         acc_ps_user = new javax.swing.JPasswordField();
         jLabel11 = new javax.swing.JLabel();
         ChangePass = new javax.swing.JLabel();
-        PIN = new javax.swing.JLabel();
+        Sec = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -104,27 +156,27 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jPanel2.setBackground(new java.awt.Color(51, 51, 51));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel3.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         BackButton.setBackground(new java.awt.Color(204, 0, 51));
         BackButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        BackButton.setText("BACK");
+        BackButton.setText("Dashboard");
         BackButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         BackButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BackButtonActionPerformed(evt);
             }
         });
-        jPanel3.add(BackButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 140, 30));
+        jPanel3.add(BackButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 140, 30));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 70));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 320, 70));
 
         jLabel5.setBackground(new java.awt.Color(0, 0, 0));
         jLabel5.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("SEE YOUR PERSONAL INFO HERE!");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, 490, 50));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 10, 490, 50));
 
         LogoutButton.setBackground(new java.awt.Color(204, 0, 51));
         LogoutButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -141,7 +193,36 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        Interface1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
+
+        jPanel14.setLayout(null);
+        jPanel14.add(acc_image_label);
+        acc_image_label.setBounds(10, 10, 280, 280);
+
+        jPanel1.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 300, 300));
+
+        jLabel6.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel6.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("PROFILE");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 380, 140, 50));
+
+        EditProfile.setFont(new java.awt.Font("Book Antiqua", 3, 14)); // NOI18N
+        EditProfile.setForeground(new java.awt.Color(0, 0, 255));
+        EditProfile.setText("EDIT PROFILE");
+        EditProfile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EditProfileMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                EditProfileMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                EditProfileMouseExited(evt);
+            }
+        });
+        jPanel1.add(EditProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 420, 120, 30));
+
+        Interface1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 320, 650));
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -154,11 +235,6 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel4.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel4.setText("Password:");
         jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 360, 160, 50));
-
-        jLabel6.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel6.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
-        jLabel6.setText("First Name:");
-        jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 170, 50));
 
         jLabel8.setBackground(new java.awt.Color(0, 0, 0));
         jLabel8.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
@@ -302,29 +378,34 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
                 ChangePassMouseExited(evt);
             }
         });
-        jPanel4.add(ChangePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 408, 230, 30));
+        jPanel4.add(ChangePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 440, 230, 30));
 
-        PIN.setBackground(new java.awt.Color(0, 0, 0));
-        PIN.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
-        PIN.setForeground(new java.awt.Color(51, 51, 255));
-        PIN.setText("ΔPIN");
-        PIN.addMouseListener(new java.awt.event.MouseAdapter() {
+        Sec.setBackground(new java.awt.Color(0, 0, 0));
+        Sec.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
+        Sec.setForeground(new java.awt.Color(51, 51, 255));
+        Sec.setText("Security");
+        Sec.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                PINMouseClicked(evt);
+                SecMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                PINMouseEntered(evt);
+                SecMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                PINMouseExited(evt);
+                SecMouseExited(evt);
             }
         });
-        jPanel4.add(PIN, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 0, 120, 50));
+        jPanel4.add(Sec, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 0, 130, 50));
 
         jLabel13.setBackground(new java.awt.Color(0, 0, 0));
         jLabel13.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel13.setText("Account Details:");
         jPanel4.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 241, 50));
+
+        jLabel12.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel12.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel12.setText("First Name:");
+        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 170, 50));
 
         Interface1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 730, 580));
 
@@ -373,9 +454,8 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     }//GEN-LAST:event_LogoutButtonActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-         Session sess = Session.getInstance();
-    
-    
+      Session sess = Session.getInstance();
+
     if (sess.getuid() == 0) {
         JOptionPane.showMessageDialog(this, "No account found, Log in First!", "Login Required", JOptionPane.WARNING_MESSAGE);
         Loginform lf = new Loginform();
@@ -384,7 +464,6 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         return; 
     }
 
-    
     acc_fname_user.setText(sess.getFname());
     acc_lname_user1.setText(sess.getLname());
     acc_cn_user8.setText(sess.getContact());
@@ -392,6 +471,18 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     acc_un_user.setText(sess.getusername());
     acc_ps_user.setText(sess.getPassword());
     acc_ps_user.setEchoChar('*');
+
+    
+    String imagePath = sess.getImagePath();
+    if (imagePath != null && !imagePath.isEmpty()) {
+        File imgFile = new File(imagePath);
+        if (imgFile.exists()) {
+            acc_image_label.setIcon(ResizeImage(imagePath,null,acc_image_label)); 
+        } else {
+            System.out.println("Image not found: " + imagePath);
+            acc_image_label.setIcon(new ImageIcon("path/to/default/icon.png")); 
+        }
+    }
 
    
        
@@ -413,10 +504,10 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     ChangePass.setForeground(Color.BLUE); 
     }//GEN-LAST:event_ChangePassMouseExited
 
-    private void PINMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PINMouseClicked
+    private void SecMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SecMouseClicked
        if (!isPinCreationOpen) { 
         isPinCreationOpen = true; 
-        UserPINcreation upc = new UserPINcreation();
+        UserSecurity upc = new UserSecurity();
         
         
         upc.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -427,17 +518,17 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
 
         upc.setVisible(true); 
     }
-    }//GEN-LAST:event_PINMouseClicked
+    }//GEN-LAST:event_SecMouseClicked
 
-    private void PINMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PINMouseEntered
-        PIN.setCursor(new Cursor  (Cursor.HAND_CURSOR));
-        PIN.setForeground(Color.BLACK);
-    }//GEN-LAST:event_PINMouseEntered
+    private void SecMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SecMouseEntered
+        Sec.setCursor(new Cursor  (Cursor.HAND_CURSOR));
+        Sec.setForeground(Color.BLACK);
+    }//GEN-LAST:event_SecMouseEntered
 
-    private void PINMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PINMouseExited
-       PIN.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-       PIN.setForeground(Color.BLUE);
-    }//GEN-LAST:event_PINMouseExited
+    private void SecMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SecMouseExited
+       Sec.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+       Sec.setForeground(Color.BLUE);
+    }//GEN-LAST:event_SecMouseExited
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
        Session sess = Session.getInstance(); 
@@ -452,6 +543,76 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         }
     }
     }//GEN-LAST:event_formWindowOpened
+
+    private void EditProfileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditProfileMouseClicked
+       Session sess = Session.getInstance(); 
+       String userId = String.valueOf(sess.getuid()); 
+
+    if (userId == null || userId.equals("0")) { 
+        JOptionPane.showMessageDialog(null, "No user is currently logged in!");
+        return;
+    }
+
+    try {
+        DbConnect dbc = new DbConnect();
+        String query = "SELECT * FROM users WHERE u_id = ?";
+
+        PreparedStatement pst = dbc.getConnection().prepareStatement(query);
+        pst.setString(1, userId);
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            AdminUpdateUser crf = new AdminUpdateUser();
+            crf.setUserId(userId);
+            crf.fn.setText(rs.getString("Fname"));
+            crf.ln.setText(rs.getString("Lname"));
+            crf.cn.setText(rs.getString("Contactnum"));
+            crf.em.setText(rs.getString("email"));
+            crf.un.setText(rs.getString("RegUser"));
+            crf.cmbStatus.setSelectedItem(rs.getString("status"));
+            crf.cmbUserType.setSelectedItem(rs.getString("usertype"));
+
+            String imagePath = rs.getString("image");
+            File imgFile = new File(imagePath);
+            if (imgFile.exists()) {
+                crf.image.setIcon(crf.ResizeImage(imagePath, null, crf.image));
+            } else {
+                System.out.println("Image file does not exist: " + imagePath);
+                crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
+            }
+
+            if (imagePath == null || imagePath.isEmpty()) { 
+                crf.select.setEnabled(true); 
+                crf.remove.setEnabled(false); 
+            } else { 
+                crf.select.setEnabled(false); 
+                crf.remove.setEnabled(true); 
+            }
+
+            crf.oldpath = imagePath;
+            crf.path = imagePath;
+            crf.destination = imagePath;
+            crf.ps.setEnabled(false); 
+             crf.CancelButton1.setVisible(true);
+             crf.CancelButton.setVisible(false);
+
+            crf.setVisible(true);
+            this.dispose();
+        }
+    } catch (SQLException ex) {
+        System.out.println("Error: " + ex.getMessage());
+    }
+    }//GEN-LAST:event_EditProfileMouseClicked
+
+    private void EditProfileMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditProfileMouseEntered
+       EditProfile.setCursor(new Cursor(Cursor.HAND_CURSOR));
+       EditProfile.setForeground(Color.BLACK);
+    }//GEN-LAST:event_EditProfileMouseEntered
+
+    private void EditProfileMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditProfileMouseExited
+       EditProfile.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+       EditProfile.setForeground(Color.BLUE);
+    }//GEN-LAST:event_EditProfileMouseExited
 
     /**
      * @param args the command line arguments
@@ -491,9 +652,10 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackButton;
     private javax.swing.JLabel ChangePass;
+    private javax.swing.JLabel EditProfile;
     private javax.swing.JPanel Interface1;
     private javax.swing.JButton LogoutButton;
-    private javax.swing.JLabel PIN;
+    private javax.swing.JLabel Sec;
     private javax.swing.JLabel acc_cn_user;
     private javax.swing.JLabel acc_cn_user2;
     private javax.swing.JLabel acc_cn_user3;
@@ -504,12 +666,14 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     private javax.swing.JLabel acc_cn_user8;
     private javax.swing.JLabel acc_em_user;
     private javax.swing.JLabel acc_fname_user;
+    private javax.swing.JLabel acc_image_label;
     private javax.swing.JLabel acc_lname_user;
     private javax.swing.JLabel acc_lname_user1;
     private javax.swing.JPasswordField acc_ps_user;
     private javax.swing.JLabel acc_un_user;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -522,6 +686,7 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

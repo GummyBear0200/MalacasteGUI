@@ -133,8 +133,8 @@ public class AdminBookControl extends javax.swing.JFrame {
                 loadBookData();  
 
                
-               AdminDashboard dashboard = new AdminDashboard(); 
-               dashboard.addLog("New User registered: " + booktitle + " (ID: " + newBookId + ")");
+              
+              
 
             } else {
                 JOptionPane.showMessageDialog(this, "Failed to add user.", "Error", JOptionPane.ERROR_MESSAGE);

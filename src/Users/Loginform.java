@@ -349,7 +349,7 @@ private void minimize() {
         return;
     }
 
-    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, RegUser, usertype, status ,PIN , RegPass FROM users WHERE RegUser = ?";
+    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, RegUser, usertype, status ,PIN , RegPass,image FROM users WHERE RegUser = ?";
 
     try (Connection connect = new DbConnect().getConnection(); 
          PreparedStatement pst = connect.prepareStatement(sql)) {
@@ -391,6 +391,7 @@ private void minimize() {
                 sess.setStatus(rs.getString("status"));
                 sess.setPIN(rs.getString("PIN"));
                 sess.setPassword(passwordInput);
+                sess.setImagePath(rs.getString("image"));
                 
                 switch (userType.toLowerCase()) {
                     case "admin":
@@ -398,6 +399,7 @@ private void minimize() {
                         new AdminDashboard().setVisible(true);
                         break;
                     case "borrower":
+                    case "user":
                         new UserDashboard().setVisible(true);
                         break;
                     default:

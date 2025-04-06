@@ -3,11 +3,25 @@ package Admin;
 
 import config.DbConnect;
 import config.Session;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 
@@ -16,15 +30,85 @@ public class AdminAddUser extends javax.swing.JFrame {
     
     public AdminAddUser() {
         initComponents();
-        
-        
-        
-        
     }
     
-   
+   public String destination;
+   File selectedFile;
+   public String oldpath;
+   public String path;
 
+public int FileExistenceChecker(String path){
+        File file = new File(path);
+        String fileName = file.getName();
+        
+        Path filePath = Paths.get("src/profileImages", fileName);
+        boolean fileExists = Files.exists(filePath);
+        
+        if (fileExists) {
+            return 1;
+        } else {
+            return 0;
+        }
+    
+    }
+public void imageUpdater(String existingFilePath, String newFilePath){
+        File existingFile = new File(existingFilePath);
+        if (existingFile.exists()) {
+            String parentDirectory = existingFile.getParent();
+            File newFile = new File(newFilePath);
+            String newFileName = newFile.getName();
+            File updatedFile = new File(parentDirectory, newFileName);
+            existingFile.delete();
+            try {
+                Files.copy(newFile.toPath(), updatedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Image updated successfully.");
+            } catch (IOException e) {
+                System.out.println("Error occurred while updating the image: "+e);
+            }
+        } else {
+            try{
+                Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }catch(IOException e){
+                System.out.println("Error on update!");
+            }
+        }
+   }
+public  ImageIcon ResizeImage(String ImagePath, byte[] pic, JLabel label) {
+    ImageIcon MyImage = null;
+        if(ImagePath !=null){
+            MyImage = new ImageIcon(ImagePath);
+        }else{
+            MyImage = new ImageIcon(pic);
+        }
+        
+    int newHeight = getHeightFromWidth(ImagePath, label.getWidth());
 
+    Image img = MyImage.getImage();
+    Image newImg = img.getScaledInstance(label.getWidth(), newHeight, Image.SCALE_SMOOTH);
+    ImageIcon image = new ImageIcon(newImg);
+    return image;
+}
+
+public static int getHeightFromWidth(String imagePath, int desiredWidth) {
+        try {
+            // Read the image file
+            File imageFile = new File(imagePath);
+            BufferedImage image = ImageIO.read(imageFile);
+            
+            // Get the original width and height of the image
+            int originalWidth = image.getWidth();
+            int originalHeight = image.getHeight();
+            
+            // Calculate the new height based on the desired width and the aspect ratio
+            int newHeight = (int) ((double) desiredWidth / originalWidth * originalHeight);
+            
+            return newHeight;
+        } catch (IOException ex) {
+            System.out.println("No image found!"+ex);
+        }
+        
+        return -1;
+    }
  public boolean duplicateCheck() {
     DbConnect dbc = new DbConnect();
     try {
@@ -66,7 +150,14 @@ public class AdminAddUser extends javax.swing.JFrame {
         return null;
     }
 }
+private String userId; 
 
+    public void setUserId(String id) {
+        this.userId = id; 
+    }
+    public void setFirstName(String firstName) {
+    this.fn.setText(firstName);
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -97,6 +188,10 @@ public class AdminAddUser extends javax.swing.JFrame {
         ln = new javax.swing.JTextField();
         ps = new javax.swing.JPasswordField();
         jCheckBox4 = new javax.swing.JCheckBox();
+        jPanel3 = new javax.swing.JPanel();
+        image = new javax.swing.JLabel();
+        remove = new javax.swing.JButton();
+        select = new javax.swing.JButton();
         jLabel21 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -120,13 +215,13 @@ public class AdminAddUser extends javax.swing.JFrame {
 
         cc.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         cc.setForeground(new java.awt.Color(255, 255, 255));
-        cc.setText("Current User:");
-        jPanel2.add(cc, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 0, 180, 50));
+        cc.setText("Current User ID:");
+        jPanel2.add(cc, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 0, 220, 50));
 
         acc_id.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         acc_id.setForeground(new java.awt.Color(255, 255, 255));
         acc_id.setText("ID");
-        jPanel2.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 0, 110, 50));
+        jPanel2.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 0, 110, 50));
 
         AddButton1.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         AddButton1.setText("ADD");
@@ -136,7 +231,7 @@ public class AdminAddUser extends javax.swing.JFrame {
                 AddButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(AddButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 410, 150, 40));
+        jPanel2.add(AddButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 410, 150, 40));
 
         CancelButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         CancelButton.setText("CANCEL");
@@ -159,14 +254,14 @@ public class AdminAddUser extends javax.swing.JFrame {
         jPanel5.add(fn, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 170, 40));
         jPanel5.add(cn, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 150, 170, 40));
         jPanel5.add(em, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 170, 40));
-        jPanel5.add(un, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, 180, 40));
+        jPanel5.add(un, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 30, 180, 40));
 
         jLabel1.setText("Note: To Add, please fill all fields then click the add button to function.");
         jPanel5.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 570, 20));
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel2.setText("Status:");
-        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 160, 70, 20));
+        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 170, 70, 20));
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel3.setText("First Name:");
@@ -190,28 +285,54 @@ public class AdminAddUser extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel9.setText("Username:");
-        jPanel5.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, 70, 20));
+        jPanel5.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 40, 70, 20));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel10.setText("Password:");
-        jPanel5.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 90, 70, 30));
+        jPanel5.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 70, 30));
 
         cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Active" }));
-        jPanel5.add(cmbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 150, 180, 40));
+        jPanel5.add(cmbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 160, 180, 40));
 
         cmbUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User", "Borrower" }));
         jPanel5.add(cmbUserType, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, 170, 40));
         jPanel5.add(ln, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 170, 40));
-        jPanel5.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 80, 180, 40));
+        jPanel5.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 80, 180, 40));
 
         jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox4ActionPerformed(evt);
             }
         });
-        jPanel5.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, -1, 40));
+        jPanel5.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 80, -1, 40));
 
-        jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, 660, 350));
+        jPanel3.setLayout(null);
+        jPanel3.add(image);
+        image.setBounds(10, 10, 260, 250);
+
+        jPanel5.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 20, 280, 270));
+
+        remove.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        remove.setText("REMOVE");
+        remove.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeActionPerformed(evt);
+            }
+        });
+        jPanel5.add(remove, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 300, 120, 30));
+
+        select.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        select.setText("SELECT");
+        select.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        select.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectActionPerformed(evt);
+            }
+        });
+        jPanel5.add(select, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 300, 120, 30));
+
+        jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, 940, 350));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -224,9 +345,7 @@ public class AdminAddUser extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1046, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -276,15 +395,22 @@ public class AdminAddUser extends javax.swing.JFrame {
 
    
     DbConnect dbc = new DbConnect();
-    String sql = "INSERT INTO users (Fname, Lname, Contactnum, email, RegUser, RegPass, usertype, status) VALUES ('" 
+   if(dbc.insertData ("INSERT INTO users (Fname, Lname, Contactnum, email, RegUser, RegPass, usertype, status, image) VALUES ('" 
             + fn.getText() + "', '" + ln.getText() + "', '" + cn.getText() + "', '" + em.getText() + "', '" + un.getText() + "', '"
-            + hashedPassword + "', '" + cmbUserType.getSelectedItem() + "', '" + cmbStatus.getSelectedItem() + "')";
+            + hashedPassword + "', '" + cmbUserType.getSelectedItem() + "', '" + cmbStatus.getSelectedItem() + "', '"+destination+"')"))
 
-    if(dbc.insertData(sql)) {
+     {
+        try {
+            Files.copy(selectedFile.toPath(), new File(destination).toPath(),StandardCopyOption.REPLACE_EXISTING);
+        
         JOptionPane.showMessageDialog(null, "Registration Successful!");
         AdminUserControl au = new AdminUserControl();
         au.setVisible(true);
         this.dispose();
+        
+        } catch (IOException ex) {
+            System.out.println("Insert Error:"+ex);
+        }
     } else {
         JOptionPane.showMessageDialog(null, "Connection Error!");
     }
@@ -307,6 +433,41 @@ public class AdminAddUser extends javax.swing.JFrame {
     private void fnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fnActionPerformed
+
+    private void selectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectActionPerformed
+       JFileChooser fileChooser = new JFileChooser();
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        selectedFile = fileChooser.getSelectedFile();
+                        destination = "src/profileImages/" + selectedFile.getName();
+                        path  = selectedFile.getAbsolutePath();
+                        
+                        
+                        if(FileExistenceChecker(path) == 1){
+                          JOptionPane.showMessageDialog(null, "File Already Exist, Rename or Choose another!");
+                            destination = "";
+                            path="";
+                        }else{
+                            image.setIcon(ResizeImage(path, null, image));
+                            select.setEnabled(false);
+                            remove.setEnabled(true);
+                            
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("File Error!"+ex);
+                    }
+                }
+
+    }//GEN-LAST:event_selectActionPerformed
+
+    private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
+       remove.setEnabled(false);
+       select.setEnabled(true);
+       image.setIcon(null);
+       destination = "";
+       path = "";
+    }//GEN-LAST:event_removeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -348,11 +509,12 @@ public class AdminAddUser extends javax.swing.JFrame {
     private javax.swing.JButton CancelButton;
     private javax.swing.JLabel acc_id;
     private javax.swing.JLabel cc;
-    private javax.swing.JComboBox<String> cmbStatus;
-    private javax.swing.JComboBox<String> cmbUserType;
-    private javax.swing.JTextField cn;
-    private javax.swing.JTextField em;
-    private javax.swing.JTextField fn;
+    public javax.swing.JComboBox<String> cmbStatus;
+    public javax.swing.JComboBox<String> cmbUserType;
+    public javax.swing.JTextField cn;
+    public javax.swing.JTextField em;
+    public javax.swing.JTextField fn;
+    public javax.swing.JLabel image;
     private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -367,9 +529,12 @@ public class AdminAddUser extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JTextField ln;
-    private javax.swing.JPasswordField ps;
-    private javax.swing.JTextField un;
+    public javax.swing.JTextField ln;
+    public javax.swing.JPasswordField ps;
+    public javax.swing.JButton remove;
+    public javax.swing.JButton select;
+    public javax.swing.JTextField un;
     // End of variables declaration//GEN-END:variables
 }

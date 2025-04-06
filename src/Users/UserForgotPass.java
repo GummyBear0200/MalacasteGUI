@@ -99,6 +99,9 @@ private Connection connect;
             sess.settype(rs.getString("usertype"));
             sess.setStatus(rs.getString("status"));
             sess.setPIN(rs.getString("PIN"));
+            sess.setImagePath(rs.getString("image"));
+            
+            
         } else {
             JOptionPane.showMessageDialog(this, "Account not found!", "Error", JOptionPane.ERROR_MESSAGE);
         }

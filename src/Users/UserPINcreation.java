@@ -15,7 +15,7 @@ import javax.swing.text.DocumentFilter;
 
 
 public class UserPINcreation extends javax.swing.JFrame {
-
+private boolean isPinCreationOpen = false;
     
     public UserPINcreation() {
          setUndecorated(true);
@@ -154,6 +154,7 @@ public class UserPINcreation extends javax.swing.JFrame {
         pin.setText("pin");
         jPanel1.add(pin, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 20, 110, 20));
 
+        submit.setBackground(new java.awt.Color(0, 0, 0));
         submit.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         submit.setText("OK");
         submit.addActionListener(new java.awt.event.ActionListener() {
@@ -189,7 +190,10 @@ public class UserPINcreation extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CLoseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CLoseMouseClicked
-       this.dispose();
+    
+        this.dispose();
+    
+       
     }//GEN-LAST:event_CLoseMouseClicked
 
     private void CLoseMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CLoseMouseEntered
