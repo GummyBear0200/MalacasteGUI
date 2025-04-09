@@ -6,6 +6,7 @@
 package Admin;
 
 import config.DbConnect;
+import config.Logger;
 import config.Session;
 import java.awt.Color;
 import java.awt.Component;
@@ -224,32 +225,42 @@ void addUser() {
 }
 
     
-    private void deleteUser() {
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a user to delete.");
-            return;
-        }
+   private void deleteUser() {
+    int selectedRow = jTable1.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a user to delete.");
+        return;
+    }
 
-        int userId = (int) jTable1.getValueAt(selectedRow, 0);
-        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this user?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            String sql = "DELETE FROM users WHERE u_id=?";
+    int userId = (int) jTable1.getValueAt(selectedRow, 0);
+    String username = (String) jTable1.getValueAt(selectedRow, 1); // Assuming the username is in the second column
+    int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this user?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+    
+    if (confirm == JOptionPane.YES_OPTION) {
+        String sql = "DELETE FROM users WHERE u_id=?";
 
-            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "");
-                 PreparedStatement pst = con.prepareStatement(sql)) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "");
+             PreparedStatement pst = con.prepareStatement(sql)) {
 
-                pst.setInt(1, userId);
-                pst.executeUpdate();
+            pst.setInt(1, userId);
+            int rowsAffected = pst.executeUpdate();
+            if (rowsAffected > 0) {
+                // Log the deletion action
+                Logger logger = new Logger(con); // Use the existing connection
+                int adminId = Integer.parseInt(acc_id.getText()); // Assuming acc_id holds the admin's ID
+                logger.logAdd(adminId, "Admin deleted user: " + username);
+
                 JOptionPane.showMessageDialog(this, "User Deleted Successfully!");
                 loadUsersData(); 
-
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No user found with that ID.", "Error", JOptionPane.ERROR_MESSAGE);
             }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+}
 
    
 
@@ -268,10 +279,12 @@ void addUser() {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        acc_id = new javax.swing.JLabel();
         AddButton = new javax.swing.JButton();
         UpdateButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -281,6 +294,11 @@ void addUser() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         Interface.setBackground(new java.awt.Color(204, 204, 204));
         Interface.setForeground(new java.awt.Color(102, 102, 102));
@@ -316,10 +334,10 @@ void addUser() {
         jPanel2.setBackground(new java.awt.Color(51, 51, 51));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("User CONTROL");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 200, 40));
+        acc_id.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
+        acc_id.setForeground(new java.awt.Color(255, 255, 255));
+        acc_id.setText("ID");
+        jPanel2.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 40, 40));
 
         AddButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         AddButton.setText("ADD");
@@ -352,6 +370,16 @@ void addUser() {
             }
         });
         jPanel2.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 30, 110, 40));
+
+        jLabel7.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("CurrentID:");
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 120, 40));
+
+        jLabel8.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("User CONTROL");
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 200, 40));
 
         Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 880, 90));
 
@@ -478,6 +506,8 @@ int rowIndex = jTable1.getSelectedRow();
                 } else {
                     System.out.println("Image file does not exist: " + imagePath);
                     crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
+                    crf.select.setEnabled(true);
+                    crf.remove.setEnabled(false);
                 }
                     if(rs.getString("image").isEmpty()){ 
                     crf.select.setEnabled(true); 
@@ -492,7 +522,8 @@ int rowIndex = jTable1.getSelectedRow();
                 crf.ps.setEnabled(false);
                 crf.CancelButton1.setVisible(false);
                 crf.CancelButton.setVisible(true);
-
+                crf.UpdateButton.setVisible(true);
+                crf.UpdateButton1.setVisible(false);
                 crf.setVisible(true);
                 this.dispose();
             }
@@ -521,6 +552,13 @@ int rowIndex = jTable1.getSelectedRow();
       
     }
     }//GEN-LAST:event_UpdateButtonMouseClicked
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+       Session sess = Session.getInstance();
+    
+   
+    acc_id.setText(String.valueOf(sess.getuid()));
+    }//GEN-LAST:event_formWindowActivated
     
     /**
      * @param args the command line arguments
@@ -562,11 +600,13 @@ int rowIndex = jTable1.getSelectedRow();
     private javax.swing.JButton DeleteButton;
     private javax.swing.JPanel Interface;
     private javax.swing.JButton UpdateButton;
+    private javax.swing.JLabel acc_id;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

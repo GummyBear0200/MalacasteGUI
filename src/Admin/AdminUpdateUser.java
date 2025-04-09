@@ -4,6 +4,7 @@ package Admin;
 
 import Users.UserAccount;
 import config.DbConnect;
+import config.Logger;
 import config.Session;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -188,6 +189,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         cc = new javax.swing.JLabel();
         acc_id = new javax.swing.JLabel();
         CancelButton1 = new javax.swing.JButton();
+        UpdateButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -326,6 +328,16 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         });
         jPanel2.add(CancelButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 410, 140, 40));
 
+        UpdateButton1.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        UpdateButton1.setText("Update");
+        UpdateButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        UpdateButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(UpdateButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 410, 140, 40));
+
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -348,7 +360,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
  
         
-    String newFname = fn.getText().trim();
+       String newFname = fn.getText().trim();
     String newLname = ln.getText().trim();
     String newContact = cn.getText().trim();
     String newEmail = em.getText().trim();
@@ -356,10 +368,8 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     String newUserType = cmbUserType.getSelectedItem().toString();
     String newUserStatus = cmbStatus.getSelectedItem().toString();
 
-    
     String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
-    
     if (newFname.isEmpty() || newLname.isEmpty() || newEmail.isEmpty() || newUsername.isEmpty() || newUserType.isEmpty() || newUserStatus.isEmpty()) {
         JOptionPane.showMessageDialog(this, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
         return;
@@ -369,6 +379,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         JOptionPane.showMessageDialog(this, "Only letters are allowed for First and Last Name.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
+    
     if (!newContact.matches("\\d+")) {
         JOptionPane.showMessageDialog(this, "Invalid contact number! Only numbers are allowed.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
@@ -385,7 +396,6 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     }
 
     DbConnect dbc = new DbConnect();
-    
     
     if (this.userId == null || this.userId.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Error: User ID is missing.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -408,9 +418,12 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
             }
         }
 
+    
+
         String updateQuery = "UPDATE users SET Fname = ?, Lname = ?, email = ?, RegUser = ?, usertype = ?, status = ?";
+        
         if (path != null && !path.isEmpty()) {
-            updateQuery += ", image = ?"; // Update image column
+            updateQuery += ", image = ?"; 
         }
         updateQuery += " WHERE u_id = ?";
         
@@ -422,24 +435,32 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
             updatePst.setString(5, newUserType);
             updatePst.setString(6, newUserStatus);
             
-            if (path != null && !path.isEmpty()) {
-                updatePst.setString(7, path); // Set the new image path
-                updatePst.setString(8, this.userId); // Set the user ID
+            if (destination != null && !destination.isEmpty()) {
+                updatePst.setString(7, destination);
+                updatePst.setString(8, this.userId);
             } else {
-                updatePst.setString(7, this.userId); // Set the user ID
+                updatePst.setString(7, this.userId); 
             }
 
             int updated = updatePst.executeUpdate();
             if (updated > 0) {
-                // If a new image was uploaded, copy it to the desired location
-                if (path != null && !path.isEmpty()) {
-                    try {
-                        Files.copy(selectedFile.toPath(), Paths.get(destination), StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(this, "Error updating image: " + ex.getMessage());
-                    }
+                // Handle image deletion or update logic
+                if (destination.isEmpty()) { 
+                    File existingFile = new File(oldpath); 
+                    if (existingFile.exists()) { 
+                        existingFile.delete(); 
+                    } 
+                } else { 
+                    if (!oldpath.equals(path)) { 
+                        imageUpdater(oldpath, path); 
+                    } 
                 }
-                JOptionPane.showMessageDialog(this, "User updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                Logger logger = new Logger(conn); 
+                int adminId = Integer.parseInt(acc_id.getText()); 
+                logger.logAdd(adminId, "Admin updated user info: " + newUsername);
+                
+                JOptionPane.showMessageDialog(this, "User data updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 new AdminUserControl().setVisible(true);
                 this.dispose();
             } else {
@@ -449,7 +470,6 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     } catch (SQLException ex) {
         JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-   
 
     }//GEN-LAST:event_UpdateButtonActionPerformed
 
@@ -506,6 +526,121 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         this.dispose();
     }//GEN-LAST:event_CancelButton1ActionPerformed
 
+    private void UpdateButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButton1ActionPerformed
+     
+        String newFname = fn.getText().trim();
+    String newLname = ln.getText().trim();
+    String newContact = cn.getText().trim();
+    String newEmail = em.getText().trim();
+    String newUsername = un.getText().trim();
+    String newUserType = cmbUserType.getSelectedItem().toString();
+    String newUserStatus = cmbStatus.getSelectedItem().toString();
+
+    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+    if (newFname.isEmpty() || newLname.isEmpty() || newEmail.isEmpty() || newUsername.isEmpty() || newUserType.isEmpty() || newUserStatus.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    if (!newFname.matches("[a-zA-Z ]+") || !newLname.matches("[a-zA-Z ]+")) {
+        JOptionPane.showMessageDialog(this, "Only letters are allowed for First and Last Name.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    if (!newContact.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "Invalid contact number! Only numbers are allowed.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    if (!newEmail.matches(emailRegex)) {
+        JOptionPane.showMessageDialog(this, "Invalid Email! Please enter a valid email address.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    if (!newUsername.matches("[a-zA-Z0-9_]{5,}")) {
+        JOptionPane.showMessageDialog(this, "Invalid Username! Must be at least 5 characters and contain only letters, numbers, and underscores.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    DbConnect dbc = new DbConnect();
+    
+    if (this.userId == null || this.userId.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Error: User ID is missing.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String checkQuery = "SELECT COUNT(*) FROM users WHERE (RegUser = ? OR email = ?) AND u_id != ?";
+    
+    try (Connection conn = dbc.getConnection();
+         PreparedStatement pst = conn.prepareStatement(checkQuery)) {
+
+        pst.setString(1, newUsername);
+        pst.setString(2, newEmail);
+        pst.setString(3, this.userId);
+
+        try (ResultSet rs = pst.executeQuery()) {
+            if (rs.next() && rs.getInt(1) > 0) {
+                JOptionPane.showMessageDialog(this, "Username or Email already exists! Please use different credentials.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+    
+
+        String updateQuery = "UPDATE users SET Fname = ?, Lname = ?, email = ?, RegUser = ?, usertype = ?, status = ?";
+        
+        if (path != null && !path.isEmpty()) {
+            updateQuery += ", image = ?"; 
+        }
+        updateQuery += " WHERE u_id = ?";
+        
+        try (PreparedStatement updatePst = conn.prepareStatement(updateQuery)) {
+            updatePst.setString(1, newFname);
+            updatePst.setString(2, newLname);
+            updatePst.setString(3, newEmail);
+            updatePst.setString(4, newUsername);
+            updatePst.setString(5, newUserType);
+            updatePst.setString(6, newUserStatus);
+            
+            if (destination != null && !destination.isEmpty()) {
+                updatePst.setString(7, destination);
+                updatePst.setString(8, this.userId);
+            } else {
+                updatePst.setString(7, this.userId); 
+            }
+
+            int updated = updatePst.executeUpdate();
+            if (updated > 0) {
+                // Handle image deletion or update logic
+                if (destination.isEmpty()) { 
+                    File existingFile = new File(oldpath); 
+                    if (existingFile.exists()) { 
+                        existingFile.delete(); 
+                    } 
+                } else { 
+                    if (!oldpath.equals(path)) { 
+                        imageUpdater(oldpath, path); 
+                    } 
+                }
+
+                Logger logger = new Logger(conn); 
+                int adminId = Integer.parseInt(acc_id.getText()); 
+                logger.logAdd(adminId, "User updated their info: " + newUsername);
+                
+                JOptionPane.showMessageDialog(this, "Your data updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                new UserAccount().setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Update failed!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+   
+    }//GEN-LAST:event_UpdateButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -544,7 +679,8 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton CancelButton;
     public javax.swing.JButton CancelButton1;
-    private javax.swing.JButton UpdateButton;
+    public javax.swing.JButton UpdateButton;
+    public javax.swing.JButton UpdateButton1;
     private javax.swing.JLabel acc_id;
     private javax.swing.JLabel cc;
     public javax.swing.JComboBox<String> cmbStatus;

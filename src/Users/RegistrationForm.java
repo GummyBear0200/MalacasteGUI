@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import config.Logger;
+import java.sql.Statement;
 
 public class RegistrationForm extends javax.swing.JFrame {
 
@@ -374,9 +376,8 @@ public class RegistrationForm extends javax.swing.JFrame {
                 return;
             }
         }
-
-        String insertQuery = "INSERT INTO users (Fname, Lname, Contactnum, Email, UserType, RegUser, RegPass, SecurityQuestion, answer,Status) VALUES (?, ?, ?, ?, ?, ?, ?,?,?, 'Pending')";
-        try (PreparedStatement insertStmt = connect.prepareStatement(insertQuery)) {
+        String insertQuery = "INSERT INTO users (Fname, Lname, Contactnum, Email, UserType, RegUser, RegPass, SecurityQuestion, answer, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending')";
+        try (PreparedStatement insertStmt = connect.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             insertStmt.setString(1, fname);
             insertStmt.setString(2, lname);
             insertStmt.setString(3, contactnum);
@@ -386,11 +387,20 @@ public class RegistrationForm extends javax.swing.JFrame {
             insertStmt.setString(7, hashedPassword);
             insertStmt.setString(8, squestion);
             insertStmt.setString(9, answer);           
-            
 
             int inserted = insertStmt.executeUpdate();
-
             if (inserted > 0) {
+                // Retrieve the generated user ID
+                ResultSet generatedKeys = insertStmt.getGeneratedKeys();
+                int userId = 0; // Initialize userId
+                if (generatedKeys.next()) {
+                    userId = generatedKeys.getInt(1); // Get the generated user ID
+                }
+
+                // Log the registration action
+                Logger logger = new Logger(connect);
+                logger.logAdd(userId, "User registered with username: " + username); // Use userId
+
                 JOptionPane.showMessageDialog(this, "Registration Successful! Your account is pending approval.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 new Loginform().setVisible(true);
                 this.dispose();
@@ -398,7 +408,6 @@ public class RegistrationForm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Registration failed. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-
     } catch (SQLException ex) {
         JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }

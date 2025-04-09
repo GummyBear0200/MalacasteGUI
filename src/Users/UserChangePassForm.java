@@ -2,6 +2,7 @@
 package Users;
 
 import config.DbConnect;
+import config.Logger;
 import config.Session;
 import java.awt.Color;
 import java.security.MessageDigest;
@@ -120,6 +121,9 @@ private boolean updatePassword(String newPassword) {
         BackButton = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        acc_id = new javax.swing.JLabel();
+        username = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         LogoutButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -184,8 +188,26 @@ private boolean updatePassword(String newPassword) {
         jLabel5.setBackground(new java.awt.Color(0, 0, 0));
         jLabel5.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Change Password:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 241, 50));
+        jLabel5.setText("Account ID:");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 10, 150, 50));
+
+        acc_id.setBackground(new java.awt.Color(0, 0, 0));
+        acc_id.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        acc_id.setForeground(new java.awt.Color(255, 255, 255));
+        acc_id.setText("ID");
+        jPanel2.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 10, 40, 50));
+
+        username.setBackground(new java.awt.Color(0, 0, 0));
+        username.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        username.setForeground(new java.awt.Color(255, 255, 255));
+        username.setText("username");
+        jPanel2.add(username, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 210, 50));
+
+        jLabel12.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel12.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Change Password for:");
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 280, 50));
 
         Interface1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 70));
 
@@ -363,7 +385,7 @@ private boolean updatePassword(String newPassword) {
     }//GEN-LAST:event_BackButtonActionPerformed
 
     private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
-    String currentPass = String.valueOf(currentPasswordField.getPassword());
+      String currentPass = String.valueOf(currentPasswordField.getPassword());
     String newPass = String.valueOf(newPasswordField.getPassword());
     String reenterPass = String.valueOf(reenterPasswordField.getPassword());
 
@@ -377,16 +399,39 @@ private boolean updatePassword(String newPassword) {
         return;
     }
 
-    if (verifyCurrentPassword(currentPass)) {
-        if (updatePassword(newPass)) {
-            JOptionPane.showMessageDialog(this, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose(); 
-        } else {
-            JOptionPane.showMessageDialog(this, "Error updating password!", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    } else {
+    if (!verifyCurrentPassword(currentPass)) {
         JOptionPane.showMessageDialog(this, "Incorrect current password!", "Error", JOptionPane.ERROR_MESSAGE);
-    }       
+        return;
+    }
+
+   if (updatePassword(newPass)) {
+    
+    try (Connection con = new DbConnect().getConnection()) {
+        Logger logger = new Logger(con); 
+        Session sess = Session.getInstance();
+        username.setText(""+sess.getusername());
+        String username = String.valueOf(sess.getusername());
+        String userIdText = acc_id.getText(); 
+        
+        if (userIdText == null || userIdText.isEmpty()) {
+            System.err.println("User ID is null or empty. Cannot log password change.");
+            
+            logger.logAdd(0, "User changed their password without a valid ID, Username: " + username);
+        } else {
+            int userID = Integer.parseInt(userIdText); 
+            logger.logAdd(userID, "User changed their password, Username: " + username);
+        }
+    } catch (SQLException ex) {
+        System.err.println("Error logging password change: " + ex.getMessage());
+    } catch (NumberFormatException ex) {
+        System.err.println("Invalid user ID format: " + ex.getMessage());
+    }
+
+    JOptionPane.showMessageDialog(this, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    this.dispose(); 
+} else {
+    JOptionPane.showMessageDialog(this, "Error updating password!", "Error", JOptionPane.ERROR_MESSAGE);
+}
     }//GEN-LAST:event_btnChangePasswordActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -399,10 +444,10 @@ private boolean updatePassword(String newPassword) {
            this.dispose();
        
        }
-       
+       acc_id.setText(""+sess.getuid());
        currentPasswordField.setText(""+sess.getPassword());
        currentPasswordField.setEchoChar('*');
-       
+       username.setText(""+sess.getusername());
        
     }//GEN-LAST:event_formWindowActivated
 
@@ -489,12 +534,14 @@ private boolean updatePassword(String newPassword) {
     private javax.swing.JLabel acc_cn_user5;
     private javax.swing.JLabel acc_cn_user6;
     private javax.swing.JLabel acc_cn_user7;
+    private javax.swing.JLabel acc_id;
     private javax.swing.JLabel acc_lname_user;
     private javax.swing.JButton btnChangePassword;
     private javax.swing.JPasswordField currentPasswordField;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -511,5 +558,6 @@ private boolean updatePassword(String newPassword) {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPasswordField newPasswordField;
     private javax.swing.JPasswordField reenterPasswordField;
+    public javax.swing.JLabel username;
     // End of variables declaration//GEN-END:variables
 }

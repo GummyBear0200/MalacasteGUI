@@ -16,8 +16,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import config.Logger;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -367,53 +370,71 @@ private String userId;
     private void AddButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButton1ActionPerformed
       
     
-    if(fn.getText().isEmpty() || ln.getText().isEmpty() || cn.getText().isEmpty()
-       || em.getText().isEmpty() || un.getText().isEmpty() || ps.getText().isEmpty()) {
+      if (fn.getText().isEmpty() || ln.getText().isEmpty() || cn.getText().isEmpty()
+        || em.getText().isEmpty() || un.getText().isEmpty() || ps.getText().isEmpty()) {
         JOptionPane.showMessageDialog(null, "All fields are required!");
         return;
     }
 
-    
-    if(ps.getText().length() < 8) {
-        JOptionPane.showMessageDialog(null, "Password character should be 8 above");
+    if (ps.getText().length() < 8) {
+        JOptionPane.showMessageDialog(null, "Password must be at least 8 characters long.");
         ps.setText("");
         return;
     }
 
-    
-    if(duplicateCheck()) {
+    if (duplicateCheck()) {
         JOptionPane.showMessageDialog(null, "Username already exists!");
         return;
     }
 
-   
     String hashedPassword = hashPassword(ps.getText());
     if (hashedPassword == null) {
         JOptionPane.showMessageDialog(null, "Error hashing password. Try again.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
-   
-    DbConnect dbc = new DbConnect();
-   if(dbc.insertData ("INSERT INTO users (Fname, Lname, Contactnum, email, RegUser, RegPass, usertype, status, image) VALUES ('" 
-            + fn.getText() + "', '" + ln.getText() + "', '" + cn.getText() + "', '" + em.getText() + "', '" + un.getText() + "', '"
-            + hashedPassword + "', '" + cmbUserType.getSelectedItem() + "', '" + cmbStatus.getSelectedItem() + "', '"+destination+"')"))
+   try (Connection connect = new DbConnect().getConnection()) {
+    
+    String insertQuery = "INSERT INTO users (Fname, Lname, Contactnum, email, RegUser, RegPass, usertype, status, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    try (PreparedStatement insertStmt = connect.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
+       
+        insertStmt.setString(1, fn.getText());
+        insertStmt.setString(2, ln.getText());
+        insertStmt.setString(3, cn.getText());
+        insertStmt.setString(4, em.getText());
+        insertStmt.setString(5, un.getText());
+        insertStmt.setString(6, hashedPassword);
+        insertStmt.setString(7, (String) cmbUserType.getSelectedItem());
+        insertStmt.setString(8, (String) cmbStatus.getSelectedItem());
+        insertStmt.setString(9, destination);
+        
+        int insertedRows = insertStmt.executeUpdate();
+        if (insertedRows > 0) {
+            
+            try (ResultSet generatedKeys = insertStmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int userId = generatedKeys.getInt(1); 
 
-     {
-        try {
-            Files.copy(selectedFile.toPath(), new File(destination).toPath(),StandardCopyOption.REPLACE_EXISTING);
-        
-        JOptionPane.showMessageDialog(null, "Registration Successful!");
-        AdminUserControl au = new AdminUserControl();
-        au.setVisible(true);
-        this.dispose();
-        
-        } catch (IOException ex) {
-            System.out.println("Insert Error:"+ex);
+                   
+                    Logger logger = new Logger(connect); 
+                    int adminId = Integer.parseInt(acc_id.getText()); 
+                    logger.logAdd(adminId, "Admin added user: " + un.getText());
+                }
+            }
+
+            
+            Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            JOptionPane.showMessageDialog(null, "Registration Successful!");
+            AdminUserControl au = new AdminUserControl();
+            au.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Connection Error!");
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Connection Error!");
     }
+} catch (SQLException | IOException ex) {
+    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+}
 
     }//GEN-LAST:event_AddButton1ActionPerformed
 

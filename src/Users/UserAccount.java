@@ -592,10 +592,12 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
             crf.oldpath = imagePath;
             crf.path = imagePath;
             crf.destination = imagePath;
+            
             crf.ps.setEnabled(false); 
-             crf.CancelButton1.setVisible(true);
-             crf.CancelButton.setVisible(false);
-
+            crf.CancelButton1.setVisible(true);
+            crf.CancelButton.setVisible(false);
+            crf.UpdateButton1.setVisible(true);
+            crf.UpdateButton.setVisible(false);
             crf.setVisible(true);
             this.dispose();
         }
