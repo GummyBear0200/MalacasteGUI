@@ -472,7 +472,7 @@ void addUser() {
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
-int rowIndex = jTable1.getSelectedRow();
+   int rowIndex = jTable1.getSelectedRow();
     if (rowIndex < 0) {
         JOptionPane.showMessageDialog(null, "Please select a User!");
     } else {
@@ -500,22 +500,26 @@ int rowIndex = jTable1.getSelectedRow();
                 crf.cmbUserType.setSelectedItem(rs.getString("usertype"));
                 
                 String imagePath = rs.getString("image");
-                File imgFile = new File(imagePath);
-                if (imgFile.exists()) {
-                    crf.image.setIcon(crf.ResizeImage(imagePath, null, crf.image));
+
+                if (imagePath != null && !imagePath.isEmpty()) {
+                    File imgFile = new File(imagePath);
+                    if (imgFile.exists()) {
+                        crf.image.setIcon(crf.ResizeImage(imagePath, null, crf.image));
+                        crf.select.setEnabled(false);
+                        crf.remove.setEnabled(true);
+                    } else {
+                        System.out.println("Image file does not exist: " + imagePath);
+                        crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
+                        crf.select.setEnabled(true);
+                        crf.remove.setEnabled(false);
+                    }
                 } else {
-                    System.out.println("Image file does not exist: " + imagePath);
+                    // Handle case where imagePath is null or empty
                     crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
                     crf.select.setEnabled(true);
                     crf.remove.setEnabled(false);
                 }
-                    if(rs.getString("image").isEmpty()){ 
-                    crf.select.setEnabled(true); 
-                    crf.remove.setEnabled(false); 
-                }else{ 
-                    crf.select.setEnabled(false); 
-                    crf.remove.setEnabled(true); 
-                }
+
                 crf.oldpath = imagePath;
                 crf.path = imagePath;
                 crf.destination = imagePath;

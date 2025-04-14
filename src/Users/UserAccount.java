@@ -103,6 +103,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         acc_image_label = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         EditProfile = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         acc_fname_user = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -134,9 +135,10 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         acc_ps_user = new javax.swing.JPasswordField();
         jLabel11 = new javax.swing.JLabel();
         ChangePass = new javax.swing.JLabel();
-        Sec = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jPanel15 = new javax.swing.JPanel();
+        Sec = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -203,8 +205,19 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         jLabel6.setBackground(new java.awt.Color(0, 0, 0));
         jLabel6.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("PROFILE");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 380, 140, 50));
+        jLabel6.setText("REFRESH ®");
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel6MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel6MouseExited(evt);
+            }
+        });
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 590, 180, 50));
 
         EditProfile.setFont(new java.awt.Font("Book Antiqua", 3, 14)); // NOI18N
         EditProfile.setForeground(new java.awt.Color(0, 0, 255));
@@ -221,6 +234,12 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
             }
         });
         jPanel1.add(EditProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 420, 120, 30));
+
+        jLabel14.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel14.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("PROFILE");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 380, 140, 50));
 
         Interface1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 320, 650));
 
@@ -378,7 +397,19 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
                 ChangePassMouseExited(evt);
             }
         });
-        jPanel4.add(ChangePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 440, 230, 30));
+        jPanel4.add(ChangePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 410, 230, 30));
+
+        jLabel13.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel13.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel13.setText("Account Details:");
+        jPanel4.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 241, 50));
+
+        jLabel12.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel12.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel12.setText("First Name:");
+        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 170, 50));
+
+        jPanel15.setBackground(new java.awt.Color(239, 239, 239));
 
         Sec.setBackground(new java.awt.Color(0, 0, 0));
         Sec.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
@@ -395,17 +426,22 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
                 SecMouseExited(evt);
             }
         });
-        jPanel4.add(Sec, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 0, 130, 50));
 
-        jLabel13.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel13.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
-        jLabel13.setText("Account Details:");
-        jPanel4.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 241, 50));
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Sec, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Sec, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+        );
 
-        jLabel12.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel12.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
-        jLabel12.setText("First Name:");
-        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 170, 50));
+        jPanel4.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 10, 140, 40));
 
         Interface1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 730, 580));
 
@@ -546,7 +582,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
 
     private void EditProfileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditProfileMouseClicked
        Session sess = Session.getInstance(); 
-       String userId = String.valueOf(sess.getuid()); 
+    String userId = String.valueOf(sess.getuid()); 
 
     if (userId == null || userId.equals("0")) { 
         JOptionPane.showMessageDialog(null, "No user is currently logged in!");
@@ -573,26 +609,29 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
             crf.cmbUserType.setSelectedItem(rs.getString("usertype"));
 
             String imagePath = rs.getString("image");
-            File imgFile = new File(imagePath);
-            if (imgFile.exists()) {
-                crf.image.setIcon(crf.ResizeImage(imagePath, null, crf.image));
-            } else {
-                System.out.println("Image file does not exist: " + imagePath);
-                crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
-            }
 
-            if (imagePath == null || imagePath.isEmpty()) { 
-                crf.select.setEnabled(true); 
-                crf.remove.setEnabled(false); 
-            } else { 
+            if (imagePath != null && !imagePath.isEmpty()) {
+                File imgFile = new File(imagePath);
+                if (imgFile.exists()) {
+                    crf.image.setIcon(crf.ResizeImage(imagePath, null, crf.image));
+                } else {
+                    System.out.println("Image file does not exist: " + imagePath);
+                    crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
+                }
                 crf.select.setEnabled(false); 
                 crf.remove.setEnabled(true); 
+                crf.oldpath = imagePath;
+                crf.path = imagePath;
+                crf.destination = imagePath;
+            } else { 
+                crf.image.setIcon(new ImageIcon("path/to/default/icon.png")); // Set default icon if no image
+                crf.select.setEnabled(true); 
+                crf.remove.setEnabled(false); 
+                crf.oldpath = null; // No previous path
+                crf.path = null; 
+                crf.destination = null; 
             }
 
-            crf.oldpath = imagePath;
-            crf.path = imagePath;
-            crf.destination = imagePath;
-            
             crf.ps.setEnabled(false); 
             crf.CancelButton1.setVisible(true);
             crf.CancelButton.setVisible(false);
@@ -615,6 +654,30 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
        EditProfile.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
        EditProfile.setForeground(Color.BLUE);
     }//GEN-LAST:event_EditProfileMouseExited
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+       Session sess = Session.getInstance();
+       UserAccount uss = new UserAccount();
+       uss.setVisible(true);
+       this.dispose();
+    acc_fname_user.setText(sess.getFname());
+    acc_lname_user1.setText(sess.getLname());
+    acc_cn_user8.setText(sess.getContact());
+    acc_em_user.setText(sess.getemail());
+    acc_un_user.setText(sess.getusername());
+    acc_ps_user.setText(sess.getPassword());
+    acc_ps_user.setEchoChar('*');
+    }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void jLabel6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseEntered
+   jLabel6.setCursor(new Cursor(Cursor.HAND_CURSOR));
+   jLabel6.setForeground(Color.BLUE);
+    }//GEN-LAST:event_jLabel6MouseEntered
+
+    private void jLabel6MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseExited
+        jLabel6.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        jLabel6.setForeground(Color.WHITE);
+    }//GEN-LAST:event_jLabel6MouseExited
 
     /**
      * @param args the command line arguments
@@ -677,6 +740,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -689,6 +753,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

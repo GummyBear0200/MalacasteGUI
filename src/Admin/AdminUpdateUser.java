@@ -18,6 +18,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -359,8 +361,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
  
-        
-       String newFname = fn.getText().trim();
+     String newFname = fn.getText().trim();
     String newLname = ln.getText().trim();
     String newContact = cn.getText().trim();
     String newEmail = em.getText().trim();
@@ -379,7 +380,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         JOptionPane.showMessageDialog(this, "Only letters are allowed for First and Last Name.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
-    
+
     if (!newContact.matches("\\d+")) {
         JOptionPane.showMessageDialog(this, "Invalid contact number! Only numbers are allowed.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
@@ -396,7 +397,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     }
 
     DbConnect dbc = new DbConnect();
-    
+
     if (this.userId == null || this.userId.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Error: User ID is missing.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
@@ -418,16 +419,13 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
             }
         }
 
-    
-
         String updateQuery = "UPDATE users SET Fname = ?, Lname = ?, email = ?, RegUser = ?, usertype = ?, status = ?";
-        
         if (path != null && !path.isEmpty()) {
             updateQuery += ", image = ?"; 
         }
         updateQuery += " WHERE u_id = ?";
-        
-        try (PreparedStatement updatePst = conn.prepareStatement(updateQuery)) {
+
+        try (PreparedStatement updatePst = conn.prepareStatement(updateQuery, Statement.RETURN_GENERATED_KEYS)) {
             updatePst.setString(1, newFname);
             updatePst.setString(2, newLname);
             updatePst.setString(3, newEmail);
@@ -435,7 +433,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
             updatePst.setString(5, newUserType);
             updatePst.setString(6, newUserStatus);
             
-            if (destination != null && !destination.isEmpty()) {
+            if (path != null && !path.isEmpty()) {
                 updatePst.setString(7, destination);
                 updatePst.setString(8, this.userId);
             } else {
@@ -444,22 +442,51 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
 
             int updated = updatePst.executeUpdate();
             if (updated > 0) {
-                // Handle image deletion or update logic
-                if (destination.isEmpty()) { 
-                    File existingFile = new File(oldpath); 
-                    if (existingFile.exists()) { 
-                        existingFile.delete(); 
-                    } 
+    
+    Logger logger = new Logger(conn); 
+    int adminId = Integer.parseInt(acc_id.getText()); 
+    String logMessage = "Admin updated user info: " + newUsername + " (User ID: " + this.userId + ")";
+    
+    try {
+        logger.logAdd(adminId, logMessage);
+    } catch (Exception logEx) {
+        JOptionPane.showMessageDialog(this, "Error logging the update: " + logEx.getMessage(), "Log Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+                
+                if (destination == null || destination.isEmpty()) {
+                    
+                    if (oldpath != null) {
+                        File existingFile = new File(oldpath); 
+                        if (existingFile.exists()) { 
+                            existingFile.delete(); 
+                        }
+                    }
+
+                    
+                    String updateImageQuery = "UPDATE users SET image = NULL WHERE u_id = ?";
+                    try (PreparedStatement updateImagePst = conn.prepareStatement(updateImageQuery)) {
+                        updateImagePst.setString(1, this.userId);
+                        updateImagePst.executeUpdate();
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(this, "Error updating image in database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else { 
-                    if (!oldpath.equals(path)) { 
+                    if (oldpath != null && !oldpath.equals(path)) { 
                         imageUpdater(oldpath, path); 
                     } 
                 }
 
-                Logger logger = new Logger(conn); 
-                int adminId = Integer.parseInt(acc_id.getText()); 
-                logger.logAdd(adminId, "Admin updated user info: " + newUsername);
                 
+                if (selectedFile != null && destination != null) {
+                    try {
+                        Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(this, "Error copying the image file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+
                 JOptionPane.showMessageDialog(this, "User data updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 new AdminUserControl().setVisible(true);
                 this.dispose();
@@ -470,7 +497,6 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     } catch (SQLException ex) {
         JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-
     }//GEN-LAST:event_UpdateButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
@@ -527,8 +553,8 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     }//GEN-LAST:event_CancelButton1ActionPerformed
 
     private void UpdateButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButton1ActionPerformed
-     
-        String newFname = fn.getText().trim();
+    
+         String newFname = fn.getText().trim();
     String newLname = ln.getText().trim();
     String newContact = cn.getText().trim();
     String newEmail = em.getText().trim();
@@ -547,7 +573,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         JOptionPane.showMessageDialog(this, "Only letters are allowed for First and Last Name.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
-    
+
     if (!newContact.matches("\\d+")) {
         JOptionPane.showMessageDialog(this, "Invalid contact number! Only numbers are allowed.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
@@ -564,7 +590,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     }
 
     DbConnect dbc = new DbConnect();
-    
+
     if (this.userId == null || this.userId.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Error: User ID is missing.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
@@ -586,16 +612,13 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
             }
         }
 
-    
-
         String updateQuery = "UPDATE users SET Fname = ?, Lname = ?, email = ?, RegUser = ?, usertype = ?, status = ?";
-        
         if (path != null && !path.isEmpty()) {
             updateQuery += ", image = ?"; 
         }
         updateQuery += " WHERE u_id = ?";
-        
-        try (PreparedStatement updatePst = conn.prepareStatement(updateQuery)) {
+
+        try (PreparedStatement updatePst = conn.prepareStatement(updateQuery, Statement.RETURN_GENERATED_KEYS)) {
             updatePst.setString(1, newFname);
             updatePst.setString(2, newLname);
             updatePst.setString(3, newEmail);
@@ -603,7 +626,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
             updatePst.setString(5, newUserType);
             updatePst.setString(6, newUserStatus);
             
-            if (destination != null && !destination.isEmpty()) {
+            if (path != null && !path.isEmpty()) {
                 updatePst.setString(7, destination);
                 updatePst.setString(8, this.userId);
             } else {
@@ -612,23 +635,52 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
 
             int updated = updatePst.executeUpdate();
             if (updated > 0) {
-                // Handle image deletion or update logic
-                if (destination.isEmpty()) { 
-                    File existingFile = new File(oldpath); 
-                    if (existingFile.exists()) { 
-                        existingFile.delete(); 
-                    } 
+    
+    Logger logger = new Logger(conn); 
+    int adminId = Integer.parseInt(acc_id.getText()); 
+    String logMessage = "User updated their info: " + newUsername + " (User ID: " + this.userId + ")";
+    
+    try {
+        logger.logAdd(adminId, logMessage);
+    } catch (Exception logEx) {
+        JOptionPane.showMessageDialog(this, "Error logging the update: " + logEx.getMessage(), "Log Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+                
+                if (destination == null || destination.isEmpty()) {
+                    
+                    if (oldpath != null) {
+                        File existingFile = new File(oldpath); 
+                        if (existingFile.exists()) { 
+                            existingFile.delete(); 
+                        }
+                    }
+
+                    
+                    String updateImageQuery = "UPDATE users SET image = NULL WHERE u_id = ?";
+                    try (PreparedStatement updateImagePst = conn.prepareStatement(updateImageQuery)) {
+                        updateImagePst.setString(1, this.userId);
+                        updateImagePst.executeUpdate();
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(this, "Error updating image in database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else { 
-                    if (!oldpath.equals(path)) { 
+                    if (oldpath != null && !oldpath.equals(path)) { 
                         imageUpdater(oldpath, path); 
                     } 
                 }
 
-                Logger logger = new Logger(conn); 
-                int adminId = Integer.parseInt(acc_id.getText()); 
-                logger.logAdd(adminId, "User updated their info: " + newUsername);
                 
-                JOptionPane.showMessageDialog(this, "Your data updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                if (selectedFile != null && destination != null) {
+                    try {
+                        Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(this, "Error copying the image file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+
+                JOptionPane.showMessageDialog(this, "User data updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 new UserAccount().setVisible(true);
                 this.dispose();
             } else {

@@ -2,6 +2,7 @@
 package Users;
 
 import config.DbConnect;
+import config.Logger;
 import config.Session;
 import java.awt.Cursor;
 import java.security.MessageDigest;
@@ -63,6 +64,7 @@ public static String hashPassword(String password) {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         titlelabel7 = new javax.swing.JLabel();
+        acc_id = new javax.swing.JLabel();
         accname = new javax.swing.JLabel();
         titlelabel8 = new javax.swing.JLabel();
         titlelabel9 = new javax.swing.JLabel();
@@ -96,6 +98,12 @@ public static String hashPassword(String password) {
         titlelabel7.setForeground(new java.awt.Color(255, 255, 255));
         titlelabel7.setText("You can now Reset your password!");
         jPanel2.add(titlelabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 0, 740, 70));
+
+        acc_id.setBackground(new java.awt.Color(0, 0, 0));
+        acc_id.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        acc_id.setForeground(new java.awt.Color(255, 255, 255));
+        acc_id.setText("ID");
+        jPanel2.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 40, 50));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -222,9 +230,30 @@ public static String hashPassword(String password) {
             JOptionPane.showMessageDialog(this, "New passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        if (!newPass.matches("^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])(?=.*\\d).{8,}$") || (!reenterPass.matches("^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])(?=.*\\d).{8,}$"))) {
+       JOptionPane.showMessageDialog(this, "Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+        }
         
-        if (updatePassword(newPass)) {
+      if (updatePassword(newPass)) {
+    try (Connection con = new DbConnect().getConnection()) {
+        Logger logger = new Logger(con); 
+        Session sess = Session.getInstance();
+        String username = String.valueOf(sess.getusername());
+        String userIdText = acc_id.getText(); 
+        
+        if (userIdText == null || userIdText.isEmpty()) {
+            System.err.println("User ID is null or empty. Cannot log password change.");
+            logger.logAdd(0, "User has RESET their password without a valid ID, Username: " + username);
+        } else {
+            int userID = Integer.parseInt(userIdText); 
+            logger.logAdd(userID, "User RESET their password, Username: " + username);
+        }
+    } catch (SQLException ex) {
+        System.err.println("Error logging password change: " + ex.getMessage());
+    } catch (NumberFormatException ex) {
+        System.err.println("Invalid user ID format: " + ex.getMessage());
+    }
             JOptionPane.showMessageDialog(this, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             Loginform lf = new Loginform();
         lf.setVisible(true);
@@ -247,6 +276,7 @@ public static String hashPassword(String password) {
            this.dispose();
        
        }
+       acc_id.setText(""+sess.getuid());
        accname.setText(""+sess.getusername());
        currentPasswordField.setText(""+sess.getPassword());
        currentPasswordField.setEchoChar('*');
@@ -306,6 +336,7 @@ public static String hashPassword(String password) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ResetButton;
+    private javax.swing.JLabel acc_id;
     private javax.swing.JLabel accname;
     private javax.swing.JPasswordField currentPasswordField;
     private javax.swing.JCheckBox jCheckBox2;

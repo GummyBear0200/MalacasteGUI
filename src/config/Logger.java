@@ -19,7 +19,7 @@ public class Logger {
     try (PreparedStatement pst = connection.prepareStatement(query)) {
         pst.setInt(1, uId); 
         pst.setString(2, logAction);
-        pst.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now())); // Use Timestamp here
+        pst.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now())); 
         pst.executeUpdate();
     } catch (SQLException e) {
         System.err.println("Error logging ADD operation: " + e.getMessage());

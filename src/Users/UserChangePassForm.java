@@ -385,37 +385,42 @@ private boolean updatePassword(String newPassword) {
     }//GEN-LAST:event_BackButtonActionPerformed
 
     private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
-      String currentPass = String.valueOf(currentPasswordField.getPassword());
-    String newPass = String.valueOf(newPasswordField.getPassword());
-    String reenterPass = String.valueOf(reenterPasswordField.getPassword());
 
-    if (currentPass.isEmpty() || newPass.isEmpty() || reenterPass.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+String currentPass = String.valueOf(currentPasswordField.getPassword());
+String newPass = String.valueOf(newPasswordField.getPassword());
+String reenterPass = String.valueOf(reenterPasswordField.getPassword());
 
-    if (!newPass.equals(reenterPass)) {
-        JOptionPane.showMessageDialog(this, "New passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+if (currentPass.isEmpty() || newPass.isEmpty() || reenterPass.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
 
-    if (!verifyCurrentPassword(currentPass)) {
-        JOptionPane.showMessageDialog(this, "Incorrect current password!", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+if (!newPass.equals(reenterPass)) {
+    JOptionPane.showMessageDialog(this, "New passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
 
-   if (updatePassword(newPass)) {
-    
+
+
+if (!newPass.matches("^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])(?=.*\\d).{8,}$") || (!reenterPass.matches("^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])(?=.*\\d).{8,}$"))) {
+    JOptionPane.showMessageDialog(this, "Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.", "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+if (!verifyCurrentPassword(currentPass)) {
+    JOptionPane.showMessageDialog(this, "Incorrect current password!", "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+if (updatePassword(newPass)) {
     try (Connection con = new DbConnect().getConnection()) {
         Logger logger = new Logger(con); 
         Session sess = Session.getInstance();
-        username.setText(""+sess.getusername());
         String username = String.valueOf(sess.getusername());
         String userIdText = acc_id.getText(); 
         
         if (userIdText == null || userIdText.isEmpty()) {
             System.err.println("User ID is null or empty. Cannot log password change.");
-            
             logger.logAdd(0, "User changed their password without a valid ID, Username: " + username);
         } else {
             int userID = Integer.parseInt(userIdText); 
