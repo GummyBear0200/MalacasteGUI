@@ -5,6 +5,15 @@
  */
 package Admin;
 
+import Users.Loginform;
+import config.DbConnect;
+import config.Logger;
+import config.Session;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,7 +28,12 @@ public class AdminAddBook extends javax.swing.JFrame {
     public AdminAddBook() {
         initComponents();
     }
+ private String BookId; 
 
+    public void setBookId(String id) {
+        this.BookId = id; 
+    }
+  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,7 +48,6 @@ public class AdminAddBook extends javax.swing.JFrame {
         txtBookTitle = new javax.swing.JTextField();
         txtBookAuthor = new javax.swing.JTextField();
         txtBookPublicationDate = new javax.swing.JTextField();
-        txtBookStatus = new javax.swing.JTextField();
         jPanel10 = new javax.swing.JPanel();
         txtBookTitle5 = new javax.swing.JTextField();
         txtAuthor5 = new javax.swing.JTextField();
@@ -60,10 +73,18 @@ public class AdminAddBook extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        UpdateButton = new javax.swing.JButton();
+        acc_id = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -84,7 +105,6 @@ public class AdminAddBook extends javax.swing.JFrame {
         jPanel9.add(txtBookTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 160, 40));
         jPanel9.add(txtBookAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, 180, 40));
         jPanel9.add(txtBookPublicationDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 180, 40));
-        jPanel9.add(txtBookStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 140, 160, 40));
 
         jPanel10.setBackground(new java.awt.Color(255, 204, 204));
         jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -212,15 +232,34 @@ public class AdminAddBook extends javax.swing.JFrame {
         jPanel9.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 50, 20));
 
         jLabel5.setFont(new java.awt.Font("Arial Black", 2, 10)); // NOI18N
-        jLabel5.setText("Publication Date:");
-        jPanel9.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 150, 20));
+        jLabel5.setText("Publication Date: (MM/DD/YYYY)");
+        jPanel9.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 200, 20));
+
+        jComboBox1.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Unavailable", "Out Of Stock", " " }));
+        jPanel9.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 140, 180, 40));
+
+        UpdateButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        UpdateButton.setText("Update");
+        UpdateButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        UpdateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateButtonActionPerformed(evt);
+            }
+        });
+        jPanel9.add(UpdateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 250, 130, 40));
 
         jPanel1.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 660, 330));
 
-        jLabel4.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Add Book page");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 241, 50));
+        acc_id.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        acc_id.setForeground(new java.awt.Color(255, 255, 255));
+        acc_id.setText("Id");
+        jPanel1.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 0, 40, 50));
+
+        jLabel6.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Book Page");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 241, 50));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -276,40 +315,100 @@ public class AdminAddBook extends javax.swing.JFrame {
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void AddButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButton1ActionPerformed
-      String title = txtBookTitle.getText().trim();
-    String author = txtBookAuthor.getText().trim();
-    String pubDate = txtBookPublicationDate.getText().trim();
-    String status = txtBookStatus.getText().trim();
-
-    
-    if (title.isEmpty() || author.isEmpty() || pubDate.isEmpty() || status.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "All fields must be filled!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+     if (txtBookTitle.getText().isEmpty() || txtBookAuthor.getText().isEmpty() || txtBookPublicationDate.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "All fields are required!");
         return;
     }
 
-   
-    AdminBookControl adminBookControl = new AdminBookControl(); 
-    adminBookControl.addBook();
+    try (Connection connect = new DbConnect().getConnection()) {
+        String insertQuery = "INSERT INTO books (b_title, b_author, b_pubdate, b_status) VALUES (?, ?, ?, ?)";
 
-   
-    JOptionPane.showMessageDialog(this, "Book added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        try (PreparedStatement insertStmt = connect.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
+            insertStmt.setString(1, txtBookTitle.getText());
+            insertStmt.setString(2, txtBookAuthor.getText()); 
+            insertStmt.setString(3, txtBookPublicationDate.getText()); 
+            insertStmt.setString(4, (String) jComboBox1.getSelectedItem()); 
 
-    AdminBookControl loadbookdata = new AdminBookControl(); 
-    loadbookdata.loadBookData(); 
-    
+            int insertedRows = insertStmt.executeUpdate();
 
-    // Clear input fields
-    txtBookTitle.setText("");
-    txtBookAuthor.setText("");
-    txtBookPublicationDate.setText("");
-    txtBookStatus.setText("");
-    
+            if (insertedRows > 0) {
+                int bookId = -1;
 
-   
-   
-    
-    JOptionPane.showMessageDialog(this, "Book added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                try (ResultSet generatedKeys = insertStmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        bookId = generatedKeys.getInt(1); 
+                        System.out.println("New book ID: " + bookId); 
+                    }
+                }
+
+                
+                int adminId = Integer.parseInt(acc_id.getText()); 
+                Logger logger = new Logger(connect);
+                logger.logAdd(adminId, "Admin Added book: " + txtBookTitle.getText());
+
+                JOptionPane.showMessageDialog(null, "Book added successfully!");
+                AdminBookControl au = new AdminBookControl();
+                au.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Insertion failed!");
+            }
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_AddButton1ActionPerformed
+
+    private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
+    if (txtBookTitle.getText().isEmpty() || txtBookAuthor.getText().isEmpty() || txtBookPublicationDate.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "All fields are required!");
+        return;
+    }
+
+    try (Connection connect = new DbConnect().getConnection()) {
+        String updateQuery = "UPDATE books SET b_title = ?, b_author = ?, b_pubdate = ?, b_status = ? WHERE b_id = ?";
+
+        try (PreparedStatement updateStmt = connect.prepareStatement(updateQuery)) {
+            updateStmt.setString(1, txtBookTitle.getText());
+            updateStmt.setString(2, txtBookAuthor.getText());
+            updateStmt.setString(3, txtBookPublicationDate.getText());
+            updateStmt.setString(4, (String) jComboBox1.getSelectedItem());
+            updateStmt.setInt(5, Integer.parseInt(BookId)); 
+
+            int updatedRows = updateStmt.executeUpdate();
+
+            if (updatedRows > 0) {
+               
+                int adminId = Integer.parseInt(acc_id.getText()); 
+                Logger logger = new Logger(connect);
+                logger.logAdd(adminId, "Admin Updated book: " + txtBookTitle.getText());
+
+                JOptionPane.showMessageDialog(null, "Book updated successfully!");
+                AdminBookControl au = new AdminBookControl();
+                au.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "No book was updated.");
+            }
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_UpdateButtonActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+
+    
+    Session sess = Session.getInstance();
+     if(sess.getuid() == 0){
+           JOptionPane.showMessageDialog(null,"No account found , Log in First!");
+           Loginform lf = new Loginform();
+           lf.setVisible(true);
+           this.dispose();
+       
+       }
+    acc_id.setText(String.valueOf(sess.getuid()));
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
@@ -348,15 +447,18 @@ public class AdminAddBook extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddButton;
-    private javax.swing.JButton AddButton1;
+    public javax.swing.JButton AddButton1;
+    public javax.swing.JButton UpdateButton;
+    private javax.swing.JLabel acc_id;
+    public javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -366,10 +468,9 @@ public class AdminAddBook extends javax.swing.JFrame {
     private javax.swing.JTextField txtAuthor5;
     private javax.swing.JTextField txtAuthor6;
     private javax.swing.JTextField txtAuthor7;
-    private javax.swing.JTextField txtBookAuthor;
-    private javax.swing.JTextField txtBookPublicationDate;
-    private javax.swing.JTextField txtBookStatus;
-    private javax.swing.JTextField txtBookTitle;
+    public javax.swing.JTextField txtBookAuthor;
+    public javax.swing.JTextField txtBookPublicationDate;
+    public javax.swing.JTextField txtBookTitle;
     private javax.swing.JTextField txtBookTitle5;
     private javax.swing.JTextField txtBookTitle6;
     private javax.swing.JTextField txtBookTitle7;

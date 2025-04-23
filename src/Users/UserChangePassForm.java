@@ -318,11 +318,14 @@ private boolean updatePassword(String newPassword) {
         jPanel13.setBackground(new java.awt.Color(255, 255, 255));
         jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        currentPasswordField.setEditable(false);
         currentPasswordField.setBackground(new java.awt.Color(255, 255, 255));
-        currentPasswordField.setText("jPasswordField1");
         currentPasswordField.setBorder(null);
-        jPanel13.add(currentPasswordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(21, 0, 300, 40));
+        currentPasswordField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                currentPasswordFieldActionPerformed(evt);
+            }
+        });
+        jPanel13.add(currentPasswordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 340, 40));
 
         jPanel4.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, 350, 40));
 
@@ -450,7 +453,7 @@ if (updatePassword(newPass)) {
        
        }
        acc_id.setText(""+sess.getuid());
-       currentPasswordField.setText(""+sess.getPassword());
+       
        currentPasswordField.setEchoChar('*');
        username.setText(""+sess.getusername());
        
@@ -492,6 +495,10 @@ if (updatePassword(newPass)) {
         reenterPasswordField.setEchoChar('*');
     }
     }//GEN-LAST:event_jCheckBox3ActionPerformed
+
+    private void currentPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentPasswordFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_currentPasswordFieldActionPerformed
 
     /**
      * @param args the command line arguments

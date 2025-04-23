@@ -102,11 +102,11 @@ jTable1.getModel().addTableModelListener(new TableModelListener() {
 });
     Session sess = Session.getInstance();
     
-    String[] columnNames = {"ID", "First Name", "Last Name", "Contact", "Email", "User Type", "Username","Password", "Status"};
+    String[] columnNames = { "First Name", "Last Name", "Contact", "Email", "User Type", "Username", "Status"};
     model.setColumnIdentifiers(columnNames); 
     model.setRowCount(0);
 
-    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, usertype, RegUser, RegPass, status FROM users WHERE u_id != '"+sess.getuid()+"';";
+    String sql = "SELECT  Fname, Lname, Contactnum, email, usertype, RegUser, status FROM users WHERE u_id != '"+sess.getuid()+"';";
 
     try (Connection connect = new DbConnect().getConnection();
          PreparedStatement pst = connect.prepareStatement(sql);
@@ -114,14 +114,14 @@ jTable1.getModel().addTableModelListener(new TableModelListener() {
 
         while (rs.next()) {
             Object[] row = {
-                rs.getInt("u_id"),
+                
                 rs.getString("Fname"),
                 rs.getString("Lname"),
                 rs.getString("Contactnum"),
                 rs.getString("email"),
                 rs.getString("usertype"),
                 rs.getString("RegUser"),
-                rs.getString("RegPass"),
+                
                 rs.getString("status")
             };
             model.addRow(row); 
@@ -472,7 +472,7 @@ void addUser() {
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
-   int rowIndex = jTable1.getSelectedRow();
+int rowIndex = jTable1.getSelectedRow();
     if (rowIndex < 0) {
         JOptionPane.showMessageDialog(null, "Please select a User!");
     } else {
@@ -480,7 +480,7 @@ void addUser() {
             DbConnect dbc = new DbConnect();
             TableModel tbl = jTable1.getModel();
 
-            String userId = tbl.getValueAt(rowIndex, 0).toString(); 
+            String userId = tbl.getValueAt(rowIndex, 0).toString();
             String query = "SELECT * FROM users WHERE u_id = ?";
 
             PreparedStatement pst = dbc.getConnection().prepareStatement(query);
@@ -490,7 +490,7 @@ void addUser() {
             if (rs.next()) {
                 
                 AdminUpdateUser crf = new AdminUpdateUser();
-                crf.setUserId(userId); 
+                crf.setUserId(userId);
                 crf.fn.setText(rs.getString("Fname"));
                 crf.ln.setText(rs.getString("Lname"));
                 crf.cn.setText(rs.getString("Contactnum"));
@@ -498,12 +498,13 @@ void addUser() {
                 crf.un.setText(rs.getString("RegUser"));
                 crf.cmbStatus.setSelectedItem(rs.getString("status"));
                 crf.cmbUserType.setSelectedItem(rs.getString("usertype"));
-                
+
                 String imagePath = rs.getString("image");
 
                 if (imagePath != null && !imagePath.isEmpty()) {
                     File imgFile = new File(imagePath);
                     if (imgFile.exists()) {
+                        // SAFE LOAD: Resize image using your method
                         crf.image.setIcon(crf.ResizeImage(imagePath, null, crf.image));
                         crf.select.setEnabled(false);
                         crf.remove.setEnabled(true);
@@ -514,7 +515,6 @@ void addUser() {
                         crf.remove.setEnabled(false);
                     }
                 } else {
-                    // Handle case where imagePath is null or empty
                     crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
                     crf.select.setEnabled(true);
                     crf.remove.setEnabled(false);
@@ -528,13 +528,20 @@ void addUser() {
                 crf.CancelButton.setVisible(true);
                 crf.UpdateButton.setVisible(true);
                 crf.UpdateButton1.setVisible(false);
+
+                // Make sure it's visible
+                
                 crf.setVisible(true);
-                this.dispose();
+
+                JOptionPane.showMessageDialog(null, "Opened Update Form!"); // debug
+
+                // this.dispose(); // Temporarily disabled for testing
             }
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
         }
-    }
+    } 
+
     }//GEN-LAST:event_UpdateButtonActionPerformed
 
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
@@ -542,19 +549,75 @@ void addUser() {
     }//GEN-LAST:event_DeleteButtonActionPerformed
 
     private void UpdateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UpdateButtonMouseClicked
-   int selectedRow = jTable1.getSelectedRow();
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Please select a user to edit.", "Selection Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+    int rowIndex = jTable1.getSelectedRow();
+    if (rowIndex < 0) {
+        JOptionPane.showMessageDialog(null, "Please select a User!");
+    } else {
+        try {
+            DbConnect dbc = new DbConnect();
+            TableModel tbl = jTable1.getModel();
 
-    String username = jTable1.getValueAt(selectedRow, jTable1.getColumn("Username").getModelIndex()).toString();
+            String userId = tbl.getValueAt(rowIndex, 0).toString();
+            String query = "SELECT * FROM users WHERE u_id = ?";
 
-    if (username == null || username.trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Selected user has no username.", "Selection Error", JOptionPane.ERROR_MESSAGE);
-        return;
-      
-    }
+            PreparedStatement pst = dbc.getConnection().prepareStatement(query);
+            pst.setString(1, userId);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                AdminUpdateUser crf = new AdminUpdateUser();
+                crf.setUserId(userId);
+                crf.fn.setText(rs.getString("Fname"));
+                crf.ln.setText(rs.getString("Lname"));
+                crf.cn.setText(rs.getString("Contactnum"));
+                crf.em.setText(rs.getString("email"));
+                crf.un.setText(rs.getString("RegUser"));
+                crf.cmbStatus.setSelectedItem(rs.getString("status"));
+                crf.cmbUserType.setSelectedItem(rs.getString("usertype"));
+
+                String imagePath = rs.getString("image");
+
+                if (imagePath != null && !imagePath.isEmpty()) {
+                    File imgFile = new File(imagePath);
+                    if (imgFile.exists()) {
+                        // SAFE LOAD: Resize image using your method
+                        crf.image.setIcon(crf.ResizeImage(imagePath, null, crf.image));
+                        crf.select.setEnabled(false);
+                        crf.remove.setEnabled(true);
+                    } else {
+                        System.out.println("Image file does not exist: " + imagePath);
+                        crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
+                        crf.select.setEnabled(true);
+                        crf.remove.setEnabled(false);
+                    }
+                } else {
+                    crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
+                    crf.select.setEnabled(true);
+                    crf.remove.setEnabled(false);
+                }
+
+                crf.oldpath = imagePath;
+                crf.path = imagePath;
+                crf.destination = imagePath;
+                crf.ps.setEnabled(false);
+                crf.CancelButton1.setVisible(false);
+                crf.CancelButton.setVisible(true);
+                crf.UpdateButton.setVisible(true);
+                crf.UpdateButton1.setVisible(false);
+
+                // Make sure it's visible
+                crf.setSize(800, 600);
+                crf.setLocationRelativeTo(null);
+                crf.setVisible(true);
+
+                JOptionPane.showMessageDialog(null, "Opened Update Form!"); // debug
+
+                // this.dispose(); // Temporarily disabled for testing
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+    } 
     }//GEN-LAST:event_UpdateButtonMouseClicked
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated

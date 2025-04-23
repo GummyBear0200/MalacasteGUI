@@ -3,15 +3,30 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Internal/AvailableBooks.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserPINcreation.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserForgotPass.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminBorrowers.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserRecoveryPhoneNumber.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserRecoveryPINchoice.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/RegistrationForm.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserRecoveryOption.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminReports.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminUserControl.java</file>
             <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/config/Logger.java</file>
             <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserResetPassword.java</file>
             <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminUpdateUser.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminAddBook.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminAddBorrower.java</file>
             <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/config/Session.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Internal/ReturnBook.java</file>
             <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserChangePassForm.java</file>
-            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/RegistrationForm.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Internal/BorrowBook.java</file>
             <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserAccount.java</file>
-            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminUserControl.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminBookControl.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserDashboard.java</file>
             <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminAddUser.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminDashboard.java</file>
         </group>
     </open-files>
 </project-private>

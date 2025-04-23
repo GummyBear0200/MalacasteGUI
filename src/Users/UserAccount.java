@@ -3,6 +3,7 @@ package Users;
 
 import Admin.AdminUpdateUser;
 import config.DbConnect;
+import config.Logger;
 import config.Session;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -10,6 +11,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -477,16 +479,28 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     }//GEN-LAST:event_BackButtonActionPerformed
 
     private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(
-            this, "Are you sure you want to logout?", "Logout Confirmation",
-            javax.swing.JOptionPane.YES_NO_OPTION);
+       int confirm = javax.swing.JOptionPane.showConfirmDialog(
+        this, "Are you sure you want to logout?", "Logout Confirmation",
+        javax.swing.JOptionPane.YES_NO_OPTION);
 
-        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
-            this.dispose();
+    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+        
+        try (Connection conn = new DbConnect().getConnection()) {
+            Session sess = Session.getInstance();
+            int userId = sess.getuid();
+            String username = sess.getusername();
 
-            Loginform loginPage = new Loginform();
-            loginPage.setVisible(true);
+            Logger logger = new Logger(conn);
+            logger.logAdd(userId, "User logged out: " + username);
+        } catch (Exception e) {
+            System.err.println("Failed to log logout action: " + e.getMessage());
         }
+
+        this.dispose(); 
+        
+        Loginform loginPage = new Loginform(); 
+        loginPage.setVisible(true);
+    }
     }//GEN-LAST:event_LogoutButtonActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -598,46 +612,46 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         ResultSet rs = pst.executeQuery();
 
         if (rs.next()) {
-            AdminUpdateUser crf = new AdminUpdateUser();
-            crf.setUserId(userId);
-            crf.fn.setText(rs.getString("Fname"));
-            crf.ln.setText(rs.getString("Lname"));
-            crf.cn.setText(rs.getString("Contactnum"));
-            crf.em.setText(rs.getString("email"));
-            crf.un.setText(rs.getString("RegUser"));
-            crf.cmbStatus.setSelectedItem(rs.getString("status"));
-            crf.cmbUserType.setSelectedItem(rs.getString("usertype"));
+            AdminUpdateUser abb = new AdminUpdateUser();
+            abb.setUserId(userId);
+            abb.fn.setText(rs.getString("Fname"));
+            abb.ln.setText(rs.getString("Lname"));
+            abb.cn.setText(rs.getString("Contactnum"));
+            abb.em.setText(rs.getString("email"));
+            abb.un.setText(rs.getString("RegUser"));
+            abb.cmbStatus.setSelectedItem(rs.getString("status"));
+            abb.cmbUserType.setSelectedItem(rs.getString("usertype"));
 
             String imagePath = rs.getString("image");
 
             if (imagePath != null && !imagePath.isEmpty()) {
                 File imgFile = new File(imagePath);
                 if (imgFile.exists()) {
-                    crf.image.setIcon(crf.ResizeImage(imagePath, null, crf.image));
+                    abb.image.setIcon(abb.ResizeImage(imagePath, null, abb.image));
                 } else {
                     System.out.println("Image file does not exist: " + imagePath);
-                    crf.image.setIcon(new ImageIcon("path/to/default/icon.png"));
+                    abb.image.setIcon(new ImageIcon("path/to/default/icon.png"));
                 }
-                crf.select.setEnabled(false); 
-                crf.remove.setEnabled(true); 
-                crf.oldpath = imagePath;
-                crf.path = imagePath;
-                crf.destination = imagePath;
+                abb.select.setEnabled(false); 
+                abb.remove.setEnabled(true); 
+                abb.oldpath = imagePath;
+                abb.path = imagePath;
+                abb.destination = imagePath;
             } else { 
-                crf.image.setIcon(new ImageIcon("path/to/default/icon.png")); // Set default icon if no image
-                crf.select.setEnabled(true); 
-                crf.remove.setEnabled(false); 
-                crf.oldpath = null; // No previous path
-                crf.path = null; 
-                crf.destination = null; 
+                abb.image.setIcon(new ImageIcon("path/to/default/icon.png")); 
+                abb.select.setEnabled(true); 
+                abb.remove.setEnabled(false); 
+                abb.oldpath = null; 
+                abb.path = null; 
+                abb.destination = null; 
             }
 
-            crf.ps.setEnabled(false); 
-            crf.CancelButton1.setVisible(true);
-            crf.CancelButton.setVisible(false);
-            crf.UpdateButton1.setVisible(true);
-            crf.UpdateButton.setVisible(false);
-            crf.setVisible(true);
+            abb.ps.setEnabled(false); 
+            abb.CancelButton1.setVisible(true);
+            abb.CancelButton.setVisible(false);
+            abb.UpdateButton1.setVisible(true);
+            abb.UpdateButton.setVisible(false);
+            abb.setVisible(true);
             this.dispose();
         }
     } catch (SQLException ex) {
@@ -656,17 +670,58 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
     }//GEN-LAST:event_EditProfileMouseExited
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-       Session sess = Session.getInstance();
-       UserAccount uss = new UserAccount();
-       uss.setVisible(true);
-       this.dispose();
-    acc_fname_user.setText(sess.getFname());
-    acc_lname_user1.setText(sess.getLname());
-    acc_cn_user8.setText(sess.getContact());
-    acc_em_user.setText(sess.getemail());
-    acc_un_user.setText(sess.getusername());
-    acc_ps_user.setText(sess.getPassword());
-    acc_ps_user.setEchoChar('*');
+    Session sess = Session.getInstance();
+    int uid = sess.getuid();
+
+    String sql = "SELECT Fname, Lname, Contactnum, email, RegUser, RegPass, image FROM users WHERE u_id = ?";
+    
+    try (Connection conn = new DbConnect().getConnection();
+         PreparedStatement pst = conn.prepareStatement(sql)) {
+        
+        pst.setInt(1, uid);
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            
+            sess.setFname(rs.getString("Fname"));
+            sess.setLname(rs.getString("Lname"));
+            sess.setContact(rs.getString("Contactnum"));
+            sess.setemail(rs.getString("email"));
+            sess.setusername(rs.getString("RegUser"));
+            sess.setPassword(rs.getString("RegPass"));
+            sess.setImagePath(rs.getString("image"));
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error refreshing user info: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    
+    UserAccount uss = new UserAccount();
+    uss.acc_fname_user.setText(sess.getFname());
+    uss.acc_lname_user1.setText(sess.getLname());
+    uss.acc_cn_user8.setText(sess.getContact());
+    uss.acc_em_user.setText(sess.getemail());
+    uss.acc_un_user.setText(sess.getusername());
+    uss.acc_ps_user.setText(sess.getPassword());
+    uss.acc_ps_user.setEchoChar('*');
+
+    
+    String imgPath = sess.getImagePath();
+    if (imgPath != null && !imgPath.isEmpty()) {
+        File imgFile = new File(imgPath);
+        if (imgFile.exists()) {
+            ImageIcon resizedImg = ResizeImage(imgPath, null, uss.acc_image_label);
+            uss.acc_image_label.setIcon(resizedImg);
+        } else {
+            uss.acc_image_label.setIcon(null);
+        }
+    } else {
+        uss.acc_image_label.setIcon(null);
+    }
+
+    uss.setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jLabel6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseEntered

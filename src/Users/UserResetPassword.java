@@ -4,6 +4,7 @@ package Users;
 import config.DbConnect;
 import config.Logger;
 import config.Session;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -78,6 +79,7 @@ public static String hashPassword(String password) {
         jCheckBox2 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
+        Cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -190,6 +192,26 @@ public static String hashPassword(String password) {
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 860, 60));
 
+        Cancel.setBackground(new java.awt.Color(51, 51, 255));
+        Cancel.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
+        Cancel.setText("Cancel");
+        Cancel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Cancel.setBorderPainted(false);
+        Cancel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                CancelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                CancelMouseExited(evt);
+            }
+        });
+        Cancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 380, 150, 40));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -211,10 +233,12 @@ public static String hashPassword(String password) {
 
     private void ResetButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetButtonMouseEntered
         ResetButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        ResetButton.setForeground(Color.WHITE);
     }//GEN-LAST:event_ResetButtonMouseEntered
 
     private void ResetButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetButtonMouseExited
         ResetButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        ResetButton.setForeground(Color.BLUE);
     }//GEN-LAST:event_ResetButtonMouseExited
 
     private void ResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetButtonActionPerformed
@@ -299,6 +323,41 @@ public static String hashPassword(String password) {
         }
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
+    private void CancelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CancelMouseEntered
+       Cancel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+       Cancel.setForeground(Color.WHITE);
+    }//GEN-LAST:event_CancelMouseEntered
+
+    private void CancelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CancelMouseExited
+       Cancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+       Cancel.setForeground(Color.BLUE);
+    }//GEN-LAST:event_CancelMouseExited
+
+    private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
+      int confirm = javax.swing.JOptionPane.showConfirmDialog(
+        this, "Are you sure you want to Cancel?", "Cancel Confirmation",
+        javax.swing.JOptionPane.YES_NO_OPTION);
+
+    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+        
+        try (Connection conn = new DbConnect().getConnection()) {
+            Session sess = Session.getInstance();
+            int userId = sess.getuid();
+            String username = sess.getusername();
+
+            Logger logger = new Logger(conn);
+            logger.logAdd(userId, "Password Reset Cancelled: " + username);
+        } catch (Exception e) {
+            System.err.println("Failed to log logout action: " + e.getMessage());
+        }
+
+        this.dispose(); 
+        
+        Loginform loginPage = new Loginform(); 
+        loginPage.setVisible(true);
+    }
+    }//GEN-LAST:event_CancelActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -335,6 +394,7 @@ public static String hashPassword(String password) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Cancel;
     private javax.swing.JButton ResetButton;
     private javax.swing.JLabel acc_id;
     private javax.swing.JLabel accname;

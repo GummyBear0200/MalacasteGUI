@@ -3,6 +3,7 @@ package Users;
 
 import Admin.AdminDashboard;
 import config.DbConnect;
+import config.Logger;
 import config.Session;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -339,9 +340,7 @@ private void minimize() {
     }//GEN-LAST:event_usernameActionPerformed
 
     private void LogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogButtonActionPerformed
-                                              
-                                         
- String usernameInput = username.getText().trim();
+     String usernameInput = username.getText().trim();
     String passwordInput = new String(pass.getPassword()).trim();
 
     if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
@@ -349,7 +348,7 @@ private void minimize() {
         return;
     }
 
-    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, RegUser, usertype, status ,PIN , RegPass,image FROM users WHERE RegUser = ?";
+    String sql = "SELECT u_id, Fname, Lname, Contactnum, email, RegUser, usertype, status, PIN, RegPass, image FROM users WHERE RegUser = ?";
 
     try (Connection connect = new DbConnect().getConnection(); 
          PreparedStatement pst = connect.prepareStatement(sql)) {
@@ -361,10 +360,9 @@ private void minimize() {
             String dbPasswordHash = rs.getString("RegPass"); 
             String status = rs.getString("status");
             String userType = rs.getString("usertype");
+            int userId = rs.getInt("u_id");
 
-            
             String hashedInputPassword = hashPassword(passwordInput);
-
             if (hashedInputPassword == null) {
                 JOptionPane.showMessageDialog(this, "Error hashing password. Try again.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -378,34 +376,43 @@ private void minimize() {
             if (hashedInputPassword.equals(dbPasswordHash)) { 
                 JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                
+               
                 Session sess = Session.getInstance();
-                sess.setuid(rs.getInt("u_id"));  
+                sess.setuid(userId);  
                 sess.setFname(rs.getString("Fname"));
                 sess.setLname(rs.getString("Lname"));
                 sess.setContact(rs.getString("Contactnum"));
                 sess.setemail(rs.getString("email"));
                 sess.setusername(rs.getString("RegUser"));
                 sess.setPassword(rs.getString("RegPass"));
-                sess.settype(rs.getString("usertype"));
-                sess.setStatus(rs.getString("status"));
+                sess.settype(userType);
+                sess.setStatus(status);
                 sess.setPIN(rs.getString("PIN"));
                 sess.setPassword(passwordInput);
                 sess.setImagePath(rs.getString("image"));
+
+                
+                Logger logger = new Logger(connect);
+                
+
                 
                 switch (userType.toLowerCase()) {
                     case "admin":
                     case "librarian":
+                         
+                        logger.logAdd(userId, "Admin logged in: " + rs.getString("RegUser"));
                         new AdminDashboard().setVisible(true);
                         break;
                     case "borrower":
                     case "user":
+                        logger.logAdd(userId, "User logged in: " + rs.getString("RegUser"));
                         new UserDashboard().setVisible(true);
                         break;
                     default:
                         JOptionPane.showMessageDialog(this, "Invalid User Type!", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                 }
+
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -417,7 +424,6 @@ private void minimize() {
     } catch (SQLException ex) {
         JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-
 
     }//GEN-LAST:event_LogButtonActionPerformed
 

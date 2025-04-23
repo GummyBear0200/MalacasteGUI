@@ -39,6 +39,15 @@ public class AdminAddUser extends javax.swing.JFrame {
    File selectedFile;
    public String oldpath;
    public String path;
+   
+    private String BookId; 
+
+    public void setUserId(String id) {
+        this.BookId = id; 
+    }
+    public void setFirstName(String firstName) {
+    this.fn.setText(firstName);
+}
 
 public int FileExistenceChecker(String path){
         File file = new File(path);
@@ -153,14 +162,7 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         return null;
     }
 }
-private String userId; 
 
-    public void setUserId(String id) {
-        this.userId = id; 
-    }
-    public void setFirstName(String firstName) {
-    this.fn.setText(firstName);
-}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -295,6 +297,11 @@ private String userId;
         jPanel5.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 70, 30));
 
         cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Active" }));
+        cmbStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbStatusActionPerformed(evt);
+            }
+        });
         jPanel5.add(cmbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 160, 180, 40));
 
         cmbUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User", "Borrower" }));
@@ -443,14 +450,6 @@ private String userId;
        acc_id.setText(""+sess.getuid());
     }//GEN-LAST:event_formWindowActivated
 
-    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
-        if (jCheckBox4.isSelected()) {
-            ps.setEchoChar((char) 0);
-        } else {
-            ps.setEchoChar('*');
-        }
-    }//GEN-LAST:event_jCheckBox4ActionPerformed
-
     private void fnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fnActionPerformed
@@ -489,6 +488,18 @@ private String userId;
        destination = "";
        path = "";
     }//GEN-LAST:event_removeActionPerformed
+
+    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+        if (jCheckBox4.isSelected()) {
+            ps.setEchoChar((char) 0);
+        } else {
+            ps.setEchoChar('*');
+        }
+    }//GEN-LAST:event_jCheckBox4ActionPerformed
+
+    private void cmbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbStatusActionPerformed
 
     /**
      * @param args the command line arguments

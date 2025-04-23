@@ -5,9 +5,14 @@
  */
 package Users;
 
+import Internal.AvailableBooks;
+import Internal.BorrowBook;
+import config.DbConnect;
+import config.Logger;
 import config.Session;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.sql.Connection;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -145,6 +150,9 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jPanel5.setBackground(new java.awt.Color(204, 204, 204));
         jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel5MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jPanel5MouseEntered(evt);
             }
@@ -164,6 +172,9 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jPanel6.setBackground(new java.awt.Color(204, 204, 204));
         jPanel6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel6MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jPanel6MouseEntered(evt);
             }
@@ -215,6 +226,9 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/customerService.png"))); // NOI18N
         jLabel8.setText("Customer Service");
         jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel8MouseEntered(evt);
+            }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 jLabel8MouseExited(evt);
             }
@@ -255,16 +269,28 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     }// </editor-fold>//GEN-END:initComponents
 
     private void LogoutbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutbuttonActionPerformed
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(
-            this, "Are you sure you want to logout?", "Logout Confirmation",
-            javax.swing.JOptionPane.YES_NO_OPTION);
+      int confirm = javax.swing.JOptionPane.showConfirmDialog(
+        this, "Are you sure you want to logout?", "Logout Confirmation",
+        javax.swing.JOptionPane.YES_NO_OPTION);
 
-        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
-            this.dispose();
+    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+        
+        try (Connection conn = new DbConnect().getConnection()) {
+            Session sess = Session.getInstance();
+            int userId = sess.getuid();
+            String username = sess.getusername();
 
-            Loginform loginPage = new Loginform();
-            loginPage.setVisible(true);
+            Logger logger = new Logger(conn);
+            logger.logAdd(userId, "User logged out: " + username);
+        } catch (Exception e) {
+            System.err.println("Failed to log logout action: " + e.getMessage());
         }
+
+        this.dispose(); 
+        
+        Loginform loginPage = new Loginform(); 
+        loginPage.setVisible(true);
+    }
     }//GEN-LAST:event_LogoutbuttonActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -319,18 +345,35 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
 
     private void jPanel8MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseEntered
         jPanel8.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-    jPanel8.setBackground(Color.RED); 
+        jPanel8.setBackground(Color.RED); 
     }//GEN-LAST:event_jPanel8MouseEntered
 
     private void jLabel8MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseExited
       jPanel8.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-    jPanel8.setBackground(Color.WHITE); 
+      jPanel8.setBackground(Color.WHITE); 
     }//GEN-LAST:event_jLabel8MouseExited
 
     private void jPanel8MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseExited
        jPanel8.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); 
        jPanel8.setBackground(Color.WHITE); 
     }//GEN-LAST:event_jPanel8MouseExited
+
+    private void jLabel8MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseEntered
+        jPanel8.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+        jPanel8.setBackground(Color.RED); 
+    }//GEN-LAST:event_jLabel8MouseEntered
+
+    private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
+       AvailableBooks bb = new AvailableBooks();
+       bb.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_jPanel5MouseClicked
+
+    private void jPanel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseClicked
+        BorrowBook bb = new BorrowBook();
+        bb.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_jPanel6MouseClicked
 
     /**
      * @param args the command line arguments

@@ -21,6 +21,8 @@ public class Session {
     private String status;
     private String pinreq;
     private String imagePath;
+    private String bookid;
+
 
    
 
@@ -138,5 +140,12 @@ public class Session {
     public String getImagePath() {
         return this.imagePath;
     }
+    
+    public String getBookid() {
+        return bookid;
+    }
 
+    public void setBookid(String bookid) {
+        this.bookid = bookid;
+    }
 }

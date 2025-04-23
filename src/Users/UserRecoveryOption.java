@@ -386,7 +386,9 @@ private void customizeButton(JButton button) {
     }//GEN-LAST:event_exitMouseExited
 
     private void mnumberMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mnumberMouseClicked
-        // TODO add your handling code here:
+       UserRecoveryPhoneNumber upn = new UserRecoveryPhoneNumber();
+       upn.setVisible(true);
+       this.dispose();
     }//GEN-LAST:event_mnumberMouseClicked
 
     private void mnumberMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mnumberMouseEntered

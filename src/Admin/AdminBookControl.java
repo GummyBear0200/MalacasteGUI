@@ -20,13 +20,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 public class AdminBookControl extends javax.swing.JFrame {
 
     /**
      * Creates new form AdminBookControl
      */
     public AdminBookControl() {
+        setUndecorated(true);
         initComponents();
+        
         
         loadBookData();
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); 
@@ -40,7 +43,7 @@ public class AdminBookControl extends javax.swing.JFrame {
         return c;
     }
 });
-    customizeButton(ViewButton);
+    
     customizeButton(AddButton);
     customizeButton(UpdateButton);
     customizeButton(DeleteButton);
@@ -91,91 +94,50 @@ public class AdminBookControl extends javax.swing.JFrame {
 }
 
     void addBook() {
-    if (txtBookTtle == null || txtAthr == null || txtPubdte == null || 
-        txtSttus == null ) {
-        JOptionPane.showMessageDialog(this, "One or more fields are not initialized.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
+        AdminAddBook adb = new AdminAddBook();
+        adb.setVisible(true);
+        this.dispose();
+  
     }
+   
 
-    String booktitle = txtBookTtle.getText();
-    String author = txtAthr.getText();
-    String pubdate = txtPubdte.getText();
-    String status = txtSttus.getText();
-    
+   private void updateBook() {
+    int rowIndex = jTable1.getSelectedRow();
+    if (rowIndex < 0) {
+        JOptionPane.showMessageDialog(null, "Please select a Book!");
+    } else {
+        try {
+            DbConnect dbc = new DbConnect();
+            TableModel tbl = jTable1.getModel();
 
-    try (Connection con = new DbConnect().getConnection()) {
-        if (con == null) {
-            JOptionPane.showMessageDialog(this, "Database connection failed!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+            String bookId = tbl.getValueAt(rowIndex, 0).toString();
+            String query = "SELECT * FROM books WHERE b_id = ?";
 
-        String sql = "INSERT INTO books (b_title, b_author, b_pubdate, b_status) VALUES (?, ?, ?, ?)";
+            PreparedStatement pst = dbc.getConnection().prepareStatement(query);
+            pst.setString(1, bookId);
+            ResultSet rs = pst.executeQuery();
 
-        
-        try (PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            pst.setString(1, booktitle);
-            pst.setString(2, author);
-            pst.setString(3, pubdate);
-            pst.setString(4, status);
-           
-
-            int rowsAffected = pst.executeUpdate();
-            if (rowsAffected > 0) {
-                
-                int newBookId = -1;
-                try (ResultSet rs = pst.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        newBookId = rs.getInt(1);  
-                    }
-                }
-
-                JOptionPane.showMessageDialog(this, "User added successfully! ID: " + newBookId);
-                loadBookData();  
-
+            if (rs.next()) {
+                AdminAddBook bookForm = new AdminAddBook();
                
-              
-              
+                bookForm.AddButton1.setVisible(false);
+                 bookForm.UpdateButton.setVisible(true);
+                bookForm.setBookId(bookId); // you should create this setter
+                bookForm.txtBookTitle.setText(rs.getString("b_title"));
+                bookForm.txtBookAuthor.setText(rs.getString("b_author"));
+                bookForm.txtBookPublicationDate.setText(rs.getString("b_pubdate"));
+                bookForm.jComboBox1.setSelectedItem(rs.getString("b_status"));
 
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to add user.", "Error", JOptionPane.ERROR_MESSAGE);
+                bookForm.setVisible(true);
+                this.dispose();
             }
-        }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
-    }
-private void updateBook() {
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a user to update.");
-            return;
-        }
-
-        int bookId = (int) jTable1.getValueAt(selectedRow, 0);
-         String booktitle = txtBookTtle.getText();
-         String author = txtAthr.getText();
-         String pubdate = txtPubdte.getText();
-         String status = txtSttus.getText();
-
-        String sql = "UPDATE books SET b_title=?, b_author=?, b_pubdate=?, b_status=? WHERE b_id=?";
-
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "");
-             PreparedStatement pst = con.prepareStatement(sql)) {
-
-            pst.setString(1, booktitle);
-            pst.setString(2, author);
-            pst.setString(3, pubdate);
-            pst.setString(4, status);         
-            pst.setInt(5, bookId);
-
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "User Updated Successfully!");
-            loadBookData(); 
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
 }
+
      private void deleteBook() {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
@@ -202,24 +164,7 @@ private void updateBook() {
             }
         }
      }
-     private void viewBook() {
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a user to view.");
-            return;
-        }
 
-       txtBookTtle.setText("Book: " + jTable1.getValueAt(selectedRow, 1).toString());
-       txtAthr.setText("Author: " + jTable1.getValueAt(selectedRow, 2).toString());
-       txtPubdte.setText("Published: " + jTable1.getValueAt(selectedRow, 3).toString());
-       txtSttus.setText("Status: " + jTable1.getValueAt(selectedRow, 4).toString());
-  
-        
-    
-
-}
-
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -234,37 +179,13 @@ private void updateBook() {
         AddButton = new javax.swing.JButton();
         UpdateButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
-        ViewButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        txtBookTtle = new javax.swing.JTextField();
-        txtAthr = new javax.swing.JTextField();
-        txtPubdte = new javax.swing.JTextField();
-        txtSttus = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
-        txtBookTitle1 = new javax.swing.JTextField();
-        txtAuthor1 = new javax.swing.JTextField();
-        txtPubdate1 = new javax.swing.JTextField();
-        txtStatus1 = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        txtBookTitle2 = new javax.swing.JTextField();
-        txtAuthor2 = new javax.swing.JTextField();
-        txtPubdate2 = new javax.swing.JTextField();
-        txtStatus2 = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
-        txtBookTitle3 = new javax.swing.JTextField();
-        txtAuthor3 = new javax.swing.JTextField();
-        txtPubdate3 = new javax.swing.JTextField();
-        txtStatus3 = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         Interface.setBackground(new java.awt.Color(102, 102, 102));
         Interface.setForeground(new java.awt.Color(102, 102, 102));
@@ -328,15 +249,6 @@ private void updateBook() {
         });
         jPanel1.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 110, 40));
 
-        ViewButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        ViewButton.setText("VIEW");
-        ViewButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ViewButtonActionPerformed(evt);
-            }
-        });
-        jPanel1.add(ViewButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 110, 40));
-
         Interface.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
@@ -345,120 +257,6 @@ private void updateBook() {
         jLabel3.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         jLabel3.setText("Current Books:");
         jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 250, 40));
-
-        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtBookTtle.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtBookTtleMouseClicked(evt);
-            }
-        });
-        txtBookTtle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBookTtleActionPerformed(evt);
-            }
-        });
-        jPanel5.add(txtBookTtle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 160, -1));
-        jPanel5.add(txtAthr, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 160, -1));
-        jPanel5.add(txtPubdte, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 160, -1));
-        jPanel5.add(txtSttus, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 160, -1));
-
-        jLabel1.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel1.setText("View Log: Select a row in the table then click View button to display their data.");
-        jPanel5.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 570, 20));
-
-        jPanel6.setBackground(new java.awt.Color(255, 204, 204));
-        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtBookTitle1.setText("Title");
-        txtBookTitle1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtBookTitle1MouseClicked(evt);
-            }
-        });
-        txtBookTitle1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBookTitle1ActionPerformed(evt);
-            }
-        });
-        jPanel6.add(txtBookTitle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 160, -1));
-
-        txtAuthor1.setText("Author");
-        jPanel6.add(txtAuthor1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 160, -1));
-
-        txtPubdate1.setText("Publication Date");
-        jPanel6.add(txtPubdate1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 160, -1));
-
-        txtStatus1.setText("Status of the book");
-        jPanel6.add(txtStatus1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 160, -1));
-
-        jLabel5.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
-        jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 570, 20));
-
-        jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 720, 70));
-
-        jPanel7.setBackground(new java.awt.Color(255, 204, 204));
-        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtBookTitle2.setText("Title");
-        txtBookTitle2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtBookTitle2MouseClicked(evt);
-            }
-        });
-        txtBookTitle2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBookTitle2ActionPerformed(evt);
-            }
-        });
-        jPanel7.add(txtBookTitle2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 160, -1));
-
-        txtAuthor2.setText("Author");
-        jPanel7.add(txtAuthor2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 160, -1));
-
-        txtPubdate2.setText("Publication Date");
-        jPanel7.add(txtPubdate2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 160, -1));
-
-        txtStatus2.setText("Status of the book");
-        jPanel7.add(txtStatus2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 160, -1));
-
-        jLabel7.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
-        jPanel7.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 570, 20));
-
-        jPanel8.setBackground(new java.awt.Color(255, 204, 204));
-        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtBookTitle3.setText("Title");
-        txtBookTitle3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtBookTitle3MouseClicked(evt);
-            }
-        });
-        txtBookTitle3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBookTitle3ActionPerformed(evt);
-            }
-        });
-        jPanel8.add(txtBookTitle3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 160, -1));
-
-        txtAuthor3.setText("Author");
-        jPanel8.add(txtAuthor3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 160, -1));
-
-        txtPubdate3.setText("Publication Date");
-        jPanel8.add(txtPubdate3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 160, -1));
-
-        txtStatus3.setText("Status of the book");
-        jPanel8.add(txtStatus3, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 160, -1));
-
-        jLabel8.setText("Note: To Add and Update please fill all fields then click the button you want to function.");
-        jPanel8.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 570, 20));
-
-        jPanel7.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 720, 70));
-
-        jPanel5.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 720, 70));
-
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 720, 70));
 
         jTable1.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -469,12 +267,21 @@ private void updateBook() {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Book ID", "Book Title", "Author", "Date Published"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTable1);
 
-        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 40, 700, 330));
+        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 40, 700, 430));
 
         Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 780, 580));
 
@@ -494,6 +301,7 @@ private void updateBook() {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
@@ -503,8 +311,7 @@ private void updateBook() {
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
-         AdminAddBook adminaddbook = new AdminAddBook();
-        adminaddbook.setVisible(true);
+        addBook();
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
@@ -514,42 +321,6 @@ private void updateBook() {
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
         deleteBook();
     }//GEN-LAST:event_DeleteButtonActionPerformed
-
-    private void ViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewButtonActionPerformed
-        viewBook();
-    }//GEN-LAST:event_ViewButtonActionPerformed
-
-    private void txtBookTtleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBookTtleMouseClicked
-
-    }//GEN-LAST:event_txtBookTtleMouseClicked
-
-    private void txtBookTtleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookTtleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTtleActionPerformed
-
-    private void txtBookTitle1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBookTitle1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle1MouseClicked
-
-    private void txtBookTitle1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookTitle1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle1ActionPerformed
-
-    private void txtBookTitle2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBookTitle2MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle2MouseClicked
-
-    private void txtBookTitle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookTitle2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle2ActionPerformed
-
-    private void txtBookTitle3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBookTitle3MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle3MouseClicked
-
-    private void txtBookTitle3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookTitle3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookTitle3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -587,44 +358,19 @@ private void updateBook() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton AddButton;
+    public javax.swing.JButton AddButton;
     private javax.swing.JButton DeleteButton;
     private javax.swing.JPanel Interface;
     private javax.swing.JButton UpdateButton;
-    private javax.swing.JButton ViewButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtAthr;
-    private javax.swing.JTextField txtAuthor1;
-    private javax.swing.JTextField txtAuthor2;
-    private javax.swing.JTextField txtAuthor3;
-    private javax.swing.JTextField txtBookTitle1;
-    private javax.swing.JTextField txtBookTitle2;
-    private javax.swing.JTextField txtBookTitle3;
-    private javax.swing.JTextField txtBookTtle;
-    private javax.swing.JTextField txtPubdate1;
-    private javax.swing.JTextField txtPubdate2;
-    private javax.swing.JTextField txtPubdate3;
-    private javax.swing.JTextField txtPubdte;
-    private javax.swing.JTextField txtStatus1;
-    private javax.swing.JTextField txtStatus2;
-    private javax.swing.JTextField txtStatus3;
-    private javax.swing.JTextField txtSttus;
     // End of variables declaration//GEN-END:variables
 }
