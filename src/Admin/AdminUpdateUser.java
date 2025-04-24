@@ -2,6 +2,7 @@
 package Admin;
 
 
+import Users.Loginform;
 import Users.UserAccount;
 import config.DbConnect;
 import config.Logger;
@@ -506,7 +507,13 @@ public static int getHeightFromWidth(String imagePath, int desiredWidth) {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
       Session sess = Session.getInstance();
-    
+    if (sess.getuid() == 0) {
+        JOptionPane.showMessageDialog(this, "No account found, Log in First!", "Login Required", JOptionPane.WARNING_MESSAGE);
+        Loginform lf = new Loginform();
+        lf.setVisible(true);
+        this.dispose();
+        return; 
+    }
    
     acc_id.setText(String.valueOf(sess.getuid()));
     }//GEN-LAST:event_formWindowActivated
