@@ -153,7 +153,7 @@ public static String hashPassword(String password) {
         titlelabel11.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         titlelabel11.setText("New Password:");
         jPanel1.add(titlelabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 190, 70));
-        jPanel1.add(reenterPasswordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 310, 290, 50));
+        jPanel1.add(reenterPasswordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 300, 290, 50));
 
         currentPasswordField.setEditable(false);
         currentPasswordField.setText("jPasswordField1");

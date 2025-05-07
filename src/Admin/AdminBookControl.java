@@ -5,7 +5,10 @@
  */
 package Admin;
 
+import Users.Loginform;
 import config.DbConnect;
+import config.Logger;
+import config.Session;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.print.Book;
@@ -47,6 +50,7 @@ public class AdminBookControl extends javax.swing.JFrame {
     customizeButton(AddButton);
     customizeButton(UpdateButton);
     customizeButton(DeleteButton);
+    customizeButton(jButton1);
     
     
     }
@@ -179,6 +183,7 @@ public class AdminBookControl extends javax.swing.JFrame {
         AddButton = new javax.swing.JButton();
         UpdateButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -248,6 +253,15 @@ public class AdminBookControl extends javax.swing.JFrame {
             }
         });
         jPanel1.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 110, 40));
+
+        jButton1.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jButton1.setText("Logout");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 593, 150, 30));
 
         Interface.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
 
@@ -322,6 +336,31 @@ public class AdminBookControl extends javax.swing.JFrame {
         deleteBook();
     }//GEN-LAST:event_DeleteButtonActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+      int confirm = javax.swing.JOptionPane.showConfirmDialog(
+        this, "Are you sure you want to logout?", "Logout Confirmation",
+        javax.swing.JOptionPane.YES_NO_OPTION);
+
+    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+        
+        try (Connection conn = new DbConnect().getConnection()) {
+            Session sess = Session.getInstance();
+            int userId = sess.getuid();
+            String username = sess.getusername();
+
+            Logger logger = new Logger(conn);
+            logger.logAdd(userId, "User logged out: " + username);
+        } catch (Exception e) {
+            System.err.println("Failed to log logout action: " + e.getMessage());
+        }
+
+        this.dispose(); 
+        
+        Loginform loginPage = new Loginform(); 
+        loginPage.setVisible(true);
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -362,7 +401,8 @@ public class AdminBookControl extends javax.swing.JFrame {
     private javax.swing.JButton DeleteButton;
     private javax.swing.JPanel Interface;
     private javax.swing.JButton UpdateButton;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton jButton1;
+    public javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;

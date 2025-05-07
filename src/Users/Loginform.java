@@ -1,13 +1,16 @@
 
 package Users;
 
+import Admin.AdminBookControl;
 import Admin.AdminDashboard;
+import Admin.LibrarianBookControl;
 import config.DbConnect;
 import config.Logger;
 import config.Session;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -29,7 +32,8 @@ private JTextField txtUsername;
 private JPasswordField txtPassword;
 private int x;
 private Timer timer;
-    
+      private Timer blinkTimer;
+private boolean isRed = true;
     public Loginform() {
         
         setUndecorated(true);
@@ -47,6 +51,13 @@ private Timer timer;
         txtPassword = new JPasswordField();
 
         initComponents();
+         blinkTimer = new Timer(500, new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            jLabel1.setForeground(isRed ? Color.RED : Color.WHITE);
+            isRed = !isRed;
+        }
+    });
+    blinkTimer.start();
     }
 private String hashPassword(String password) {
     try {
@@ -398,7 +409,7 @@ private void minimize() {
                 
                 switch (userType.toLowerCase()) {
                     case "admin":
-                    case "librarian":
+                    
                          
                         logger.logAdd(userId, "Admin logged in: " + rs.getString("RegUser"));
                         new AdminDashboard().setVisible(true);
@@ -407,6 +418,12 @@ private void minimize() {
                     case "user":
                         logger.logAdd(userId, "User logged in: " + rs.getString("RegUser"));
                         new UserDashboard().setVisible(true);
+                        break;
+                        case "librarian":
+                            logger.logAdd(userId, "Admin logged in: " + rs.getString("RegUser"));
+                        new LibrarianBookControl().setVisible(true);
+                         
+                        
                         break;
                     default:
                         JOptionPane.showMessageDialog(this, "Invalid User Type!", "Error", JOptionPane.ERROR_MESSAGE);

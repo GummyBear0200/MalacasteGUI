@@ -297,7 +297,7 @@ private Connection connect;
     }//GEN-LAST:event_searchMouseExited
 
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
-        // TODO add your handling code here:
+      searchUsername(); 
     }//GEN-LAST:event_searchActionPerformed
 
     private void usernamefieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernamefieldKeyPressed

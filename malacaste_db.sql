@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2025 at 08:08 PM
+-- Generation Time: May 07, 2025 at 05:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -54,10 +54,11 @@ INSERT INTO `books` (`b_id`, `b_title`, `b_author`, `b_pubdate`, `b_status`) VAL
 
 CREATE TABLE `borrowers` (
   `br_id` int(11) NOT NULL,
+  `u_id` int(11) NOT NULL,
   `br_name` varchar(100) NOT NULL,
-  `br_address` varchar(60) NOT NULL,
-  `br_cn` varchar(50) NOT NULL,
-  `br_status` int(50) NOT NULL
+  `br_address` varchar(255) NOT NULL,
+  `br_contactnumber` varchar(100) NOT NULL,
+  `br_status` varchar(20) NOT NULL DEFAULT 'not borrowed'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -209,7 +210,34 @@ INSERT INTO `logs` (`log_id`, `u_id`, `log_action`, `log_date`) VALUES
 (136, 21, 'Admin logged in: charles011605', '2025-04-24 02:03:53'),
 (137, 21, 'Admin logged in: charles011605', '2025-04-24 02:05:38'),
 (138, 21, 'Admin logged in: charles011605', '2025-04-24 02:06:21'),
-(139, 21, 'Admin logged in: charles011605', '2025-04-24 02:07:04');
+(139, 21, 'Admin logged in: charles011605', '2025-04-24 02:07:04'),
+(140, 21, 'Admin logged in: charles011605', '2025-04-27 18:59:18'),
+(141, 21, 'Admin logged in: charles011605', '2025-05-01 12:04:13'),
+(142, 21, 'Admin logged out: charles011605', '2025-05-01 12:04:41'),
+(143, 29, 'User logged in: shan1234', '2025-05-01 12:05:01'),
+(144, 29, 'User logged out: shan1234', '2025-05-01 12:06:08'),
+(145, 26, 'Password Reset Cancelled: colenscolens', '2025-05-01 12:07:32'),
+(146, 29, 'User logged in: shan1234', '2025-05-01 12:25:17'),
+(147, 29, 'User logged out: shan1234', '2025-05-01 12:27:16'),
+(148, 21, 'Admin logged in: charles011605', '2025-05-01 12:27:24'),
+(149, 21, 'Admin logged in: charles011605', '2025-05-04 21:14:33'),
+(150, 21, 'Admin logged in: charles011605', '2025-05-07 22:26:59'),
+(151, 21, 'Admin logged in: charles011605', '2025-05-07 22:36:57'),
+(152, 21, 'Admin logged out: charles011605', '2025-05-07 22:37:08'),
+(153, 29, 'User logged in: shan1234', '2025-05-07 22:37:17'),
+(154, 29, 'User logged in: shan1234', '2025-05-07 22:38:50'),
+(155, 29, 'User logged in: shan1234', '2025-05-07 22:40:29'),
+(156, 29, 'User logged out: shan1234', '2025-05-07 22:42:24'),
+(157, 42, 'User registered with username: mike123', '2025-05-07 23:25:30'),
+(158, 21, 'Admin logged in: charles011605', '2025-05-07 23:25:44'),
+(159, 21, 'Admin logged out: charles011605', '2025-05-07 23:25:54'),
+(160, 42, 'Admin logged in: mike123', '2025-05-07 23:26:39'),
+(161, 42, 'Admin logged in: mike123', '2025-05-07 23:27:12'),
+(162, 42, 'Admin logged in: mike123', '2025-05-07 23:28:32'),
+(163, 42, 'Admin logged in: mike123', '2025-05-07 23:30:31'),
+(164, 42, 'User logged out: mike123', '2025-05-07 23:31:42'),
+(165, 42, 'Admin logged in: mike123', '2025-05-07 23:32:59'),
+(166, 42, 'User logged out: mike123', '2025-05-07 23:33:08');
 
 -- --------------------------------------------------------
 
@@ -268,7 +296,8 @@ INSERT INTO `users` (`u_id`, `Fname`, `Lname`, `Contactnum`, `email`, `usertype`
 (29, 'Shanellayza L', 'Torres', '09202237644', 'shann@gmail.com', 'User', 'shan1234', 'b0894b8c7d77b9f201ea9729501311613a36c2c93d364e07cf4312cd6cda8fa3', 'What is my fav food?', 'Charles', 'Active', 'src/profileImages/ACKKKShann.jpg', '123456'),
 (30, 'Maby', 'Otahay', '09233235456', 'maby@gmail.com', 'Borrower', 'mabycrushngbayan123', '1ceadcf6cfcfddccb00bcb4f78bc238d3615eeaca4adae85e118ca4760b2073f', NULL, NULL, 'Active', 'src/profileImages/MABY.png', NULL),
 (40, 'Mego Gwapo', 'baynas', '09234354545', 'baynas@gmail.com', 'Borrower', 'baynas123', '2bbbef0f660fcdf7964da674ae21fd545c0db304ccaf18f7c4e01c70abe804a2', 'Is baynas gwapo?', 'Of course, yes', 'Active', 'src/profileImages/A_detailed_illustration_of_an_Admin_Dashboard_for_a_Library_Management_System_GUI_The_dashboard_features_a_clean_and_modern_design_with_a_sidebar_on_the_left_containing_navigation_options_like_Dashboard_Books_Members_.png', '111111'),
-(41, 'Jimz', 'Ansali', '092343435', 'jimz@gmail.com', 'Borrower', 'jimz123', '0b255eaebd53193359560878526c9a06d31d8a4128659571244ee27726f05260', 'Am I friendly to you?', 'Yes', 'Active', 'src/profileImages/111.jpg', '111111');
+(41, 'Jimz', 'Ansali', '092343435', 'jimz@gmail.com', 'Borrower', 'jimz123', '0b255eaebd53193359560878526c9a06d31d8a4128659571244ee27726f05260', 'Am I friendly to you?', 'Yes', 'Active', 'src/profileImages/111.jpg', '111111'),
+(42, 'Mike', 'Bustamante', '092323232323', 'mike@st.cecila.edu.ph', 'Librarian', 'mike123', '5155ea8ca667bc8bbfc722df032b4d9721c6666c93e0a20e6c7181165d232ef6', 'Are you  pumped?', 'Yes', 'Active', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -284,7 +313,8 @@ ALTER TABLE `books`
 -- Indexes for table `borrowers`
 --
 ALTER TABLE `borrowers`
-  ADD PRIMARY KEY (`br_id`);
+  ADD PRIMARY KEY (`br_id`),
+  ADD KEY `u_id` (`u_id`);
 
 --
 -- Indexes for table `logs`
@@ -317,10 +347,16 @@ ALTER TABLE `books`
   MODIFY `b_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT for table `borrowers`
+--
+ALTER TABLE `borrowers`
+  MODIFY `br_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
 
 --
 -- AUTO_INCREMENT for table `pin_requests`
@@ -332,11 +368,17 @@ ALTER TABLE `pin_requests`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `borrowers`
+--
+ALTER TABLE `borrowers`
+  ADD CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`u_id`) REFERENCES `users` (`u_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `logs`
