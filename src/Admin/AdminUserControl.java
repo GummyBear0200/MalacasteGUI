@@ -11,6 +11,7 @@ import config.Logger;
 import config.Session;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,6 +26,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
 /**
@@ -35,7 +37,7 @@ import javax.swing.table.TableModel;
 
       
     public AdminUserControl() {
-        
+        setUndecorated(true);
         initComponents();
         
 
@@ -56,7 +58,25 @@ import javax.swing.table.TableModel;
     customizeButton(AddButton);
     customizeButton(UpdateButton);
     customizeButton(DeleteButton);
-    
+    jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        if (!isSelected) {
+            c.setBackground(row % 2 == 0 ? new Color(240, 240, 240) : Color.WHITE);
+        }
+        return c;
+    }
+});
+
+
+JTableHeader header = jTable1.getTableHeader();
+header.setFont(new Font("Tahoma", Font.BOLD, 14));
+header.setBackground(new Color(200, 0, 0));
+header.setForeground(Color.WHITE);
+
+
+jTable1.setRowHeight(25);
     }
     private void customizeButton(JButton button) {
       button.setOpaque(true);
@@ -373,14 +393,14 @@ void addUser() {
         });
         jPanel2.add(UpdateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 30, 110, 40));
 
-        Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 880, 90));
+        Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, 880, 90));
 
         jPanel4.setBackground(new java.awt.Color(51, 51, 51));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 130, 490));
 
         jTable1.setBackground(new java.awt.Color(204, 204, 204));
-        jTable1.setFont(new java.awt.Font("Bahnschrift", 1, 10)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Bahnschrift", 1, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

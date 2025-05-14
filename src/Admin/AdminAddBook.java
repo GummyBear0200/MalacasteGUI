@@ -26,6 +26,7 @@ public class AdminAddBook extends javax.swing.JFrame {
      * Creates new form AdminAddBook
      */
     public AdminAddBook() {
+        setUndecorated(true);
         initComponents();
     }
  private String BookId; 

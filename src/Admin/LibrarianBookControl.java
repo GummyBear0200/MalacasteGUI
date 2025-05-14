@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Admin;
 
 import Users.Loginform;
@@ -212,7 +208,7 @@ public class LibrarianBookControl extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 150, 30));
+        jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 30));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, -1));
 
@@ -233,7 +229,7 @@ public class LibrarianBookControl extends javax.swing.JFrame {
                 AddButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(AddButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 110, 40));
+        jPanel1.add(AddButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 110, 40));
 
         UpdateButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         UpdateButton.setText("UPDATE");
@@ -242,7 +238,7 @@ public class LibrarianBookControl extends javax.swing.JFrame {
                 UpdateButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(UpdateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 110, 40));
+        jPanel1.add(UpdateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 110, 40));
 
         DeleteButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         DeleteButton.setText("DELETE");
@@ -251,9 +247,9 @@ public class LibrarianBookControl extends javax.swing.JFrame {
                 DeleteButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 110, 40));
+        jPanel1.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 110, 40));
 
-        Interface.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
+        Interface.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 180, 660));
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -287,7 +283,7 @@ public class LibrarianBookControl extends javax.swing.JFrame {
 
         jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 40, 700, 430));
 
-        Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 780, 580));
+        Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 780, 540));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -301,7 +297,7 @@ public class LibrarianBookControl extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 650, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Interface, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(Interface, javax.swing.GroupLayout.PREFERRED_SIZE, 650, Short.MAX_VALUE))
         );
 
         pack();

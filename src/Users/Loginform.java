@@ -132,7 +132,7 @@ private void minimize() {
         reg.setBackground(new java.awt.Color(51, 51, 51));
         reg.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton2.setFont(new java.awt.Font("Arial Black", 1, 10)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Georgia", 3, 14)); // NOI18N
         jButton2.setText("Register");
         jButton2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -155,8 +155,8 @@ private void minimize() {
 
         jLabel4.setFont(new java.awt.Font("Arial Black", 2, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("No account? Click here to ->");
-        reg.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 240, 30));
+        jLabel4.setText("No account? Click here to create");
+        reg.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, 260, 40));
 
         jPanel2.add(reg, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 360, 440, 60));
 
@@ -251,7 +251,7 @@ private void minimize() {
         });
         jPanel2.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 200, 30, 40));
 
-        LogButton.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        LogButton.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
         LogButton.setText("LOGIN");
         LogButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         LogButton.addMouseListener(new java.awt.event.MouseAdapter() {

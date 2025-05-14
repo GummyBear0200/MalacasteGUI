@@ -4,6 +4,7 @@ package Admin;
 import java.awt.Color;
 import javax.swing.JButton;
 import Admin.AdminUserControl;
+import Internal.BorrowedBookPenalties;
 import Users.Loginform;
 import config.DbConnect;
 import config.Logger;
@@ -16,7 +17,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -30,6 +30,7 @@ public final class AdminDashboard extends javax.swing.JFrame {
 
     
     public AdminDashboard() {
+        setUndecorated(true);
         initComponents();
         
         JButton userButton = new JButton("User Control");
@@ -51,14 +52,16 @@ userButton.addMouseListener(new java.awt.event.MouseAdapter() {
     }
 });
 
-        loadBorrowersData();
+       
         loadBooksTable();
         loadUsersData();
+        loadBorrowersToTable();
     customizeButton(jButton1);
     customizeButton(jButton2);
     customizeButton(jButton3);
     customizeButton(jButton4);
     customizeButton(jButton5);
+    customizeButton(jButton6);
     
     
    jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -81,8 +84,76 @@ header.setForeground(Color.WHITE);
 
 jTable1.setRowHeight(25);
 
+
+jTable2.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        if (!isSelected) {
+            c.setBackground(row % 2 == 0 ? new Color(240, 240, 240) : Color.WHITE);
+        }
+        return c;
+    }
+});
+ header = jTable2.getTableHeader();
+header.setFont(new Font("Tahoma", Font.BOLD, 14));
+header.setBackground(new Color(200, 0, 0));
+header.setForeground(Color.WHITE);
+
+
+jTable3.setRowHeight(25);
+jTable3.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        if (!isSelected) {
+            c.setBackground(row % 2 == 0 ? new Color(240, 240, 240) : Color.WHITE);
+        }
+        return c;
+    }
+});
+ header = jTable3.getTableHeader();
+header.setFont(new Font("Tahoma", Font.BOLD, 14));
+header.setBackground(new Color(200, 0, 0));
+header.setForeground(Color.WHITE);
+
+
+jTable3.setRowHeight(25);
     }
     
+      private void loadBorrowersToTable() {
+    DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
+    model.setRowCount(0); 
+
+    try {
+        Connection conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/malacaste_db",  
+            "root",                            
+            ""                         
+        );
+
+        String sql = "SELECT b.br_id, u.Fname, u.email, b.br_status " +
+                     "FROM borrowers b " +
+                     "JOIN users u ON b.u_id = u.u_id";
+
+        PreparedStatement pst = conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            int brId = rs.getInt("br_id");
+            String fname = rs.getString("Fname");           
+            String email = rs.getString("email");
+            String status = rs.getString("br_status");
+            model.addRow(new Object[]{brId, fname + " " ,   status});
+        }
+
+        conn.close();
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error loading borrowers: " + ex.getMessage());
+    }
+}
      public void getTotalAcc() {
         try {
             DbConnect dbc = new DbConnect();
@@ -95,33 +166,8 @@ jTable1.setRowHeight(25);
             System.out.println("" + ex);
         }
     }
-  public void loadBorrowersData() {
-    DefaultTableModel model = (DefaultTableModel) BorrowersTable.getModel();
-    
-    
-    String[] columnNames = {"ID", "Name", "Status"};
-    model.setColumnIdentifiers(columnNames);
-    model.setRowCount(0); 
-
-    String sql = "SELECT br_id , br_name, br_status FROM borrowers";
-
-    try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "");
-         PreparedStatement pst = con.prepareStatement(sql);
-         ResultSet rs = pst.executeQuery()) {
-
-        while (rs.next()) {
-            Object[] row = {
-                rs.getString("br_id"),
-                rs.getString("br_name"),
-                rs.getString("br_status")
-            };
-            model.addRow(row); 
-        }
-
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
-  }
+ 
+  
 
 
  public void loadBooksTable() {
@@ -239,6 +285,8 @@ private String generateTempPin() {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
+        jLabel19 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -253,7 +301,7 @@ private String generateTempPin() {
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        BorrowersTable = new javax.swing.JTable();
+        jTable3 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -330,10 +378,10 @@ private String generateTempPin() {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/ACCOUNTT.png"))); // NOI18N
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, 60));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, 60));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/patients.png"))); // NOI18N
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, 60));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, -1, 60));
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/log out.png"))); // NOI18N
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 510, 50, 50));
@@ -344,10 +392,10 @@ private String generateTempPin() {
         jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(1430, 50, -1, -1));
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/reports.png"))); // NOI18N
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, 60, 60));
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 410, 60, 60));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/c6131e0206d37d4f4146d53c6e3d16f3.png"))); // NOI18N
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 50, 40));
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 50, 40));
 
         jButton5.setBackground(new java.awt.Color(204, 0, 51));
         jButton5.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -358,7 +406,7 @@ private String generateTempPin() {
                 jButton5ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 140, 40));
+        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 140, 40));
 
         jButton3.setBackground(new java.awt.Color(204, 0, 51));
         jButton3.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -369,7 +417,7 @@ private String generateTempPin() {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 190, 140, 40));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 140, 40));
 
         jButton4.setBackground(new java.awt.Color(204, 0, 51));
         jButton4.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -380,18 +428,18 @@ private String generateTempPin() {
                 jButton4ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 140, 40));
+        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, 140, 40));
 
         jButton1.setBackground(new java.awt.Color(204, 0, 51));
         jButton1.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        jButton1.setText("Records");
+        jButton1.setText("Reports");
         jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 390, 140, 40));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 330, 140, 40));
 
         jButton2.setBackground(new java.awt.Color(204, 0, 51));
         jButton2.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -408,6 +456,20 @@ private String generateTempPin() {
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Online");
         jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(1430, 50, -1, -1));
+
+        jButton6.setBackground(new java.awt.Color(204, 0, 51));
+        jButton6.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jButton6.setText("Penalties");
+        jButton6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 420, 140, 40));
+
+        jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/reports.png"))); // NOI18N
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 60, 60));
 
         Interface.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 210, 590));
 
@@ -452,8 +514,22 @@ private String generateTempPin() {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
+        if (jTable2.getColumnModel().getColumnCount() > 0) {
+            jTable2.getColumnModel().getColumn(0).setResizable(false);
+            jTable2.getColumnModel().getColumn(1).setResizable(false);
+            jTable2.getColumnModel().getColumn(2).setResizable(false);
+            jTable2.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 390, 260));
 
@@ -475,20 +551,34 @@ private String generateTempPin() {
         jLabel6.setText("Online");
         jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1430, 50, -1, -1));
 
-        BorrowersTable.setModel(new javax.swing.table.DefaultTableModel(
+        jTable3.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Name", "Status"
             }
-        ));
-        jScrollPane3.setViewportView(BorrowersTable);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
-        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 300, 270, 260));
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTable3);
+        if (jTable3.getColumnModel().getColumnCount() > 0) {
+            jTable3.getColumnModel().getColumn(0).setResizable(false);
+            jTable3.getColumnModel().getColumn(1).setResizable(false);
+            jTable3.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 300, 290, 260));
 
         Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 730, 580));
 
@@ -605,6 +695,12 @@ AdminBookControl bookControl = new AdminBookControl();
        acc_fname.setText(sess.getFname() +" "+  sess.getLname());
        
     }//GEN-LAST:event_formWindowActivated
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+       BorrowedBookPenalties bbp = new BorrowedBookPenalties();
+       bbp.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
     
 private void performSearch(String query) {
     JOptionPane.showMessageDialog(this, "Searching for: " + query);
@@ -645,7 +741,6 @@ private void performSearch(String query) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable BorrowersTable;
     private javax.swing.JPanel Interface;
     private javax.swing.JLabel acc_fname;
     private javax.swing.JButton jButton1;
@@ -653,6 +748,7 @@ private void performSearch(String query) {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -663,6 +759,7 @@ private void performSearch(String query) {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -680,6 +777,7 @@ private void performSearch(String query) {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel totalacc;
     // End of variables declaration//GEN-END:variables

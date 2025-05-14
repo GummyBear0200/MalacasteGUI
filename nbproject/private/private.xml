@@ -2,6 +2,34 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/config/EmailSender.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserPINcreation.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminBorrowers.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserRecoveryPhoneNumber.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserRecoveryOption.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/config/DbConnect.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserResetPassword.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserRecoverySQchoice.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminAddBorrower.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/LibrarianBookControl.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserDashboard.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Internal/AvailableBooks.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/config/TextbeltSMS.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/Loginform.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserForgotPass.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserRecoveryPINchoice.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Internal/BorrowerSignup.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/config/Logger.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UseRecoveryEmailChoice.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserSecurity.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/config/Session.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserChangePassForm.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/config/OTPGenerator.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminBookControl.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserAccount.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Users/UserSQcreation.java</file>
+            <file>file:/C:/Users/II/Documents/NetBeansProjects/MalacasteGUI/src/Admin/AdminDashboard.java</file>
+        </group>
     </open-files>
 </project-private>

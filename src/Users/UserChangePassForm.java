@@ -19,6 +19,7 @@ public class UserChangePassForm extends javax.swing.JFrame {
  
     
     public UserChangePassForm() {
+        setUndecorated(true);
         initComponents();
         customizeButton(BackButton);
     
@@ -150,6 +151,7 @@ private boolean updatePassword(String newPassword) {
         btnChangePassword = new javax.swing.JButton();
         jCheckBox2 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -318,7 +320,6 @@ private boolean updatePassword(String newPassword) {
         jPanel13.setBackground(new java.awt.Color(255, 255, 255));
         jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        currentPasswordField.setBackground(new java.awt.Color(255, 255, 255));
         currentPasswordField.setBorder(null);
         currentPasswordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -345,7 +346,7 @@ private boolean updatePassword(String newPassword) {
                 jCheckBox2ActionPerformed(evt);
             }
         });
-        jPanel4.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 120, 30, 40));
+        jPanel4.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 60, 30, 40));
 
         jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -353,6 +354,13 @@ private boolean updatePassword(String newPassword) {
             }
         });
         jPanel4.add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 180, 30, 40));
+
+        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox4ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 120, 30, 40));
 
         Interface1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 730, 580));
 
@@ -436,7 +444,7 @@ if (updatePassword(newPass)) {
     }
 
     JOptionPane.showMessageDialog(this, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-    this.dispose(); 
+    
 } else {
     JOptionPane.showMessageDialog(this, "Error updating password!", "Error", JOptionPane.ERROR_MESSAGE);
 }
@@ -500,6 +508,14 @@ if (updatePassword(newPass)) {
         // TODO add your handling code here:
     }//GEN-LAST:event_currentPasswordFieldActionPerformed
 
+    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+       if (jCheckBox4.isSelected()) { 
+        currentPasswordField.setEchoChar((char) 0);
+    } else {
+        currentPasswordField.setEchoChar('*');
+    }
+    }//GEN-LAST:event_jCheckBox4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -552,6 +568,7 @@ if (updatePassword(newPass)) {
     private javax.swing.JPasswordField currentPasswordField;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel5;

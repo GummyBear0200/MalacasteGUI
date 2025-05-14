@@ -11,6 +11,7 @@ import config.Logger;
 import config.Session;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.print.Book;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 public class AdminBookControl extends javax.swing.JFrame {
 
@@ -35,6 +37,26 @@ public class AdminBookControl extends javax.swing.JFrame {
         
         
         loadBookData();
+        
+         jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        if (!isSelected) {
+            c.setBackground(row % 2 == 0 ? new Color(240, 240, 240) : Color.WHITE);
+        }
+        return c;
+    }
+});
+
+
+JTableHeader header = jTable1.getTableHeader();
+header.setFont(new Font("Tahoma", Font.BOLD, 14));
+header.setBackground(new Color(200, 0, 0));
+header.setForeground(Color.WHITE);
+
+
+jTable1.setRowHeight(25);
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); 
 
         jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -179,15 +201,15 @@ public class AdminBookControl extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        AddButton = new javax.swing.JButton();
-        UpdateButton = new javax.swing.JButton();
-        DeleteButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        AddButton = new javax.swing.JButton();
+        UpdateButton = new javax.swing.JButton();
+        DeleteButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -213,46 +235,14 @@ public class AdminBookControl extends javax.swing.JFrame {
                 jLabel2MouseClicked(evt);
             }
         });
-        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, -1, 70));
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, -1, 70));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, -1));
 
         jLabel4.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Book management");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 241, 50));
-
-        Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 70));
-
-        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        AddButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        AddButton.setText("ADD");
-        AddButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddButtonActionPerformed(evt);
-            }
-        });
-        jPanel1.add(AddButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 110, 40));
-
-        UpdateButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        UpdateButton.setText("UPDATE");
-        UpdateButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UpdateButtonActionPerformed(evt);
-            }
-        });
-        jPanel1.add(UpdateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 110, 40));
-
-        DeleteButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        DeleteButton.setText("DELETE");
-        DeleteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DeleteButtonActionPerformed(evt);
-            }
-        });
-        jPanel1.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 110, 40));
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 10, 241, 50));
 
         jButton1.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jButton1.setText("Logout");
@@ -261,9 +251,13 @@ public class AdminBookControl extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 593, 150, 30));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 20, 150, 30));
 
-        Interface.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
+        Interface.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-80, 0, 1120, 70));
+
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        Interface.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 110, 650));
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -295,23 +289,48 @@ public class AdminBookControl extends javax.swing.JFrame {
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTable1);
 
-        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 40, 700, 430));
+        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 700, 430));
 
-        Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 780, 580));
+        Interface.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 760, 490));
+
+        AddButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        AddButton.setText("ADD");
+        AddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddButtonActionPerformed(evt);
+            }
+        });
+        Interface.add(AddButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 110, 40));
+
+        UpdateButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        UpdateButton.setText("UPDATE");
+        UpdateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateButtonActionPerformed(evt);
+            }
+        });
+        Interface.add(UpdateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 110, 40));
+
+        DeleteButton.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        DeleteButton.setText("DELETE");
+        DeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteButtonActionPerformed(evt);
+            }
+        });
+        Interface.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, 110, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1082, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Interface, javax.swing.GroupLayout.DEFAULT_SIZE, 1082, Short.MAX_VALUE))
+            .addComponent(Interface, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 650, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Interface, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Interface, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();

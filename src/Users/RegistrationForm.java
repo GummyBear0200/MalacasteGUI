@@ -16,6 +16,7 @@ public class RegistrationForm extends javax.swing.JFrame {
 
    
     public RegistrationForm() {
+        setUndecorated(true);
         initComponents();
     }
 

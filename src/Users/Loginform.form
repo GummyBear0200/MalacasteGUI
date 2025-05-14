@@ -112,7 +112,7 @@
                 <Component class="javax.swing.JButton" name="jButton2">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Arial Black" size="10" style="1"/>
+                      <Font name="Georgia" size="14" style="3"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Register"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -141,11 +141,11 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="No account? Click here to -&gt;"/>
+                    <Property name="text" type="java.lang.String" value="No account? Click here to create"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="50" y="10" width="240" height="30"/>
+                      <AbsoluteConstraints x="40" y="10" width="260" height="40"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -300,7 +300,7 @@
             <Component class="javax.swing.JButton" name="LogButton">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Arial Black" size="12" style="1"/>
+                  <Font name="Georgia" size="14" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="LOGIN"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">

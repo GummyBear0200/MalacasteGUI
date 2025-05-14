@@ -20,6 +20,7 @@ public class UserForgotPass extends javax.swing.JFrame {
 private Connection connect;
 
     public UserForgotPass() {
+        setUndecorated(true);
         
       
         initComponents();

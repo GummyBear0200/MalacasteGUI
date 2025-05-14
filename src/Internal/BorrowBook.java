@@ -1,25 +1,127 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Internal;
 
 import Users.UserDashboard;
+import config.Logger;
+import config.Session;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Font;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
-/**
- *
- * @author II
- */
+
 public class BorrowBook extends javax.swing.JFrame {
 
-    /**
-     * Creates new form BorrowBook
-     */
+    
     public BorrowBook() {
+        setUndecorated(true);
         initComponents();
+        loadBooksToTable();
+         customizeButton(jButton1);
+    
+        
+         JButton userButton = new JButton("User Control");
+
+
+userButton.setBackground(new Color(200, 0, 0)); 
+userButton.setForeground(Color.WHITE);
+userButton.setFont(new Font("Arial", Font.BOLD, 14));
+userButton.setFocusPainted(false);
+userButton.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15)); 
+
+
+userButton.addMouseListener(new java.awt.event.MouseAdapter() {
+    public void mouseEntered(java.awt.event.MouseEvent evt) {
+        userButton.setBackground(new Color(220, 0, 0)); 
     }
+    public void mouseExited(java.awt.event.MouseEvent evt) {
+        userButton.setBackground(new Color(200, 0, 0)); 
+    }
+});
+
+
+         books.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        if (!isSelected) {
+            c.setBackground(row % 2 == 0 ? new Color(240, 240, 240) : Color.WHITE);
+        }
+        return c;
+    }
+});
+
+
+JTableHeader header = books.getTableHeader();
+header.setFont(new Font("Tahoma", Font.BOLD, 14));
+header.setBackground(new Color(200, 0, 0));
+header.setForeground(Color.WHITE);
+
+
+books.setRowHeight(25);
+        
+    }
+    private void customizeButton(JButton button) {
+   button.setOpaque(true);
+button.setBorderPainted(false);
+button.setFocusPainted(false);
+button.setBackground(new Color(139, 0, 0)); 
+button.setForeground(Color.WHITE);
+button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
+
+   
+    button.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(0, 102, 204)); 
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(139, 0, 0)); 
+        }
+    });
+}
+private void loadBooksToTable() {
+    DefaultTableModel model = (DefaultTableModel) books.getModel();
+    model.setRowCount(0); 
+
+    try {
+        Connection conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/malacaste_db",     
+            "root",                               
+            ""                          
+        );
+
+        String sql = "SELECT * FROM books";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            int id = rs.getInt("b_id");
+            String title = rs.getString("b_title");
+            String author = rs.getString("b_author");
+            String status = rs.getString("b_status");
+
+            model.addRow(new Object[]{id, title, author,  status});
+        }
+
+        conn.close();
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error loading books: " + ex.getMessage());
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,76 +135,296 @@ public class BorrowBook extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        books = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        bookid = new javax.swing.JTextField();
+        duration = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel1.setBackground(new java.awt.Color(255, 153, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
 
-        jLabel1.setFont(new java.awt.Font("Georgia", 1, 48)); // NOI18N
-        jLabel1.setText("BACK");
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel1.setFont(new java.awt.Font("Georgia", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("||  Borrowing Page");
+
+        jLabel4.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Back");
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                jLabel4MouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jLabel1MouseEntered(evt);
+                jLabel4MouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jLabel1MouseExited(evt);
+                jLabel4MouseExited(evt);
             }
         });
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, -10, 160, 94));
 
-        jLabel2.setFont(new java.awt.Font("Georgia", 1, 48)); // NOI18N
-        jLabel2.setText("IN PROGRESS..");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 143, 412, 94));
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel4)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(310, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel1))
+                .addContainerGap())
+        );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 18, 790, 410));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 990, -1));
+
+        jPanel3.setBackground(new java.awt.Color(51, 51, 51));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 590, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, 590));
+
+        jPanel4.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        books.setBackground(new java.awt.Color(153, 153, 153));
+        books.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 51, 255))); // NOI18N
+        books.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        books.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Book ID", "Title", "Author", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(books);
+        if (books.getColumnModel().getColumnCount() > 0) {
+            books.getColumnModel().getColumn(0).setResizable(false);
+            books.getColumnModel().getColumn(1).setResizable(false);
+            books.getColumnModel().getColumn(2).setResizable(false);
+            books.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 400, -1));
+
+        jLabel5.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Current Books:");
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(4, 4, 140, 20));
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 400, 460));
+        jPanel1.add(bookid, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 130, 280, 50));
+        jPanel1.add(duration, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, 290, 60));
+
+        jButton1.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
+        jButton1.setText("Borrow");
+        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(713, 403, 140, 50));
+
+        jLabel2.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        jLabel2.setText("Borrow Days:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 220, 290, 30));
+
+        jLabel3.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        jLabel3.setText("Enter the Book ID you want to borrow:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 100, 290, 30));
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/istockphoto-1491990664-612x612.jpg"))); // NOI18N
+        jLabel6.setText("jLabel6");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 10, 810, 560));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 840, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 986, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        UserDashboard ud = new UserDashboard();
-        ud.setVisible(true);
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        UserDashboard us = new UserDashboard();
+        us.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_jLabel4MouseClicked
 
-    private void jLabel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseEntered
-       jLabel1.setCursor( new Cursor (Cursor.HAND_CURSOR) );
-       
-    }//GEN-LAST:event_jLabel1MouseEntered
+    private void jLabel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseEntered
+     jLabel4.setCursor(new Cursor (Cursor.HAND_CURSOR));
+     
+    }//GEN-LAST:event_jLabel4MouseEntered
 
-    private void jLabel1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseExited
-        jLabel1.setCursor( new Cursor (Cursor.DEFAULT_CURSOR) );
-    }//GEN-LAST:event_jLabel1MouseExited
+    private void jLabel4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseExited
+         jLabel4.setCursor(new Cursor (Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_jLabel4MouseExited
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       int userId = Session.getInstance().getuid();
+    String borrowerName = Session.getInstance().getusername(); 
+    String bookIdStr = bookid.getText().trim();
+    String borrowDaysStr = duration.getText().trim();
+
+    if (bookIdStr.isEmpty() || borrowDaysStr.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Please fill in both Book ID and Borrow Days.");
+        return;
+    }
+
+    try {
+        int bookId = Integer.parseInt(bookIdStr);
+        int borrowDays = Integer.parseInt(borrowDaysStr);
+
+        if (borrowDays <= 0) {
+            JOptionPane.showMessageDialog(null, "Borrow days must be at least 1.");
+            return;
+        }
+
+        if (borrowDays > 30) {
+            JOptionPane.showMessageDialog(null,
+                "You can only borrow a book for up to 30 days.\n" +
+                "Please contact the administrator if you need an extension.");
+            return;
+        }
+
+        Connection conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/malacaste_db",
+            "root",
+            ""
+        );
+
+        String checkBookStatus = "SELECT b_status FROM books WHERE b_id = ?";
+        PreparedStatement psCheck = conn.prepareStatement(checkBookStatus);
+        psCheck.setInt(1, bookId);
+        ResultSet rsCheck = psCheck.executeQuery();
+
+        if (rsCheck.next()) {
+            String status = rsCheck.getString("b_status");
+            if (status.equalsIgnoreCase("unavailable")) {
+                JOptionPane.showMessageDialog(null, "This book is currently unavailable for borrowing.");
+                conn.close();
+                return;
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Book not found.");
+            conn.close();
+            return;
+        }
+
+        String getBorrowerIdQuery = "SELECT br_id FROM borrowers WHERE u_id = ?";
+        PreparedStatement psBr = conn.prepareStatement(getBorrowerIdQuery);
+        psBr.setInt(1, userId);
+        ResultSet rs = psBr.executeQuery();
+
+        if (rs.next()) {
+            int borrowerId = rs.getInt("br_id");
+
+            String insertQuery = "INSERT INTO Borrowedbooks (br_id, b_fk, borrowdays) VALUES (?, ?, ?)";
+            PreparedStatement psInsert = conn.prepareStatement(insertQuery);
+            psInsert.setInt(1, borrowerId);
+            psInsert.setInt(2, bookId);
+            psInsert.setInt(3, borrowDays);
+
+            int rowsInserted = psInsert.executeUpdate();
+
+            if (rowsInserted > 0) {
+                String updateBookStatus = "UPDATE books SET b_status = 'unavailable' WHERE b_id = ?";
+                PreparedStatement psUpdateBook = conn.prepareStatement(updateBookStatus);
+                psUpdateBook.setInt(1, bookId);
+                psUpdateBook.executeUpdate();
+
+                String updateBorrowerStatus = "UPDATE borrowers SET br_status = 'has borrowed' WHERE br_id = ?";
+                PreparedStatement psUpdateBorrower = conn.prepareStatement(updateBorrowerStatus);
+                psUpdateBorrower.setInt(1, borrowerId);
+                psUpdateBorrower.executeUpdate();
+
+                String insertTransaction = "INSERT INTO transactions (user_id, book_id, borrow_date) VALUES (?, ?, NOW())";
+                PreparedStatement psTransaction = conn.prepareStatement(insertTransaction);
+                psTransaction.setInt(1, userId);
+                psTransaction.setInt(2, bookId);
+                psTransaction.executeUpdate();
+
+                // ✅ Log the borrowing action
+                Logger logger = new Logger(conn);
+                String logMessage = "Borrower '" + borrowerName + "' borrowed the book ID: " + bookId;
+                logger.logAdd(userId, logMessage);
+
+                JOptionPane.showMessageDialog(null, "Book successfully borrowed!");
+                bookid.setText("");
+                duration.setText("");
+                loadBooksToTable();
+
+                UserDashboard udd = new UserDashboard();
+                udd.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to borrow book.");
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "You are not registered as a borrower.");
+        }
+
+        conn.close();
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Please enter valid numbers.");
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage());
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -140,9 +462,20 @@ public class BorrowBook extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField bookid;
+    private javax.swing.JTable books;
+    private javax.swing.JTextField duration;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

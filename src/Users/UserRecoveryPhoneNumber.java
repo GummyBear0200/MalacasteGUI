@@ -20,6 +20,7 @@ public class UserRecoveryPhoneNumber extends javax.swing.JFrame {
      
      
     public UserRecoveryPhoneNumber() {
+         setUndecorated(true);
         initComponents();
     }
 

@@ -7,30 +7,37 @@ package Users;
 
 import Internal.AvailableBooks;
 import Internal.BorrowBook;
+
+import Internal.BorrowerSignup;
+import Internal.UserBorrowedBooks;
 import config.DbConnect;
 import config.Logger;
 import config.Session;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author II
- */
+
 public class UserDashboard extends javax.swing.JFrame {
 
-    /**
-     * Creates new form UserDashboard
-     */
+   
     public UserDashboard() {
+        setUndecorated(true);
         initComponents();
        
     customizeButton(Logoutbutton);
     
+    
+    
     customizeButton(AccountDetails);
+    checkAndApplyPenalties();
     }
 private void customizeButton(JButton button) {
    button.setOpaque(true);
@@ -50,6 +57,58 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         }
     });
 }
+    private void checkAndApplyPenalties() {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "")) {
+       String query = "SELECT bb.br_id, bb.b_fk, bb.borrowdays, t.borrow_date, u.u_id " +
+               "FROM Borrowedbooks bb " +
+               "JOIN transactions t ON bb.b_fk = t.book_id AND t.return_date IS NULL " +
+               "JOIN borrowers b ON bb.br_id = b.br_id " +
+               "JOIN users u ON b.u_id = u.u_id " +
+               "WHERE u.u_id = ?";
+
+
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, Session.getInstance().getuid());
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int userId = rs.getInt("u_id");
+            int bookId = rs.getInt("b_fk");
+            int allowedDays = rs.getInt("borrowdays");
+            LocalDateTime borrowDate = rs.getTimestamp("borrow_date").toLocalDateTime();
+
+            long daysBorrowed = java.time.Duration.between(borrowDate, LocalDateTime.now()).toDays();
+
+            if (daysBorrowed > allowedDays) {
+                int overdueDays = (int)(daysBorrowed - allowedDays);
+                double penalty = overdueDays * 5.0; 
+
+               
+                String checkPenalty = "SELECT * FROM penalties WHERE user_id = ? AND book_id = ? AND status = 'unpaid'";
+                PreparedStatement psCheck = conn.prepareStatement(checkPenalty);
+                psCheck.setInt(1, userId);
+                psCheck.setInt(2, bookId);
+                ResultSet rsCheck = psCheck.executeQuery();
+
+                if (!rsCheck.next()) {
+                    String insertPenalty = "INSERT INTO penalties (user_id, book_id, overdue_days, penalty_amount) VALUES (?, ?, ?, ?)";
+                    PreparedStatement psInsert = conn.prepareStatement(insertPenalty);
+                    psInsert.setInt(1, userId);
+                    psInsert.setInt(2, bookId);
+                    psInsert.setInt(3, overdueDays);
+                    psInsert.setDouble(4, penalty);
+                    psInsert.executeUpdate();
+                }
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
+
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -68,6 +127,15 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         AccountDetails = new javax.swing.JButton();
         acc_fname_user = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        borrowedbooks = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        Register = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -75,11 +143,8 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jLabel5 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -142,75 +207,12 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Lets Get Started!");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 170, -1));
+        jLabel10.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Lets Get Started!");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 170, -1));
 
-        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel5MouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jPanel5MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jPanel5MouseExited(evt);
-            }
-        });
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Book_Shelf_50px.png"))); // NOI18N
-        jLabel2.setText("Available Books");
-        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 40));
-
-        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 140, 50));
-
-        jPanel6.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel6MouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jPanel6MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jPanel6MouseExited(evt);
-            }
-        });
-        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Books_26px.png"))); // NOI18N
-        jLabel5.setText("Borrow Book");
-        jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 120, 28));
-
-        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 140, 50));
-
-        jPanel7.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jPanel7MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jPanel7MouseExited(evt);
-            }
-        });
-        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Book_26px.png"))); // NOI18N
-        jLabel6.setText("Return Book");
-        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 11, -1, 28));
-
-        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 140, 50));
-
-        jPanel8.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel8.setBackground(new java.awt.Color(204, 0, 0));
         jPanel8.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel8.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -235,19 +237,138 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
         });
         jPanel8.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 50));
 
-        jPanel1.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 170, 50));
+        jPanel1.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 580, 170, -1));
 
         Interface1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 650));
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        borrowedbooks.setBackground(new java.awt.Color(204, 0, 0));
+        borrowedbooks.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        borrowedbooks.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                borrowedbooksMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                borrowedbooksMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                borrowedbooksMouseExited(evt);
+            }
+        });
+        borrowedbooks.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel11.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Books_26px.png"))); // NOI18N
+        jLabel11.setText("View Borrowed Books");
+        borrowedbooks.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 200, 30));
+
+        jPanel4.add(borrowedbooks, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, 220, 50));
+
+        jLabel3.setFont(new java.awt.Font("Georgia", 1, 36)); // NOI18N
+        jLabel3.setText("STAY TUNED!");
+        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 540, -1, -1));
+
+        Register.setBackground(new java.awt.Color(204, 0, 0));
+        Register.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Register.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                RegisterMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                RegisterMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                RegisterMouseExited(evt);
+            }
+        });
+        Register.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel9.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Books_26px.png"))); // NOI18N
+        jLabel9.setText("Verify Borrower");
+        Register.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 190, 30));
+
+        jPanel4.add(Register, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 220, 50));
+
+        jLabel7.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        jLabel7.setText("Features:");
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 170, -1));
+
+        jPanel5.setBackground(new java.awt.Color(204, 0, 0));
+        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel5MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel5MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel5MouseExited(evt);
+            }
+        });
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Book_Shelf_50px.png"))); // NOI18N
+        jLabel2.setText("Available Books");
+        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 220, 50));
+
+        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 220, 50));
+
+        jPanel6.setBackground(new java.awt.Color(204, 0, 0));
+        jPanel6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel6MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel6MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel6MouseExited(evt);
+            }
+        });
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Books_26px.png"))); // NOI18N
+        jLabel5.setText("Borrow Book");
+        jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 9, 190, 30));
+
+        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 220, 50));
+
+        jPanel7.setBackground(new java.awt.Color(204, 0, 0));
+        jPanel7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel7MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel7MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel7MouseExited(evt);
+            }
+        });
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/icons8_Book_26px.png"))); // NOI18N
+        jLabel6.setText("Return Book");
+        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 11, 190, 28));
+
+        jPanel4.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, 220, 50));
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo/unnamed.png"))); // NOI18N
         jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 650, 510));
 
-        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
-        jLabel3.setText("STAY TUNED!");
-        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 540, -1, -1));
+        jLabel12.setFont(new java.awt.Font("Georgia", 3, 18)); // NOI18N
+        jLabel12.setText("Verify:");
+        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 170, -1));
 
         Interface1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 730, 580));
 
@@ -315,52 +436,52 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
 
     private void jPanel6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseEntered
         jPanel6.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-    jPanel6.setBackground(Color.RED); 
+    jPanel6.setBackground(Color.WHITE); 
     }//GEN-LAST:event_jPanel6MouseEntered
 
     private void jPanel6MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseExited
        jPanel6.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-    jPanel6.setBackground(Color.WHITE); 
+    jPanel6.setBackground(Color.RED); 
     }//GEN-LAST:event_jPanel6MouseExited
 
     private void jPanel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseEntered
        jPanel5.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-    jPanel5.setBackground(Color.RED); 
+    jPanel5.setBackground(Color.WHITE); 
     }//GEN-LAST:event_jPanel5MouseEntered
 
     private void jPanel5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseExited
        jPanel5.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-    jPanel5.setBackground(Color.WHITE); 
+    jPanel5.setBackground(Color.RED); 
     }//GEN-LAST:event_jPanel5MouseExited
 
     private void jPanel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseEntered
          jPanel7.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-    jPanel7.setBackground(Color.RED); 
+    jPanel7.setBackground(Color.WHITE); 
     }//GEN-LAST:event_jPanel7MouseEntered
 
     private void jPanel7MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseExited
         jPanel7.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-    jPanel7.setBackground(Color.WHITE); 
+    jPanel7.setBackground(Color.RED); 
     }//GEN-LAST:event_jPanel7MouseExited
 
     private void jPanel8MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseEntered
         jPanel8.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-        jPanel8.setBackground(Color.RED); 
+        jPanel8.setBackground(Color.WHITE); 
     }//GEN-LAST:event_jPanel8MouseEntered
 
     private void jLabel8MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseExited
       jPanel8.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-      jPanel8.setBackground(Color.WHITE); 
+      jPanel8.setBackground(Color.RED); 
     }//GEN-LAST:event_jLabel8MouseExited
 
     private void jPanel8MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseExited
        jPanel8.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); 
-       jPanel8.setBackground(Color.WHITE); 
+       jPanel8.setBackground(Color.RED); 
     }//GEN-LAST:event_jPanel8MouseExited
 
     private void jLabel8MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseEntered
         jPanel8.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-        jPanel8.setBackground(Color.RED); 
+        jPanel8.setBackground(Color.WHITE); 
     }//GEN-LAST:event_jLabel8MouseEntered
 
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
@@ -370,10 +491,77 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     }//GEN-LAST:event_jPanel5MouseClicked
 
     private void jPanel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseClicked
-        BorrowBook bb = new BorrowBook();
+      int uid = Session.getInstance().getuid();
+
+    try {
+      
+        Connection conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/malacaste_db",  
+            "root",                           
+            ""                         
+        );
+
+      
+        String sql = "SELECT * FROM borrowers WHERE u_id = ?";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setInt(1, uid);
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+           
+            BorrowBook nf = new BorrowBook();
+            nf.setVisible(true);
+            this.dispose(); 
+        } else {
+           
+            JOptionPane.showMessageDialog(null, "Access denied. You must be a borrower to proceed.");
+        }
+
+        conn.close();
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Database error: " + ex.getMessage());
+    }
+    }//GEN-LAST:event_jPanel6MouseClicked
+
+    private void RegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RegisterMouseClicked
+         BorrowerSignup bb = new BorrowerSignup();
         bb.setVisible(true);
        this.dispose();
-    }//GEN-LAST:event_jPanel6MouseClicked
+    }//GEN-LAST:event_RegisterMouseClicked
+
+    private void RegisterMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RegisterMouseEntered
+         Register.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+       Register.setBackground(Color.WHITE); 
+    }//GEN-LAST:event_RegisterMouseEntered
+
+    private void RegisterMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RegisterMouseExited
+       Register.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); 
+        Register.setBackground(Color.RED); 
+    }//GEN-LAST:event_RegisterMouseExited
+
+    private void borrowedbooksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_borrowedbooksMouseClicked
+       UserBorrowedBooks ubb = new UserBorrowedBooks();
+       ubb.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_borrowedbooksMouseClicked
+
+    private void borrowedbooksMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_borrowedbooksMouseEntered
+       borrowedbooks.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+       borrowedbooks.setBackground(Color.WHITE); 
+    }//GEN-LAST:event_borrowedbooksMouseEntered
+
+    private void borrowedbooksMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_borrowedbooksMouseExited
+       borrowedbooks.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); 
+       borrowedbooks.setBackground(Color.RED); 
+    }//GEN-LAST:event_borrowedbooksMouseExited
+
+    private void jPanel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseClicked
+        UserBorrowedBooks ubb = new UserBorrowedBooks();
+        ubb.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jPanel7MouseClicked
 
     /**
      * @param args the command line arguments
@@ -415,8 +603,13 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     private javax.swing.JPanel Interface;
     private javax.swing.JPanel Interface1;
     private javax.swing.JButton Logoutbutton;
+    private javax.swing.JPanel Register;
     private javax.swing.JLabel acc_fname_user;
+    private javax.swing.JPanel borrowedbooks;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -424,6 +617,7 @@ button.setFont(new java.awt.Font("Arial Black", java.awt.Font.BOLD, 14));
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

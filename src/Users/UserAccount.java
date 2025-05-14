@@ -27,6 +27,7 @@ public class UserAccount extends javax.swing.JFrame {
 
     
     public UserAccount() {
+        setUndecorated(true);
         initComponents();
        customizeButton(BackButton);
     customizeButton(LogoutButton);

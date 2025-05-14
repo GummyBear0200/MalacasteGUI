@@ -55,7 +55,6 @@ private void resetPassword() {
         PIN = new javax.swing.JTextField();
         sq = new javax.swing.JLabel();
         verify = new javax.swing.JButton();
-        req = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         titlelabel6 = new javax.swing.JLabel();
 
@@ -118,7 +117,7 @@ private void resetPassword() {
 
         sq.setBackground(new java.awt.Color(0, 0, 0));
         sq.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
-        sq.setText("<html>Enter your PIN or if you forgot your PIN,<br> you can request a new one. </html>");
+        sq.setText("<html>Enter your PIN or if you forgot your PIN,<br> please contact the administrator. </html>");
         jPanel2.add(sq, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 460, 50));
 
         verify.setBackground(new java.awt.Color(51, 51, 255));
@@ -141,27 +140,6 @@ private void resetPassword() {
             }
         });
         jPanel2.add(verify, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, 150, 40));
-
-        req.setBackground(new java.awt.Color(51, 51, 255));
-        req.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
-        req.setForeground(new java.awt.Color(255, 255, 255));
-        req.setText("Request");
-        req.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        req.setBorderPainted(false);
-        req.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                reqMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                reqMouseExited(evt);
-            }
-        });
-        req.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reqActionPerformed(evt);
-            }
-        });
-        jPanel2.add(req, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 150, 40));
 
         jPanel3.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 170, 480, 210));
 
@@ -244,32 +222,6 @@ private void resetPassword() {
 
     }//GEN-LAST:event_verifyActionPerformed
 
-    private void reqMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reqMouseEntered
-         req.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }//GEN-LAST:event_reqMouseEntered
-
-    private void reqMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reqMouseExited
-        req.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_reqMouseExited
-
-    private void reqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reqActionPerformed
-      Session  sess = Session.getInstance();
-        
-        int userId = sess.getuid();
-
-    try {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/malacaste_db", "root", "");
-        String sql = "INSERT INTO pin_requests (user_id) VALUES (?)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, userId);
-        stmt.executeUpdate();
-
-        JOptionPane.showMessageDialog(this, "A request for a new PIN has been sent!", "Request Sent", JOptionPane.INFORMATION_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Request Failed", JOptionPane.ERROR_MESSAGE);
-    }
-    }//GEN-LAST:event_reqActionPerformed
-
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         Session sess = Session.getInstance();
        
@@ -325,7 +277,6 @@ private void resetPassword() {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JButton req;
     private javax.swing.JLabel sq;
     private javax.swing.JLabel titlelabel6;
     private javax.swing.JLabel titlelabel7;

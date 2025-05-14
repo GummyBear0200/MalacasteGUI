@@ -14,7 +14,7 @@ public class TextbeltSMS {
 
             String postData = "phone=" + phone +
                               "&message=Your OTP is " + otp +
-                              "&key=textbelt"; // Free trial key
+                              "&key=textbelt"; 
 
             OutputStream os = conn.getOutputStream();
             os.write(postData.getBytes());
